@@ -21,7 +21,7 @@ const trailerModels = [
         id: 'remolque-1',
         name: 'Remolque 40-20 Fijo Molino',
         category: 'Carga General',
-        modelPath: '/models/40-20 Fijo Molino Remake.glb',
+        modelPath: '/models/40-20-fijo-molino-remake.glb',
         specs: {
             Largo: '16.15 m',
             Ancho: '2.60 m',
@@ -36,7 +36,7 @@ const trailerModels = [
         id: 'remolque-2',
         name: 'Remolque 40-20 Variante 2',
         category: 'Carga Especial',
-        modelPath: '/models/40-20 Fijo Molino Remake-2.glb',
+        modelPath: '/models/40-20-fijo-molino-remake-2.glb',
         specs: {
             Largo: '16.10 m',
             Ancho: '2.55 m',
@@ -51,7 +51,7 @@ const trailerModels = [
         id: 'remolque-3',
         name: 'Remolque 40-20 Variante 3',
         category: 'Carga Industrial',
-        modelPath: '/models/40-20 Fijo Molino Remake-3.glb',
+        modelPath: '/models/40-20-fijo-molino-remake-3.glb',
         specs: {
             Largo: '14.63 m',
             Ancho: '2.60 m',
