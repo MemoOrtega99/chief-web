@@ -132,8 +132,8 @@ export default function TrailersPage() {
             </section>
 
             {/* 3D Viewer and specs */}
-            <section className="relative pb-[450px] lg:pb-0">
-                {/* Full width 3D Viewer */}
+            <section className="flex flex-col lg:relative">
+                {/* 3D Viewer - shorter on mobile, full on desktop */}
                 <motion.div
                     key={selectedTrailer.id}
                     initial={{ opacity: 0 }}
@@ -141,10 +141,8 @@ export default function TrailersPage() {
                     transition={{ duration: 0.4 }}
                     className="w-full"
                 >
-                    <div className="h-[80vh] bg-surface overflow-hidden relative">
+                    <div className="h-[50vh] lg:h-[80vh] bg-surface overflow-hidden relative">
                         <TrailerViewer modelPath={selectedTrailer.modelPath} bodyColor={selectedColor.value} />
-
-
 
                         {/* Controls hint */}
                         <div className="absolute bottom-6 left-6 text-sm text-text-muted bg-background/80 backdrop-blur-sm px-4 py-2 rounded-full">
@@ -153,13 +151,13 @@ export default function TrailersPage() {
                     </div>
                 </motion.div>
 
-                {/* Floating Specs panel */}
+                {/* Specs panel - stacked on mobile, floating on desktop */}
                 <motion.div
                     key={`specs-${selectedTrailer.id}`}
                     initial={{ opacity: 0, y: 20 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ duration: 0.4 }}
-                    className="absolute top-4 right-4 lg:top-8 lg:right-8 w-[calc(100%-2rem)] lg:w-full max-w-sm lg:max-w-md bg-background/95 backdrop-blur-xl rounded-2xl shadow-2xl p-6 lg:p-8 space-y-4 lg:space-y-6 border border-border"
+                    className="relative lg:absolute lg:top-8 lg:right-8 w-full lg:w-full lg:max-w-md bg-background lg:bg-background/95 lg:backdrop-blur-xl lg:rounded-2xl lg:shadow-2xl p-6 lg:p-8 space-y-4 lg:space-y-6 lg:border lg:border-border"
                 >
                     {/* Title */}
                     <div>
