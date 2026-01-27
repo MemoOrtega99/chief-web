@@ -18,46 +18,49 @@ const TrailerViewer = dynamic(() => import('@/components/3d/TrailerViewer'), {
 // Trailer model data
 const trailerModels = [
     {
-        id: 'caja-seca',
-        name: 'Caja Seca 53"',
+        id: 'remolque-1',
+        name: 'Remolque 40-20 Fijo Molino',
         category: 'Carga General',
+        modelPath: '/models/40-20 Fijo Molino Remake.glb',
         specs: {
-            length: '16.15 m',
-            width: '2.60 m',
-            height: '2.90 m',
-            capacity: '30,000 kg',
-            volume: '120 m³',
+            Largo: '16.15 m',
+            Ancho: '2.60 m',
+            Alto: '2.90 m',
+            Capacidad: '30,000 kg',
+            Volumen: '120 m³',
         },
         color: '#dc2626',
-        description: 'Remolque estándar para carga seca. Ideal para mercancía paletizada y productos secos.',
+        description: 'Remolque fijo tipo molino 40-20. Construcción robusta para carga pesada.',
     },
     {
-        id: 'refrigerado',
-        name: 'Refrigerado 53"',
-        category: 'Temperatura Controlada',
+        id: 'remolque-2',
+        name: 'Remolque 40-20 Variante 2',
+        category: 'Carga Especial',
+        modelPath: '/models/40-20 Fijo Molino Remake-2.glb',
         specs: {
-            length: '16.10 m',
-            width: '2.55 m',
-            height: '2.75 m',
-            capacity: '26,000 kg',
-            temperature: '-30°C a +25°C',
+            Largo: '16.10 m',
+            Ancho: '2.55 m',
+            Alto: '2.75 m',
+            Capacidad: '28,000 kg',
+            Tipo: 'Fijo Molino',
         },
         color: '#3b82f6',
-        description: 'Remolque con sistema de refrigeración para productos perecederos y cadena de frío.',
+        description: 'Segunda variante del remolque 40-20, con configuración adaptada para aplicaciones específicas.',
     },
     {
-        id: 'plataforma',
-        name: 'Plataforma 48"',
-        category: 'Carga Especial',
+        id: 'remolque-3',
+        name: 'Remolque 40-20 Variante 3',
+        category: 'Carga Industrial',
+        modelPath: '/models/40-20 Fijo Molino Remake-3.glb',
         specs: {
-            length: '14.63 m',
-            width: '2.60 m',
-            height: '1.52 m',
-            capacity: '35,000 kg',
-            type: 'Flatbed',
+            Largo: '14.63 m',
+            Ancho: '2.60 m',
+            Alto: '1.52 m',
+            Capacidad: '35,000 kg',
+            Tipo: 'Molino Industrial',
         },
         color: '#22c55e',
-        description: 'Plataforma abierta para maquinaria, materiales de construcción y cargas sobredimensionadas.',
+        description: 'Tercera variante optimizada para aplicaciones industriales y de alto rendimiento.',
     },
 ];
 
@@ -99,7 +102,7 @@ export default function Trailers() {
                         className="relative"
                     >
                         <div className="aspect-square rounded-2xl bg-gradient-to-br from-surface-light to-background border border-white/5 overflow-hidden relative">
-                            <TrailerViewer color={selectedTrailer.color} />
+                            <TrailerViewer modelPath={selectedTrailer.modelPath} bodyColor={selectedTrailer.color} />
 
                             {/* Controls hint */}
                             <div className="absolute bottom-4 left-4 flex items-center gap-2 text-text-muted text-sm bg-background/80 px-3 py-2 rounded-lg backdrop-blur-sm z-10">
@@ -125,8 +128,8 @@ export default function Trailers() {
                                     key={trailer.id}
                                     onClick={() => setSelectedTrailer(trailer)}
                                     className={`px-5 py-3 rounded-xl font-medium transition-all duration-200 ${selectedTrailer.id === trailer.id
-                                            ? 'bg-accent text-white'
-                                            : 'bg-surface-light text-text-muted hover:text-white hover:bg-surface-light/80'
+                                        ? 'bg-accent text-white'
+                                        : 'bg-surface-light text-text-muted hover:text-white hover:bg-surface-light/80'
                                         }`}
                                 >
                                     {trailer.name}
