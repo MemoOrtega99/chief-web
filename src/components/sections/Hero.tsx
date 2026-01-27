@@ -21,8 +21,6 @@ export default function Hero() {
                     className="object-cover"
                     priority
                 />
-                {/* Dark overlay for text readability */}
-                <div className="absolute inset-0 bg-black/50" />
             </div>
 
             <motion.div
