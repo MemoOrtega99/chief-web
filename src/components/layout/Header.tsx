@@ -19,7 +19,7 @@ export default function Header() {
         <header className="fixed top-4 left-1/2 -translate-x-1/2 z-[1000] w-[95%] max-w-6xl">
             {/* Navbar estandar con backdrop-blur nativo (mas estable y rapido) */}
             <nav
-                className="bg-white rounded-2xl shadow-lg border border-border px-4 lg:px-6 overflow-visible"
+                className="bg-white/80 backdrop-blur-xl rounded-2xl shadow-lg border border-border px-4 lg:px-6 overflow-visible"
             >
                 <div className="flex items-center justify-between h-16">
                     {/* Logo */}
@@ -35,8 +35,8 @@ export default function Header() {
                         />
                     </Link>
 
-                    {/* Desktop Navigation - Fondo sólido rojo claro, borde rounded-2xl y padding ajustado */}
-                    <div className="hidden md:flex items-center bg-accent-light rounded-2xl p-1 border border-border">
+                    {/* Desktop Navigation - Fondo rojo ultra claro y blureado */}
+                    <div className="hidden md:flex items-center bg-[#dc2626]/25 backdrop-blur-md rounded-2xl p-1 border border-[#dc2626]/10">
                         <div className="flex items-center gap-1">
                             {navLinks.map((link) => (
                                 <Link
