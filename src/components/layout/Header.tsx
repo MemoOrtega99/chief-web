@@ -76,14 +76,14 @@ export default function Header() {
                 {/* Mobile Menu */}
                 {
                     isMobileMenuOpen && (
-                        <div className="md:hidden py-8 border-t border-border bg-white/95 backdrop-blur-xl rounded-b-3xl px-6">
-                            <div className="flex flex-col gap-6">
+                        <div className="md:hidden py-6 border-t border-border bg-white/95 backdrop-blur-xl rounded-b-3xl px-6">
+                            <div className="flex flex-col items-end gap-4">
                                 {navLinks.map((link) => (
                                     <Link
                                         key={link.href}
                                         href={link.href}
                                         onClick={() => setIsMobileMenuOpen(false)}
-                                        className="text-2xl font-bold text-[#dc2626]"
+                                        className="text-base font-medium text-[#dc2626]"
                                     >
                                         {link.label}
                                     </Link>
