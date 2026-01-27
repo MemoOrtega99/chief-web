@@ -17,9 +17,9 @@ export default function Header() {
 
     return (
         <header className="fixed top-4 left-1/2 -translate-x-1/2 z-[1000] w-[95%] max-w-6xl">
-            {/* Navbar estandar con backdrop-blur nativo (mas estable y rapido) */}
+            {/* Navbar estandar con fondo solido */}
             <nav
-                className="bg-white/80 backdrop-blur-xl rounded-2xl shadow-lg border border-border px-4 lg:px-6 overflow-visible"
+                className="bg-white rounded-2xl shadow-lg border border-border px-4 lg:px-6 overflow-visible"
             >
                 <div className="flex items-center justify-between h-16">
                     {/* Logo */}
@@ -35,8 +35,8 @@ export default function Header() {
                         />
                     </Link>
 
-                    {/* Desktop Navigation - Fondo rojo ultra claro y blureado */}
-                    <div className="hidden md:flex items-center bg-[#dc2626]/25 backdrop-blur-md rounded-2xl p-1 border border-[#dc2626]/10">
+                    {/* Desktop Navigation - Fondo rojo ultra sutil (5%) y blureado */}
+                    <div className="hidden md:flex items-center bg-[#dc2626]/5 backdrop-blur-md rounded-2xl p-1 border border-[#dc2626]/10">
                         <div className="flex items-center gap-1">
                             {navLinks.map((link) => (
                                 <Link
@@ -74,23 +74,25 @@ export default function Header() {
                 </div>
 
                 {/* Mobile Menu */}
-                {isMobileMenuOpen && (
-                    <div className="md:hidden py-8 border-t border-border bg-white/95 backdrop-blur-xl rounded-b-3xl px-6">
-                        <div className="flex flex-col gap-6">
-                            {navLinks.map((link) => (
-                                <Link
-                                    key={link.href}
-                                    href={link.href}
-                                    onClick={() => setIsMobileMenuOpen(false)}
-                                    className="text-2xl font-bold text-[#dc2626]"
-                                >
-                                    {link.label}
-                                </Link>
-                            ))}
+                {
+                    isMobileMenuOpen && (
+                        <div className="md:hidden py-8 border-t border-border bg-white/95 backdrop-blur-xl rounded-b-3xl px-6">
+                            <div className="flex flex-col gap-6">
+                                {navLinks.map((link) => (
+                                    <Link
+                                        key={link.href}
+                                        href={link.href}
+                                        onClick={() => setIsMobileMenuOpen(false)}
+                                        className="text-2xl font-bold text-[#dc2626]"
+                                    >
+                                        {link.label}
+                                    </Link>
+                                ))}
+                            </div>
                         </div>
-                    </div>
-                )}
-            </nav>
-        </header>
+                    )
+                }
+            </nav >
+        </header >
     );
 }
