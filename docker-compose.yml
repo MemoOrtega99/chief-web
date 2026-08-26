@@ -1,0 +1,14 @@
+services:
+  chief-web:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: chief_web_app
+    ports:
+      - "${CHIEF_WEB_PORT:-3001}:3000"
+    environment:
+      NODE_ENV: production
+      NEXT_TELEMETRY_DISABLED: "1"
+      HOSTNAME: 0.0.0.0
+      PORT: "3000"
+    restart: unless-stopped
