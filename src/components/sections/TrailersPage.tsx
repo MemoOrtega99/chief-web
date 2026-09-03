@@ -1,262 +1,225 @@
 'use client';
 
-import { motion } from 'framer-motion';
-import { useState } from 'react';
 import dynamic from 'next/dynamic';
+import Image from 'next/image';
 import Link from 'next/link';
+import { useState } from 'react';
+import { colorOptions, homeProducts, viewerModels, ViewerModel } from '@/data/catalog';
 
-// Dynamic import with SSR disabled
 const TrailerViewer = dynamic(() => import('@/components/3d/TrailerViewer'), {
     ssr: false,
-    loading: () => (
-        <div className="absolute inset-0 flex items-center justify-center bg-surface">
-            <div className="flex flex-col items-center gap-4">
-                <div className="w-8 h-8 border-2 border-text-light border-t-foreground rounded-full animate-spin" />
-                <span className="text-sm text-text-muted">Cargando modelo...</span>
-            </div>
-        </div>
-    ),
+    loading: () => <div className="ct-viewer-loading">Cargando modelo 3D...</div>,
 });
 
-// Trailer model data
-const trailerModels = [
+const specificationGroups = [
     {
-        id: 'remolque-1',
-        name: 'Remolque 40-20 Fijo Molino',
-        category: 'Carga General',
-        modelPath: '/models/40-20-fijo-molino-remake.glb',
-        specs: {
-            Largo: '16.15 m',
-            Ancho: '2.60 m',
-            Alto: '2.90 m',
-            Capacidad: '30,000 kg',
-            Volumen: '120 m³',
-        },
-        description: 'Remolque fijo tipo molino 40-20. Construcción robusta para carga pesada.',
-        features: ['Estructura reforzada', 'Piso de acero', 'Alta capacidad de carga', 'Diseño optimizado'],
+        title: 'Estructura',
+        items: [
+            'Vigas principales tipo I en acero G50 o Strenx',
+            'Doble cuello con vigas A36 o Strenx',
+            'Corazas de ¼ pulgada grado 50',
+            'Piso de madera de pino traslapada de 1½ pulgadas',
+            'Borda lateral con canal estructural de 6 pulgadas',
+        ],
     },
     {
-        id: 'remolque-2',
-        name: 'Remolque 40-20 Variante 2',
-        category: 'Carga Especial',
-        modelPath: '/models/40-20-fijo-molino-remake-2.glb',
-        specs: {
-            Largo: '16.10 m',
-            Ancho: '2.55 m',
-            Alto: '2.75 m',
-            Capacidad: '28,000 kg',
-            Tipo: 'Fijo Molino',
-        },
-        description: 'Segunda variante del remolque 40-20, con configuración adaptada para aplicaciones específicas.',
-        features: ['Configuración personalizada', 'Estructura reforzada', 'Versatilidad de uso', 'Diseño industrial'],
+        title: 'Patines y suspensión neumática',
+        items: [
+            'Patines Holland Mark V, Ampro o Jost',
+            'Suspensión neumática de 30,000 lbs',
+            'Eje tipo Propar con capacidad de 30,000 lbs',
+        ],
     },
     {
-        id: 'remolque-3',
-        name: 'Remolque 40-20 Variante 3',
-        category: 'Carga Industrial',
-        modelPath: '/models/40-20-fijo-molino-remake-3.glb',
-        specs: {
-            Largo: '14.63 m',
-            Ancho: '2.60 m',
-            Alto: '1.52 m',
-            Capacidad: '35,000 kg',
-            Tipo: 'Molino Industrial',
-        },
-        description: 'Tercera variante optimizada para aplicaciones industriales y de alto rendimiento.',
-        features: ['Diseño compacto', 'Alta resistencia', 'Fácil mantenimiento', 'Aplicación industrial'],
+        title: 'Sistema de arrastre',
+        items: [
+            'Gancho de arrastre Wallace Force R50-10',
+            'Patín Ampro de dos velocidades',
+            'Sistema de arrastre configurado para trabajo pesado',
+        ],
     },
-];
-
-// Available colors for the trailer body
-const colorOptions = [
-    { name: 'Rojo Chief', value: '#dc2626' },
-    { name: 'Azul', value: '#2563eb' },
-    { name: 'Verde', value: '#16a34a' },
-    { name: 'Amarillo', value: '#eab308' },
-    { name: 'Blanco', value: '#f5f5f5' },
-    { name: 'Negro', value: '#171717' },
+    {
+        title: 'Accesorios y opcionales',
+        items: [
+            'Sistema ABS Bendix de 2 o 4 sensores',
+            'Luces y arnés marca Grote',
+            'Rines de acero o aluminio de 22.5 pulgadas',
+            'Sistema de autoinflado y logotipo de empresa',
+        ],
+    },
 ];
 
 export default function TrailersPage() {
-    const [selectedTrailer, setSelectedTrailer] = useState(trailerModels[0]);
+    const [selectedTrailer, setSelectedTrailer] = useState<ViewerModel>(viewerModels[0]);
     const [selectedColor, setSelectedColor] = useState(colorOptions[0]);
+    const [openGroup, setOpenGroup] = useState(specificationGroups[0].title);
+
+    const selectTrailer = (trailer: ViewerModel) => {
+        setSelectedTrailer(trailer);
+        const matchingColor = colorOptions.find((color) => color.value === trailer.defaultColor);
+        if (matchingColor) setSelectedColor(matchingColor);
+    };
 
     return (
-        <div className="min-h-screen bg-background">
-            {/* Hero section */}
-            <section className="pt-24 pb-8 px-6 lg:px-12">
-                <div className="max-w-7xl mx-auto">
-                    <motion.div
-                        initial={{ opacity: 0, y: 20 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        transition={{ duration: 0.6 }}
-                    >
-                        <Link
-                            href="/"
-                            className="inline-flex items-center gap-2 text-sm text-text-muted hover:text-foreground transition-colors mb-12"
-                        >
-                            <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M15 19l-7-7 7-7" />
-                            </svg>
-                            Volver
-                        </Link>
-
-                        <p className="text-sm text-text-muted tracking-[0.2em] uppercase mb-4">
-                            Catálogo 3D
-                        </p>
-                        <h1 className="text-huge max-w-3xl">
-                            Explora nuestros remolques
-                        </h1>
-                    </motion.div>
-                </div>
-            </section>
-
-            {/* Model selector - Sticky */}
-            <section className="sticky top-20 z-40 bg-background/95 backdrop-blur-xl border-y border-border">
-                <div className="max-w-7xl mx-auto px-6 lg:px-12 py-4">
-                    <div className="flex gap-2 overflow-x-auto pb-2 -mb-2">
-                        {trailerModels.map((trailer) => (
-                            <button
-                                key={trailer.id}
-                                onClick={() => setSelectedTrailer(trailer)}
-                                className={`px-6 py-3 text-sm font-medium whitespace-nowrap transition-all duration-200 ${selectedTrailer.id === trailer.id
-                                    ? 'bg-foreground text-background'
-                                    : 'text-text-muted hover:text-foreground'
-                                    }`}
-                            >
-                                {trailer.name}
-                            </button>
-                        ))}
-                    </div>
-                </div>
-            </section>
-
-            {/* 3D Viewer and specs */}
-            <section className="flex flex-col lg:relative">
-                {/* 3D Viewer - shorter on mobile, full on desktop */}
-                <motion.div
-                    key={selectedTrailer.id}
-                    initial={{ opacity: 0 }}
-                    animate={{ opacity: 1 }}
-                    transition={{ duration: 0.4 }}
-                    className="w-full"
-                >
-                    <div className="h-[50vh] lg:h-[80vh] bg-surface overflow-hidden relative">
-                        <TrailerViewer modelPath={selectedTrailer.modelPath} bodyColor={selectedColor.value} />
-
-                        {/* Controls hint */}
-                        <div className="absolute bottom-6 left-6 text-sm text-text-muted bg-background/80 backdrop-blur-sm px-4 py-2 rounded-full">
-                            Arrastra para rotar • Scroll para zoom
+        <div className="ct-product-page">
+            <section className="ct-product-hero">
+                <div className="ct-shell ct-product-split">
+                    <div className="ct-product-viewer">
+                        <div className="ct-viewer-badge">
+                            <span className="ct-live-dot" aria-hidden="true" />
+                            Modelo 3D interactivo
                         </div>
-                    </div>
-                </motion.div>
-
-                {/* Specs panel - stacked on mobile, floating on desktop */}
-                <motion.div
-                    key={`specs-${selectedTrailer.id}`}
-                    initial={{ opacity: 0, y: 20 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ duration: 0.4 }}
-                    className="relative lg:absolute lg:top-8 lg:right-8 w-full lg:w-full lg:max-w-md bg-background lg:bg-background/95 lg:backdrop-blur-xl lg:rounded-2xl lg:shadow-2xl p-6 lg:p-8 space-y-4 lg:space-y-6 lg:border lg:border-border"
-                >
-                    {/* Title */}
-                    <div>
-                        <p className="text-xs text-text-muted tracking-[0.2em] uppercase mb-2">{selectedTrailer.category}</p>
-                        <h2 className="text-2xl font-semibold">{selectedTrailer.name}</h2>
+                        <TrailerViewer
+                            modelPath={selectedTrailer.modelPath}
+                            bodyColor={selectedColor.value}
+                            posterSrc="/trailer-day.png"
+                        />
+                        <div className="ct-viewer-hint">Arrastra para girar · Scroll para zoom</div>
                     </div>
 
-                    {/* Description */}
-                    <p className="text-sm text-text-muted leading-relaxed">
-                        {selectedTrailer.description}
-                    </p>
+                    <div className="ct-product-info">
+                        <Link href="/" className="ct-back-link">← Volver al inicio</Link>
+                        <p className="ct-kicker">{selectedTrailer.category}</p>
+                        <h1>{selectedTrailer.name}</h1>
+                        <p className="ct-lead">{selectedTrailer.description}</p>
 
-                    {/* Specs */}
-                    <div className="border-t border-border pt-6">
-                        <p className="text-xs text-text-muted tracking-[0.15em] uppercase mb-4">
-                            Especificaciones
-                        </p>
-                        <div className="space-y-2">
-                            {Object.entries(selectedTrailer.specs).map(([key, value]) => (
-                                <div key={key} className="flex justify-between py-1.5 text-sm border-b border-border/50">
-                                    <span className="text-text-muted">{key}</span>
-                                    <span className="font-medium">{value}</span>
+                        <div className="ct-model-selector" aria-label="Seleccionar modelo 3D">
+                            {viewerModels.map((trailer) => (
+                                <button
+                                    key={trailer.id}
+                                    type="button"
+                                    onClick={() => selectTrailer(trailer)}
+                                    className={selectedTrailer.id === trailer.id ? 'is-active' : ''}
+                                >
+                                    {trailer.name}
+                                </button>
+                            ))}
+                        </div>
+
+                        <div className="ct-spec-summary">
+                            {Object.entries(selectedTrailer.specs).slice(0, 3).map(([key, value]) => (
+                                <div key={key}>
+                                    <span>{key}</span>
+                                    <strong>{value}</strong>
                                 </div>
                             ))}
                         </div>
-                    </div>
 
-                    {/* Features */}
-                    <div>
-                        <p className="text-xs text-text-muted tracking-[0.15em] uppercase mb-4">
-                            Características
-                        </p>
-                        <ul className="space-y-2">
-                            {selectedTrailer.features.map((feature, index) => (
-                                <li key={index} className="flex items-center gap-2 text-sm">
-                                    <span className="w-1 h-1 bg-foreground rounded-full" />
-                                    {feature}
-                                </li>
-                            ))}
-                        </ul>
-                    </div>
-
-                    {/* Color picker */}
-                    <div>
-                        <p className="text-xs text-text-muted tracking-[0.15em] uppercase mb-4">
-                            Color de Carrocería
-                        </p>
-                        <div className="flex gap-2 flex-wrap">
-                            {colorOptions.map((color) => (
-                                <button
-                                    key={color.value}
-                                    onClick={() => setSelectedColor(color)}
-                                    className={`w-8 h-8 rounded-full border-2 transition-all ${selectedColor.value === color.value
-                                        ? 'border-foreground scale-110 shadow-lg'
-                                        : 'border-border hover:scale-105'
-                                        }`}
-                                    style={{ backgroundColor: color.value }}
-                                    title={color.name}
-                                />
-                            ))}
+                        <div className="ct-capacity-strip">
+                            <span>Capacidad de carga</span>
+                            <strong>{selectedTrailer.specs.Capacidad}</strong>
                         </div>
-                        <p className="text-xs text-text-muted mt-2">{selectedColor.name}</p>
-                    </div>
 
-                    {/* CTA */}
-                    <button className="btn-solid w-full justify-center">
-                        Solicitar Cotización
-                    </button>
-                </motion.div>
+                        <div className="ct-color-picker">
+                            <div>
+                                <span>Color de carrocería</span>
+                                <small>{selectedColor.name}</small>
+                            </div>
+                            <div className="ct-color-options">
+                                {colorOptions.map((color) => (
+                                    <button
+                                        key={color.value}
+                                        type="button"
+                                        onClick={() => setSelectedColor(color)}
+                                        className={selectedColor.value === color.value ? 'is-active' : ''}
+                                        style={{ backgroundColor: color.value }}
+                                        aria-label={`Seleccionar color ${color.name}`}
+                                        aria-pressed={selectedColor.value === color.value}
+                                    />
+                                ))}
+                            </div>
+                        </div>
+
+                        <Link href="/#contacto" className="ct-button ct-button-primary ct-button-wide">
+                            Cotizar esta configuración <span aria-hidden="true">→</span>
+                        </Link>
+                        <Link href="/#contacto" className="ct-button ct-button-outline ct-button-wide">
+                            Solicitar ficha técnica (PDF)
+                        </Link>
+                    </div>
+                </div>
             </section>
 
-            {/* Additional info */}
-            <section className="py-24 px-6 lg:px-12 bg-surface">
-                <div className="max-w-7xl mx-auto">
-                    <div className="grid grid-cols-1 md:grid-cols-3 gap-12">
-                        {[
-                            {
-                                title: 'Garantía',
-                                description: '2 años en estructura y componentes principales.',
-                            },
-                            {
-                                title: 'Financiamiento',
-                                description: 'Opciones de crédito hasta 60 meses.',
-                            },
-                            {
-                                title: 'Servicio',
-                                description: 'Soporte técnico y refacciones 24/7.',
-                            },
-                        ].map((item, index) => (
-                            <motion.div
-                                key={item.title}
-                                initial={{ opacity: 0, y: 20 }}
-                                whileInView={{ opacity: 1, y: 0 }}
-                                viewport={{ once: true }}
-                                transition={{ duration: 0.6, delay: index * 0.1 }}
-                            >
-                                <h3 className="text-xl font-medium mb-3">{item.title}</h3>
-                                <p className="text-text-muted">{item.description}</p>
-                            </motion.div>
+            <section className="ct-product-specs">
+                <div className="ct-narrow-shell">
+                    <div className="ct-section-heading">
+                        <div>
+                            <p className="ct-kicker">Datos de ingeniería</p>
+                            <h2>
+                                Especificaciones
+                                <br />
+                                <span>técnicas</span>
+                            </h2>
+                        </div>
+                        <p>Conoce la estructura, suspensión, sistema de arrastre y opciones disponibles para esta línea.</p>
+                    </div>
+
+                    <div className="ct-accordion">
+                        {specificationGroups.map((group) => {
+                            const isOpen = openGroup === group.title;
+                            return (
+                                <div className={`ct-accordion-item ${isOpen ? 'is-open' : ''}`} key={group.title}>
+                                    <button
+                                        type="button"
+                                        className="ct-accordion-trigger"
+                                        onClick={() => setOpenGroup(isOpen ? '' : group.title)}
+                                        aria-expanded={isOpen}
+                                    >
+                                        <span>{group.title}</span>
+                                        <strong aria-hidden="true">+</strong>
+                                    </button>
+                                    {isOpen && (
+                                        <ul className="ct-accordion-content">
+                                            {group.items.map((item) => <li key={item}>{item}</li>)}
+                                        </ul>
+                                    )}
+                                </div>
+                            );
+                        })}
+                    </div>
+                </div>
+            </section>
+
+            <section className="ct-product-gallery">
+                <div className="ct-shell">
+                    <div className="ct-section-heading ct-gallery-heading">
+                        <div>
+                            <p className="ct-kicker">Trabajo que se ve</p>
+                            <h2>Unidades <span>entregadas</span></h2>
+                        </div>
+                        <p>Imágenes de referencia mientras incorporamos la galería fotográfica de cada línea.</p>
+                    </div>
+                    <div className="ct-gallery-grid">
+                        <div className="ct-gallery-image ct-gallery-large">
+                            <Image src="/trailer-day.png" alt="Unidad de carga en carretera" fill sizes="(max-width: 800px) 100vw, 50vw" className="ct-cover-image" />
+                        </div>
+                        <div className="ct-gallery-image">
+                            <Image src="/hero-background-v2.jpg" alt="Transporte en operación" fill sizes="(max-width: 800px) 50vw, 25vw" className="ct-cover-image" />
+                        </div>
+                        <div className="ct-gallery-image">
+                            <Image src="/hero-background-user.png" alt="Ruta de transporte" fill sizes="(max-width: 800px) 50vw, 25vw" className="ct-cover-image" />
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section className="ct-product-closing">
+                <p className="ct-kicker ct-kicker-light">Da el siguiente paso</p>
+                <h2>¿Este modelo es <span>el ideal</span> para tu operación?</h2>
+                <Link href="/#contacto" className="ct-button ct-button-primary">Cotizar ahora <span aria-hidden="true">→</span></Link>
+            </section>
+
+            <section className="ct-related">
+                <div className="ct-shell">
+                    <p className="ct-kicker">Explora más</p>
+                    <h2>También te puede <span>interesar</span></h2>
+                    <div className="ct-related-grid">
+                        {homeProducts.slice(0, 4).map((product) => (
+                            <Link href="/#productos" className="ct-related-card" key={product.slug}>
+                                <span className="ct-related-mark" aria-hidden="true">+</span>
+                                <span>{product.family}</span>
+                                <strong>{product.name}</strong>
+                            </Link>
                         ))}
                     </div>
                 </div>

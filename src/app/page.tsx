@@ -5,6 +5,8 @@ import Services from '@/components/sections/Services';
 import TrailersCTA from '@/components/sections/TrailersCTA';
 import About from '@/components/sections/About';
 import Contact from '@/components/sections/Contact';
+import Coverage from '@/components/sections/Coverage';
+import Clients from '@/components/sections/Clients';
 
 export default function Home() {
   return (
@@ -12,9 +14,11 @@ export default function Home() {
       <Header />
       <main>
         <Hero />
-        <Services />
-        <TrailersCTA />
         <About />
+        <TrailersCTA />
+        <Services />
+        <Coverage />
+        <Clients />
         <Contact />
       </main>
       <Footer />

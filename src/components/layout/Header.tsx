@@ -1,6 +1,5 @@
 'use client';
 
-import { motion } from 'framer-motion';
 import Link from 'next/link';
 import Image from 'next/image';
 import { useState } from 'react';
@@ -9,40 +8,39 @@ export default function Header() {
     const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
     const navLinks = [
-        { href: '/#servicios', label: 'Servicios' },
-        { href: '/remolques', label: 'Remolques' },
+        { href: '/#productos', label: 'Productos' },
         { href: '/#nosotros', label: 'Nosotros' },
+        { href: '/#proceso', label: 'Proceso' },
         { href: '/#contacto', label: 'Contacto' },
     ];
 
     return (
-        <header className="fixed top-4 left-1/2 -translate-x-1/2 z-[1000] w-[95%] max-w-6xl">
-            {/* Navbar estandar con fondo solido */}
-            <nav
-                className="bg-white rounded-2xl shadow-lg border border-border px-4 lg:px-6 overflow-visible"
-            >
-                <div className="flex items-center justify-between h-16">
-                    {/* Logo */}
-                    <Link href="/" className="flex items-center">
+        <header className="ct-header">
+            <nav className="ct-nav" aria-label="Navegación principal">
+                <div className="ct-nav-inner">
+                    <Link href="/" className="ct-brand" aria-label="Chief Trailers del Norte, inicio">
                         <Image
                             src="/chief-logo-iso.png"
                             alt="Chief Logo"
-                            width={48}
-                            height={48}
-                            className="h-10 w-10 object-contain"
+                            width={44}
+                            height={44}
+                            className="ct-brand-mark"
                             unoptimized
                             priority
                         />
+                        <span className="ct-brand-copy">
+                            CHIEF
+                            <small>TRAILERS DEL NORTE</small>
+                        </span>
                     </Link>
 
-                    {/* Desktop Navigation - Fondo rojo ultra sutil (5%) y blureado */}
-                    <div className="hidden md:flex items-center bg-[#dc2626]/5 backdrop-blur-md rounded-2xl p-1 border border-[#dc2626]/10">
-                        <div className="flex items-center gap-1">
+                    <div className="ct-desktop-nav">
+                        <div className="ct-nav-links">
                             {navLinks.map((link) => (
                                 <Link
                                     key={link.href}
                                     href={link.href}
-                                    className="text-sm font-bold px-4 py-2 rounded-xl transition-all duration-300 text-[#dc2626] hover:bg-[#dc2626] hover:text-[#fee2e2]"
+                                    className="ct-nav-link"
                                 >
                                     {link.label}
                                 </Link>
@@ -50,48 +48,48 @@ export default function Header() {
                         </div>
                     </div>
 
-                    {/* CTA */}
-                    <div className="hidden md:block">
+                    <div className="ct-desktop-cta">
                         <Link
                             href="/#contacto"
-                            className="bg-black text-white px-5 py-2 rounded-2xl text-sm font-medium hover:bg-surface hover:text-black border border-transparent hover:border-border transition-all shadow-md shadow-black/10"
+                            className="ct-nav-cta"
                         >
                             Cotizar
                         </Link>
                     </div>
 
-                    {/* Mobile Menu Button */}
                     <button
                         onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-                        className="md:hidden p-2 text-black"
+                        className="ct-menu-button"
+                        aria-label={isMobileMenuOpen ? 'Cerrar menú' : 'Abrir menú'}
+                        aria-expanded={isMobileMenuOpen}
                     >
-                        <div className="w-6 flex flex-col gap-1.5">
-                            <span className="h-px bg-current" />
-                            <span className="h-px bg-current" />
-                            <span className="h-px bg-current" />
-                        </div>
+                        <span />
+                        <span />
+                        <span />
                     </button>
                 </div>
 
-                {/* Mobile Menu */}
-                {
-                    isMobileMenuOpen && (
-                        <div className="md:hidden py-6 border-t border-border bg-white/95 backdrop-blur-xl rounded-b-3xl px-6">
-                            <div className="flex flex-col items-end gap-4">
-                                {navLinks.map((link) => (
-                                    <Link
-                                        key={link.href}
-                                        href={link.href}
-                                        onClick={() => setIsMobileMenuOpen(false)}
-                                        className="text-base font-medium text-[#dc2626]"
-                                    >
-                                        {link.label}
-                                    </Link>
-                                ))}
-                            </div>
-                        </div>
-                    )
-                }
+                {isMobileMenuOpen && (
+                    <div className="ct-mobile-menu">
+                        {navLinks.map((link) => (
+                            <Link
+                                key={link.href}
+                                href={link.href}
+                                onClick={() => setIsMobileMenuOpen(false)}
+                                className="ct-mobile-link"
+                            >
+                                {link.label}
+                            </Link>
+                        ))}
+                        <Link
+                            href="/#contacto"
+                            onClick={() => setIsMobileMenuOpen(false)}
+                            className="ct-mobile-cta"
+                        >
+                            Cotizar tu remolque
+                        </Link>
+                    </div>
+                )}
             </nav >
         </header >
     );

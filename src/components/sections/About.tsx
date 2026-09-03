@@ -1,80 +1,84 @@
 'use client';
 
+import Image from 'next/image';
 import { motion } from 'framer-motion';
-import { useInView } from 'framer-motion';
-import { useRef } from 'react';
+
+const attributes = [
+    'Diseño 3D',
+    'Acero de alta resistencia grado 50 y 100',
+    'Pruebas antes de entregar',
+];
 
 export default function About() {
-    const ref = useRef(null);
-    const isInView = useInView(ref, { once: true, margin: '-100px' });
-
     return (
-        <section id="nosotros" className="section-padding bg-background relative">
-            <div className="max-w-7xl mx-auto px-6 lg:px-12" ref={ref}>
-                <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 lg:gap-24">
-                    {/* Left - Main content */}
-                    <motion.div
-                        initial={{ opacity: 0, y: 40 }}
-                        animate={isInView ? { opacity: 1, y: 0 } : {}}
-                        transition={{ duration: 0.8 }}
-                    >
-                        <p className="text-sm text-text-muted tracking-[0.2em] uppercase mb-4">
-                            Nuestra Historia
-                        </p>
-                        <h2 className="text-huge mb-12">
-                            20 años fabricando calidad
-                        </h2>
+        <section id="nosotros" className="ct-section ct-about">
+            <div className="ct-shell ct-about-grid">
+                <motion.div
+                    className="ct-mosaic"
+                    initial={{ opacity: 0, x: -24 }}
+                    whileInView={{ opacity: 1, x: 0 }}
+                    viewport={{ once: true, margin: '-80px' }}
+                    transition={{ duration: 0.7 }}
+                >
+                    <div className="ct-mosaic-tile ct-mosaic-main">
+                        <Image
+                            src="/trailer-day.png"
+                            alt="Unidad de carga en carretera"
+                            fill
+                            sizes="(max-width: 900px) 100vw, 34vw"
+                            className="ct-cover-image"
+                        />
+                        <span>Operación</span>
+                    </div>
+                    <div className="ct-mosaic-tile ct-mosaic-top">
+                        <Image
+                            src="/hero-background-v2.jpg"
+                            alt="Detalle industrial de transporte"
+                            fill
+                            sizes="(max-width: 900px) 50vw, 18vw"
+                            className="ct-cover-image"
+                        />
+                        <span>Resistencia</span>
+                    </div>
+                    <div className="ct-mosaic-tile ct-mosaic-bottom">
+                        <Image
+                            src="/hero-background-user.png"
+                            alt="Diseño de transporte para largas rutas"
+                            fill
+                            sizes="(max-width: 900px) 50vw, 18vw"
+                            className="ct-cover-image"
+                        />
+                        <span>Diseño 3D</span>
+                    </div>
+                </motion.div>
 
-                        <div className="space-y-6 text-lg text-text-muted leading-relaxed">
-                            <p>
-                                Desde 2004, nos hemos consolidado como referencia en la fabricación
-                                de remolques en México. Lo que comenzó como un pequeño taller,
-                                hoy es una planta con capacidad de producción de más de 1000 unidades anuales.
-                            </p>
-                            <p>
-                                Nuestros remolques están diseñados para resistir las condiciones
-                                más exigentes, con materiales de primera calidad y acabados
-                                de clase mundial.
-                            </p>
-                        </div>
-                    </motion.div>
+                <motion.div
+                    className="ct-about-copy"
+                    initial={{ opacity: 0, y: 24 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    viewport={{ once: true, margin: '-80px' }}
+                    transition={{ duration: 0.7, delay: 0.1 }}
+                >
+                    <p className="ct-kicker">¿Quiénes somos?</p>
+                    <h2>
+                        Detrás de cada
+                        <br />
+                        remolque hay <span>un equipo</span>
+                    </h2>
+                    <p className="ct-lead">
+                        Fabricantes de remolques y plataformas de alta resistencia para el
+                        transporte de carga pesada, con diseño e ingeniería 100% mexicana.
+                    </p>
 
-                    {/* Right - Values */}
-                    <motion.div
-                        initial={{ opacity: 0, y: 40 }}
-                        animate={isInView ? { opacity: 1, y: 0 } : {}}
-                        transition={{ duration: 0.8, delay: 0.2 }}
-                        className="lg:pt-24"
-                    >
-                        <div className="space-y-8">
-                            {[
-                                {
-                                    title: 'Compromiso',
-                                    description: 'Cada remolque fabricado con los más altos estándares.',
-                                },
-                                {
-                                    title: 'Innovación',
-                                    description: 'Tecnología de vanguardia en diseño y manufactura.',
-                                },
-                                {
-                                    title: 'Confianza',
-                                    description: 'Más de 1000 clientes satisfechos en todo México.',
-                                },
-                            ].map((value, index) => (
-                                <motion.div
-                                    key={value.title}
-                                    initial={{ opacity: 0, y: 20 }}
-                                    animate={isInView ? { opacity: 1, y: 0 } : {}}
-                                    transition={{ duration: 0.6, delay: 0.4 + index * 0.1 }}
-                                    className="border-l-2 border-foreground pl-6"
-                                >
-                                    <h3 className="text-xl font-medium mb-2">{value.title}</h3>
-                                    <p className="text-text-muted">{value.description}</p>
-                                </motion.div>
-                            ))}
-                        </div>
-                    </motion.div>
-                </div>
+                    <div className="ct-attribute-list">
+                        {attributes.map((attribute) => (
+                            <div className="ct-attribute" key={attribute}>
+                                <span className="ct-attribute-icon" aria-hidden="true">✓</span>
+                                <span>{attribute}</span>
+                            </div>
+                        ))}
+                    </div>
+                </motion.div>
             </div>
         </section>
     );

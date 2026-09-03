@@ -4,15 +4,15 @@ import Footer from '@/components/layout/Footer';
 import TrailersPage from '@/components/sections/TrailersPage';
 
 export const metadata: Metadata = {
-    title: 'Catálogo de Remolques 3D | Chief',
-    description: 'Explora nuestra línea de remolques en 3D. Visualiza modelos de caja seca, refrigerados y plataformas con especificaciones técnicas detalladas.',
+    title: 'Modelos 3D y especificaciones | Chief Trailers del Norte',
+    description: 'Explora los modelos 3D de Chief Trailers del Norte, sus especificaciones y configuraciones para carga pesada.',
 };
 
 export default function Remolques() {
     return (
         <>
             <Header />
-            <main className="pt-20">
+            <main>
                 <TrailersPage />
             </main>
             <Footer />
