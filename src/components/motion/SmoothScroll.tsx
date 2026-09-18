@@ -15,6 +15,25 @@ export default function SmoothScroll({ children }: { children: ReactNode }) {
     const pathname = usePathname();
     const firstRender = useRef(true);
 
+    // Si la altura del documento cambia (secciones que montan tarde, pins, imágenes),
+    // ScrollTrigger debe recalcular sus posiciones o las animaciones quedan sin dispararse.
+    useEffect(() => {
+        let timer: ReturnType<typeof setTimeout>;
+        let lastHeight = document.body.scrollHeight;
+        const observer = new ResizeObserver(() => {
+            const height = document.body.scrollHeight;
+            if (Math.abs(height - lastHeight) < 2) return;
+            lastHeight = height;
+            clearTimeout(timer);
+            timer = setTimeout(() => ScrollTrigger.refresh(), 150);
+        });
+        observer.observe(document.body);
+        return () => {
+            clearTimeout(timer);
+            observer.disconnect();
+        };
+    }, []);
+
     useEffect(() => {
         if (prefersReducedMotion()) return;
         const lenis = new Lenis({ lerp: 0.09, anchors: { offset: -64 } });
