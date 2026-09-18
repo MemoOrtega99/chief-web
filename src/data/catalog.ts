@@ -15,8 +15,8 @@ export type CatalogProduct = {
     code: string;
     summary: string;
     model?: ProductModel;
-    dimensions?: { width: string; height: string; length: string };
-    capacity?: string;
+    dimensions: { width: string; height: string; length: string };
+    capacity: string;
     /** Pendiente: el cliente aún no confirma las especificaciones técnicas. */
     specs: SpecGroup[];
 };
@@ -27,14 +27,13 @@ export const catalogProducts: CatalogProduct[] = [
         line: 'Plataforma',
         name: "High Cube 40'",
         code: 'PHC-40FT-2EJES',
-        summary:
-            'Plataforma de 40 pies y 2 ejes para carga general y contenedor. Doble cuello, vigas tipo I y piso de pino traslapado.',
+        summary: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.',
         model: {
             path: '/models/plataforma-high-cube-40-2ejes.glb',
             defaultColor: '#E31E24',
         },
-        dimensions: { width: '2.60 m', height: '1.35 m', length: '12.19 m' },
-        capacity: '30 t',
+        dimensions: { width: '— m', height: '— m', length: '— m' },
+        capacity: '— t',
         specs: [],
     },
     {
@@ -42,9 +41,9 @@ export const catalogProducts: CatalogProduct[] = [
         line: 'Plataforma',
         name: "High Cube 40' · 3 ejes",
         code: 'PHC-40FT-3EJES',
-        summary: 'La misma plataforma High Cube con un tercer eje para operaciones de hasta 40 toneladas.',
-        dimensions: { width: '2.60 m', height: '1.35 m', length: '12.19 m' },
-        capacity: '40 t',
+        summary: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.',
+        dimensions: { width: '— m', height: '— m', length: '— m' },
+        capacity: '— t',
         specs: [],
     },
     {
@@ -52,8 +51,9 @@ export const catalogProducts: CatalogProduct[] = [
         line: 'Portacontenedor',
         name: "Fijo 40'",
         code: 'PC-F40',
-        summary: 'Portacontenedor fijo con alma de ¼" G50 y 4 candados.',
-        capacity: '30 t',
+        summary: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.',
+        capacity: '— t',
+        dimensions: { width: '— m', height: '— m', length: '— m' },
         specs: [],
     },
     {
@@ -61,8 +61,9 @@ export const catalogProducts: CatalogProduct[] = [
         line: 'Portacontenedor',
         name: 'Fijo 40-20 FT',
         code: 'PC-F4020',
-        summary: 'Portacontenedor fijo para contenedores de 20 y 40 pies, con 6 candados.',
-        capacity: '30 t',
+        summary: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.',
+        capacity: '— t',
+        dimensions: { width: '— m', height: '— m', length: '— m' },
         specs: [],
     },
     {
@@ -70,8 +71,9 @@ export const catalogProducts: CatalogProduct[] = [
         line: 'Portacontenedor',
         name: "Extendible 40'-20'",
         code: 'PC-E4020',
-        summary: 'Diseño adaptable para contenedores de 20 y 40 pies, 6 candados.',
-        dimensions: { width: '2.44 m', height: '1.35 m', length: '12.90 m' },
+        summary: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.',
+        dimensions: { width: '— m', height: '— m', length: '— m' },
+        capacity: '— t',
         specs: [],
     },
     {
@@ -79,8 +81,9 @@ export const catalogProducts: CatalogProduct[] = [
         line: 'Convertidor',
         name: 'Dolly Tipo A',
         code: 'DC-A',
-        summary: 'Dolly convertidor con retráctil tipo UBL, quinta rueda Holland y eje Propar.',
-        dimensions: { width: '2.60 m', height: '1.45 m', length: '3.66 m' },
+        summary: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.',
+        dimensions: { width: '— m', height: '— m', length: '— m' },
+        capacity: '— t',
         specs: [],
     },
 ];

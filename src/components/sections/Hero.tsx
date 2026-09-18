@@ -9,9 +9,9 @@ const HERO_VIDEO_SRC: string | null = null;
 const HERO_POSTER_SRC = '/media/hero-poster.jpg';
 
 const facts = [
-    { title: 'Diseño 3D', text: 'Cada unidad se modela y valida en SolidWorks antes de cortar acero.' },
-    { title: 'Acero G50 / G100', text: 'Vigas y corazas de alta resistencia para trabajo pesado.' },
-    { title: 'Pruebas antes de entregar', text: 'Revisamos cada remolque antes de que salga de planta.' },
+    { title: 'Diseño 3D', text: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit.' },
+    { title: 'Acero G50 / G100', text: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit.' },
+    { title: 'Pruebas antes de entregar', text: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit.' },
 ];
 
 export default function Hero() {
