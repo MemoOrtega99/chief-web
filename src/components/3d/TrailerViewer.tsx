@@ -118,17 +118,28 @@ function TrailerModel({ path, color, onBounds }: ModelProps) {
         });
     }, [scene]);
 
-    useEffect(() => {
+    // Materiales de pintura; el color cambia con una transición suave en lugar de un salto.
+    const paints = useMemo(() => {
+        const list: THREE.MeshStandardMaterial[] = [];
         scene.traverse((child) => {
             if (!(child instanceof THREE.Mesh)) return;
             const materials = Array.isArray(child.material) ? child.material : [child.material];
             materials.forEach((material) => {
                 if (material instanceof THREE.MeshStandardMaterial && PAINT_MATERIALS.has(material.name)) {
-                    material.color.set(color);
+                    list.push(material);
                 }
             });
         });
-    }, [scene, color]);
+        return list;
+    }, [scene]);
+    const targetColor = useMemo(() => new THREE.Color(color), [color]);
+    const firstPaint = useRef(true);
+
+    useFrame((_, delta) => {
+        const t = firstPaint.current ? 1 : 1 - Math.exp(-delta * 6);
+        firstPaint.current = false;
+        paints.forEach((material) => material.color.lerp(targetColor, t));
+    });
 
     useEffect(() => {
         const box = computeBounds(scene).translate(offset);
@@ -146,6 +157,7 @@ type RigProps = {
     box: THREE.Box3 | null;
     initialView: ViewName;
     autoRotate: boolean;
+    autoRotateSpeed: number;
     interactive: boolean;
     controlsRef: React.RefObject<OrbitControlsImpl | null>;
     goalRef: React.RefObject<{ position: THREE.Vector3; target: THREE.Vector3 } | null>;
@@ -154,7 +166,7 @@ type RigProps = {
 };
 
 /** Encuadra la cámara al modelo y anima los cambios de vista. */
-function CameraRig({ box, initialView, autoRotate, interactive, controlsRef, goalRef, fitRef, frameMargin }: RigProps) {
+function CameraRig({ box, initialView, autoRotate, autoRotateSpeed, interactive, controlsRef, goalRef, fitRef, frameMargin }: RigProps) {
     const camera = useThree((state) => state.camera) as THREE.PerspectiveCamera;
     const size = useThree((state) => state.size);
 
@@ -249,7 +261,7 @@ function CameraRig({ box, initialView, autoRotate, interactive, controlsRef, goa
             enableZoom={interactive}
             enableRotate={interactive}
             autoRotate={autoRotate}
-            autoRotateSpeed={0.6}
+            autoRotateSpeed={autoRotateSpeed}
             maxPolarAngle={Math.PI / 2 - 0.04}
             onStart={() => {
                 goalRef.current = null;
@@ -309,6 +321,7 @@ type TrailerViewerProps = {
     color: string;
     initialView?: ViewName;
     autoRotate?: boolean;
+    autoRotateSpeed?: number;
     interactive?: boolean;
     /** Holgura del encuadre: 1 = el modelo toca los bordes. */
     frameMargin?: number;
@@ -323,6 +336,7 @@ const TrailerViewer = forwardRef<TrailerViewerHandle, TrailerViewerProps>(functi
         color,
         initialView = 'perspectiva',
         autoRotate = false,
+        autoRotateSpeed = 0.6,
         interactive = true,
         frameMargin = 1.12,
         preserveDrawingBuffer = false,
@@ -371,6 +385,7 @@ const TrailerViewer = forwardRef<TrailerViewerHandle, TrailerViewerProps>(functi
                         box={box}
                         initialView={initialView}
                         autoRotate={autoRotate}
+                        autoRotateSpeed={autoRotateSpeed}
                         interactive={interactive}
                         controlsRef={controlsRef}
                         goalRef={goalRef}

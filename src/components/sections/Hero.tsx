@@ -12,6 +12,8 @@ import { EASE, gsap, onIntroDone, prefersReducedMotion, SplitText, useGSAP } fro
  */
 const HERO_VIDEO_SRC: string | null = null;
 const HERO_PHOTO = 'chief-plataforma-extendible' as const;
+/** Tarjeta de producto junto al titular. Oculta por ahora; se retomará después. */
+const SHOW_HERO_CARD = false;
 
 export default function Hero() {
     const root = useRef<HTMLElement>(null);
@@ -34,9 +36,11 @@ export default function Hero() {
                 .from('.hr-grid-line', { scaleY: 0, transformOrigin: 'top', duration: 1.6, ease: 'expo.inOut', stagger: 0.08 }, 0)
                 .from('.hr-foot-line', { scaleX: 0, transformOrigin: 'left', duration: 1.6, ease: 'expo.inOut' }, 0.2)
                 .from('.hr-lead', { y: 30, autoAlpha: 0, duration: 1 }, 0.6)
-                .from('.hr-card', { clipPath: 'inset(100% 0% 0% 0%)', duration: 1.3, ease: 'expo.inOut' }, 0.5)
-                .from('.hr-card img', { scale: 1.3, xPercent: 12, duration: 1.8 }, 0.6)
                 .from('.hr-scroll', { autoAlpha: 0, duration: 0.8 }, 1);
+            if (SHOW_HERO_CARD) {
+                tl.from('.hr-card', { clipPath: 'inset(100% 0% 0% 0%)', duration: 1.3, ease: 'expo.inOut' }, 0.5)
+                    .from('.hr-card img', { scale: 1.3, xPercent: 12, duration: 1.8 }, 0.6);
+            }
 
             const off = onIntroDone(() => tl.play());
             return () => {
@@ -78,24 +82,26 @@ export default function Hero() {
                     </p>
                 </div>
 
-                <aside className="hr-card">
-                    <div className="hr-card-media">
-                        <Photo
-                            name="chief-cama-baja-trasera-taller"
-                            position="30% 55%"
-                            alt="Cama baja Chief Trailers en la planta"
-                            sizes="420px"
-                        />
-                    </div>
-                    <div className="hr-actions">
-                        <Link href="/#contacto" className="btn btn-ink">
-                            Cotizar
-                        </Link>
-                        <Link href="/catalogo" className="btn btn-red">
-                            Ver catálogo <ArrowIcon />
-                        </Link>
-                    </div>
-                </aside>
+                {SHOW_HERO_CARD && (
+                    <aside className="hr-card">
+                        <div className="hr-card-media">
+                            <Photo
+                                name="chief-cama-baja-trasera-taller"
+                                position="30% 55%"
+                                alt="Cama baja Chief Trailers en la planta"
+                                sizes="420px"
+                            />
+                        </div>
+                        <div className="hr-actions">
+                            <Link href="/#contacto" className="btn btn-ink">
+                                Cotizar
+                            </Link>
+                            <Link href="/catalogo" className="btn btn-red">
+                                Ver catálogo <ArrowIcon />
+                            </Link>
+                        </div>
+                    </aside>
+                )}
             </div>
 
             <span className="hr-foot-line" aria-hidden="true" />
