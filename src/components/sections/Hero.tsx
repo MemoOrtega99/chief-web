@@ -89,14 +89,14 @@ export default function Hero() {
                             Cotizar
                         </Link>
                         <Link href="/catalogo" className="btn btn-red">
-                            Catálogo 3D <ArrowIcon />
+                            Ver catálogo <ArrowIcon />
                         </Link>
                     </div>
                 </aside>
             </div>
 
             <span className="hr-foot-line" aria-hidden="true" />
-            <a href="#catalogo" className="hr-scroll">
+            <a href="#productos" className="hr-scroll">
                 Scroll
             </a>
         </section>

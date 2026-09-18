@@ -3,7 +3,6 @@
 import Link from 'next/link';
 import { useRef } from 'react';
 import { catalogProducts } from '@/data/catalog';
-import Blueprint from '@/components/ui/Blueprint';
 import { ArrowIcon } from '@/components/ui/icons';
 import { useReveal } from '@/components/motion/useReveal';
 
@@ -12,44 +11,36 @@ export default function ProductLines() {
     useReveal(root);
 
     return (
-        <section ref={root} className="pl-sec">
-            <div className="shell pl-head">
+        <section ref={root} id="productos" className="pr">
+            <div className="shell pr-head">
                 <div>
                     <p className="tag" data-fade>
-                        Líneas de producto
+                        Productos
                     </p>
                     <h2 className="display" data-split>
-                        Nuestra <em>línea.</em>
+                        Nuestros <em>productos.</em>
                     </h2>
                 </div>
-                <p className="pl-count mono" data-fade>
-                    ({String(catalogProducts.length).padStart(2, '0')})
+                <p className="pr-lead" data-fade>
+                    Remolques y plataformas de alta resistencia para el transporte de carga pesada.
                 </p>
             </div>
 
-            <span className="rule" data-line="x" />
-
-            <div className="pl-grid">
-                <span className="pl-divider" data-line="y" aria-hidden="true" />
+            <div className="pr-grid">
                 {catalogProducts.map((product, index) => (
-                    <Link
-                        key={product.slug}
-                        href={`/catalogo?modelo=${product.slug}`}
-                        className={`pl-card ${index % 2 ? 'is-offset' : ''}`}
-                    >
-                        <div className="pl-card-media" data-reveal>
-                            <span className="pl-card-index mono">{String(index + 1).padStart(2, '0')}</span>
-                            <span className={`chip ${product.model ? 'chip-live' : ''}`}>
-                                {product.model ? 'Modelo 3D' : 'Próximamente'}
-                            </span>
-                            {product.render ? (
+                    <Link key={product.slug} href={`/catalogo?modelo=${product.slug}`} className="pr-card">
+                        <div className="pr-card-media" data-reveal>
+                            {product.photo ? (
                                 // eslint-disable-next-line @next/next/no-img-element
-                                <img src={product.render} alt={`${product.line} ${product.name}`} loading="lazy" />
+                                <img src={product.photo} alt={`${product.line} ${product.name}`} loading="lazy" />
                             ) : (
-                                <Blueprint kind={product.blueprint} className="pl-card-blueprint" />
+                                <div className="pr-photo-slot" aria-hidden="true">
+                                    <span className="mono">Foto de producto</span>
+                                </div>
                             )}
                         </div>
-                        <div className="pl-card-foot">
+                        <div className="pr-card-foot">
+                            <span className="mono pr-card-index">{String(index + 1).padStart(2, '0')}</span>
                             <div>
                                 <span className="mono">{product.line}</span>
                                 <strong>{product.name}</strong>

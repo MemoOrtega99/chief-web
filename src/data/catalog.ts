@@ -15,6 +15,8 @@ export type CatalogProduct = {
     blueprint: BlueprintKind;
     /** Render estático del modelo 3D, si existe. */
     render?: string;
+    /** Foto real del producto (pendiente del cliente). Ruta en /public, ej. '/productos/phc-40.jpg'. */
+    photo?: string;
     line: string;
     name: string;
     code: string;
