@@ -65,21 +65,15 @@ export default function TrailersPage() {
             <section className="ct-product-hero">
                 <div className="ct-shell ct-product-split">
                     <div className="ct-product-viewer">
-                        <div className="ct-viewer-badge">
-                            <span className="ct-live-dot" aria-hidden="true" />
-                            Modelo 3D interactivo
-                        </div>
                         <TrailerViewer
                             modelPath={selectedTrailer.modelPath}
                             bodyColor={selectedColor.value}
-                            posterSrc="/trailer-day.png"
                         />
                         <div className="ct-viewer-hint">Arrastra para girar · Scroll para zoom</div>
                     </div>
 
                     <div className="ct-product-info">
                         <Link href="/" className="ct-back-link">← Volver al inicio</Link>
-                        <p className="ct-kicker">{selectedTrailer.category}</p>
                         <h1>{selectedTrailer.name}</h1>
                         <p className="ct-lead">{selectedTrailer.description}</p>
 

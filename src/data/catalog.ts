@@ -12,7 +12,6 @@ export type HomeProduct = {
 export type ViewerModel = {
     id: string;
     name: string;
-    category: string;
     modelPath: string;
     specs: Record<string, string>;
     description: string;
@@ -84,7 +83,6 @@ export const viewerModels: ViewerModel[] = [
     {
         id: 'remolque-1',
         name: 'Remolque 40-20 Fijo Molino',
-        category: 'Modelo 3D disponible',
         modelPath: '/models/40-20-fijo-molino-remake.glb',
         specs: {
             Largo: '16.15 m',
@@ -100,7 +98,6 @@ export const viewerModels: ViewerModel[] = [
     {
         id: 'remolque-2',
         name: 'Remolque 40-20 Variante 2',
-        category: 'Configuración especial',
         modelPath: '/models/40-20-fijo-molino-remake-2.glb',
         specs: {
             Largo: '16.10 m',
@@ -116,7 +113,6 @@ export const viewerModels: ViewerModel[] = [
     {
         id: 'remolque-3',
         name: 'Remolque 40-20 Variante 3',
-        category: 'Aplicación industrial',
         modelPath: '/models/40-20-fijo-molino-remake-3.glb',
         specs: {
             Largo: '14.63 m',

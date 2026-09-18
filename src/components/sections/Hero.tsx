@@ -61,13 +61,8 @@ export default function Hero() {
                         <TrailerViewer
                             modelPath="/models/40-20-fijo-molino-remake.glb"
                             bodyColor="#E31E24"
-                            posterSrc="/trailer-day.png"
                         />
                     </div>
-                    <p className="ct-model-label">
-                        <span className="ct-live-dot" aria-hidden="true" />
-                        Modelo 3D disponible
-                    </p>
                 </motion.div>
             </div>
         </section>

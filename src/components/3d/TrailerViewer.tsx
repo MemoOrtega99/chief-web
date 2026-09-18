@@ -94,26 +94,16 @@ class ViewerErrorBoundary extends Component<ViewerBoundaryProps, ViewerBoundaryS
 interface TrailerViewerProps {
     modelPath: string;
     bodyColor?: string;
-    posterSrc?: string;
     className?: string;
 }
 
 export default function TrailerViewer({
     modelPath,
     bodyColor = '#E31E24',
-    posterSrc,
     className = '',
 }: TrailerViewerProps) {
     return (
         <div className={`ct-trailer-viewer ${className}`.trim()}>
-            {posterSrc && (
-                <img
-                    src={posterSrc}
-                    alt=""
-                    aria-hidden="true"
-                    className="ct-viewer-poster"
-                />
-            )}
             <div className="ct-trailer-canvas">
                 <ViewerErrorBoundary>
                     <Canvas
