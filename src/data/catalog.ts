@@ -1,3 +1,5 @@
+import type { BlueprintKind } from '@/components/ui/Blueprint';
+
 export type SpecGroup = {
     title: string;
     items: string[];
@@ -10,6 +12,9 @@ export type ProductModel = {
 
 export type CatalogProduct = {
     slug: string;
+    blueprint: BlueprintKind;
+    /** Render estático del modelo 3D, si existe. */
+    render?: string;
     line: string;
     name: string;
     code: string;
@@ -24,6 +29,8 @@ export type CatalogProduct = {
 export const catalogProducts: CatalogProduct[] = [
     {
         slug: 'plataforma-high-cube-40-2-ejes',
+        blueprint: 'platform',
+        render: '/renders/phc-rojo-34.webp',
         line: 'Plataforma',
         name: "High Cube 40'",
         code: 'PHC-40FT-2EJES',
@@ -38,6 +45,7 @@ export const catalogProducts: CatalogProduct[] = [
     },
     {
         slug: 'plataforma-high-cube-40-3-ejes',
+        blueprint: 'platform',
         line: 'Plataforma',
         name: "High Cube 40' · 3 ejes",
         code: 'PHC-40FT-3EJES',
@@ -48,6 +56,7 @@ export const catalogProducts: CatalogProduct[] = [
     },
     {
         slug: 'portacontenedor-fijo-40',
+        blueprint: 'container',
         line: 'Portacontenedor',
         name: "Fijo 40'",
         code: 'PC-F40',
@@ -58,6 +67,7 @@ export const catalogProducts: CatalogProduct[] = [
     },
     {
         slug: 'portacontenedor-fijo-40-20',
+        blueprint: 'container',
         line: 'Portacontenedor',
         name: 'Fijo 40-20 FT',
         code: 'PC-F4020',
@@ -68,6 +78,7 @@ export const catalogProducts: CatalogProduct[] = [
     },
     {
         slug: 'portacontenedor-extendible-40-20',
+        blueprint: 'extendable',
         line: 'Portacontenedor',
         name: "Extendible 40'-20'",
         code: 'PC-E4020',
@@ -78,6 +89,7 @@ export const catalogProducts: CatalogProduct[] = [
     },
     {
         slug: 'dolly-convertidor-tipo-a',
+        blueprint: 'dolly',
         line: 'Convertidor',
         name: 'Dolly Tipo A',
         code: 'DC-A',

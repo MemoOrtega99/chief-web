@@ -29,7 +29,6 @@ const VIEW_DIRECTIONS: Record<ViewName, THREE.Vector3> = {
 };
 
 const PAINT_MATERIALS = new Set(['paint_body', 'paint_accent']);
-const FRAME_MARGIN = 1.12;
 
 export type TrailerViewerHandle = {
     setView: (view: ViewName) => void;
@@ -151,21 +150,24 @@ type RigProps = {
     controlsRef: React.RefObject<OrbitControlsImpl | null>;
     goalRef: React.RefObject<{ position: THREE.Vector3; target: THREE.Vector3 } | null>;
     fitRef: React.RefObject<((view: ViewName) => void) | null>;
+    orbitRef?: React.RefObject<number>;
+    frameMargin: number;
 };
 
 /** Encuadra la cámara al modelo y anima los cambios de vista. */
-function CameraRig({ box, initialView, autoRotate, interactive, controlsRef, goalRef, fitRef }: RigProps) {
+function CameraRig({ box, initialView, autoRotate, interactive, controlsRef, goalRef, fitRef, orbitRef, frameMargin }: RigProps) {
+    const baseRef = useRef<{ target: THREE.Vector3; spherical: THREE.Spherical; azimuth: number } | null>(null);
     const camera = useThree((state) => state.camera) as THREE.PerspectiveCamera;
     const size = useThree((state) => state.size);
 
-    const computeGoal = useCallback(
-        (view: ViewName) => {
+    const fitDirection = useCallback(
+        (direction: THREE.Vector3) => {
             if (!box) return null;
             const extent = box.getSize(new THREE.Vector3());
             const target = box.getCenter(new THREE.Vector3()).setY(extent.y * 0.35);
 
-            // Base de la cámara para esta vista.
-            const back = VIEW_DIRECTIONS[view].clone().normalize();
+            // Base de la cámara para esta dirección.
+            const back = direction.clone().normalize();
             const right = new THREE.Vector3(0, 1, 0).cross(back).normalize();
             const up = back.clone().cross(right).normalize();
 
@@ -186,11 +188,29 @@ function CameraRig({ box, initialView, autoRotate, interactive, controlsRef, goa
                     depth + Math.abs(corner.dot(up)) / tanV,
                 );
             }
-            distance *= FRAME_MARGIN;
-            const position = target.clone().addScaledVector(back, distance);
-            return { position, target, distance };
+            return { target, distance: distance * frameMargin };
         },
-        [box, camera],
+        [box, camera, frameMargin],
+    );
+
+    const computeGoal = useCallback(
+        (view: ViewName) => {
+            const direction = VIEW_DIRECTIONS[view].clone().normalize();
+            const fit = fitDirection(direction);
+            if (!fit) return null;
+            let { distance } = fit;
+            // Con giro externo, la distancia debe servir para cualquier ángulo de la vuelta.
+            if (orbitRef) {
+                const spherical = new THREE.Spherical().setFromVector3(direction);
+                for (let i = 0; i < 16; i++) {
+                    spherical.theta += Math.PI / 8;
+                    distance = Math.max(distance, fitDirection(new THREE.Vector3().setFromSpherical(spherical))!.distance);
+                }
+            }
+            const position = fit.target.clone().addScaledVector(direction, distance);
+            return { position, target: fit.target, distance };
+        },
+        [fitDirection, orbitRef],
     );
 
     useEffect(() => {
@@ -205,6 +225,8 @@ function CameraRig({ box, initialView, autoRotate, interactive, controlsRef, goa
         const goal = computeGoal(initialView);
         if (!goal) return;
         camera.position.copy(goal.position);
+        const spherical = new THREE.Spherical().setFromVector3(goal.position.clone().sub(goal.target));
+        baseRef.current = { target: goal.target.clone(), spherical, azimuth: spherical.theta };
         camera.near = goal.distance / 100;
         camera.far = goal.distance * 20;
         camera.updateProjectionMatrix();
@@ -219,6 +241,17 @@ function CameraRig({ box, initialView, autoRotate, interactive, controlsRef, goa
     }, [box, size.width, size.height]);
 
     useFrame((_, delta) => {
+        // Giro controlado desde fuera (por ejemplo, con el scroll): orbitRef guarda el ángulo en radianes.
+        const base = baseRef.current;
+        if (orbitRef && base) {
+            const t = 1 - Math.exp(-delta * 6);
+            base.azimuth += (base.spherical.theta + orbitRef.current - base.azimuth) * t;
+            const spherical = base.spherical.clone();
+            spherical.theta = base.azimuth;
+            camera.position.setFromSpherical(spherical).add(base.target);
+            camera.lookAt(base.target);
+            return;
+        }
         const goal = goalRef.current;
         const controls = controlsRef.current;
         if (!goal || !controls) return;
@@ -228,6 +261,8 @@ function CameraRig({ box, initialView, autoRotate, interactive, controlsRef, goa
         controls.update();
         if (camera.position.distanceTo(goal.position) < 0.01) goalRef.current = null;
     });
+
+    if (orbitRef) return null;
 
     return (
         <OrbitControls
@@ -300,11 +335,27 @@ type TrailerViewerProps = {
     initialView?: ViewName;
     autoRotate?: boolean;
     interactive?: boolean;
+    /** Ángulo de giro externo en radianes; desactiva los controles de órbita. */
+    orbitRef?: React.RefObject<number>;
+    /** Holgura del encuadre: 1 = el modelo toca los bordes. */
+    frameMargin?: number;
+    /** Permite leer el lienzo con toDataURL (para generar renders). */
+    preserveDrawingBuffer?: boolean;
     className?: string;
 };
 
 const TrailerViewer = forwardRef<TrailerViewerHandle, TrailerViewerProps>(function TrailerViewer(
-    { modelPath, color, initialView = 'perspectiva', autoRotate = false, interactive = true, className = '' },
+    {
+        modelPath,
+        color,
+        initialView = 'perspectiva',
+        autoRotate = false,
+        interactive = true,
+        orbitRef,
+        frameMargin = 1.12,
+        preserveDrawingBuffer = false,
+        className = '',
+    },
     ref,
 ) {
     const [box, setBox] = useState<THREE.Box3 | null>(null);
@@ -322,7 +373,7 @@ const TrailerViewer = forwardRef<TrailerViewerHandle, TrailerViewerProps>(functi
                 <Canvas
                     shadows={false}
                     dpr={[1, 1.75]}
-                    gl={{ antialias: true, alpha: true, powerPreference: 'high-performance' }}
+                    gl={{ antialias: true, alpha: true, powerPreference: 'high-performance', preserveDrawingBuffer }}
                     camera={{ fov: 30, position: [-12, 5, 10] }}
                     onContextMenu={(event) => event.preventDefault()}
                 >
@@ -352,6 +403,8 @@ const TrailerViewer = forwardRef<TrailerViewerHandle, TrailerViewerProps>(functi
                         controlsRef={controlsRef}
                         goalRef={goalRef}
                         fitRef={fitRef}
+                        orbitRef={orbitRef}
+                        frameMargin={frameMargin}
                     />
                 </Canvas>
             </ViewerErrorBoundary>

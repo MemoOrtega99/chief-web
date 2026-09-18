@@ -13,7 +13,7 @@ export const metadata: Metadata = {
 export default function CatalogoPage() {
     return (
         <>
-            <Header solid />
+            <Header />
             <main>
                 <Suspense>
                     <Catalog3D />
