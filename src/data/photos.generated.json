@@ -1,0 +1,58 @@
+{
+  "chief-cama-baja-3-ejes-cenital": {
+    "width": 4536,
+    "height": 8064,
+    "widths": [
+      1200,
+      2400
+    ]
+  },
+  "chief-cama-baja-3-ejes-perspectiva": {
+    "width": 4536,
+    "height": 8064,
+    "widths": [
+      1200,
+      2400
+    ]
+  },
+  "chief-cama-baja-trasera-taller": {
+    "width": 6048,
+    "height": 4032,
+    "widths": [
+      1200,
+      2400
+    ]
+  },
+  "chief-plataforma-extendible": {
+    "width": 8064,
+    "height": 4536,
+    "widths": [
+      1200,
+      2400
+    ]
+  },
+  "chief-plataforma-y-dollies-cenital": {
+    "width": 4336,
+    "height": 4924,
+    "widths": [
+      1200,
+      2400
+    ]
+  },
+  "chief-plataformas-y-dollies-cenital": {
+    "width": 4536,
+    "height": 5216,
+    "widths": [
+      1200,
+      2400
+    ]
+  },
+  "chief-plataformas-y-dollies-patio": {
+    "width": 7884,
+    "height": 4536,
+    "widths": [
+      1200,
+      2400
+    ]
+  }
+}

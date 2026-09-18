@@ -1,4 +1,5 @@
 import type { BlueprintKind } from '@/components/ui/Blueprint';
+import type { PhotoName } from '@/components/ui/Photo';
 
 export type SpecGroup = {
     title: string;
@@ -13,10 +14,8 @@ export type ProductModel = {
 export type CatalogProduct = {
     slug: string;
     blueprint: BlueprintKind;
-    /** Render estático del modelo 3D, si existe. */
-    render?: string;
-    /** Foto real del producto (pendiente del cliente). Ruta en /public, ej. '/productos/phc-40.jpg'. */
-    photo?: string;
+    /** Foto real (ver assets-src/fotos) y su encuadre en las tarjetas. */
+    photo?: { name: PhotoName; position?: string };
     line: string;
     name: string;
     code: string;
@@ -32,7 +31,7 @@ export const catalogProducts: CatalogProduct[] = [
     {
         slug: 'plataforma-high-cube-40-2-ejes',
         blueprint: 'platform',
-        render: '/renders/phc-rojo-34.webp',
+        photo: { name: 'chief-plataforma-y-dollies-cenital', position: '50% 22%' },
         line: 'Plataforma',
         name: "High Cube 40'",
         code: 'PHC-40FT-2EJES',
@@ -48,6 +47,7 @@ export const catalogProducts: CatalogProduct[] = [
     {
         slug: 'plataforma-high-cube-40-3-ejes',
         blueprint: 'platform',
+        photo: { name: 'chief-plataformas-y-dollies-cenital', position: '50% 24%' },
         line: 'Plataforma',
         name: "High Cube 40' · 3 ejes",
         code: 'PHC-40FT-3EJES',
@@ -81,6 +81,7 @@ export const catalogProducts: CatalogProduct[] = [
     {
         slug: 'portacontenedor-extendible-40-20',
         blueprint: 'extendable',
+        photo: { name: 'chief-plataforma-extendible', position: '55% 50%' },
         line: 'Portacontenedor',
         name: "Extendible 40'-20'",
         code: 'PC-E4020',
@@ -90,8 +91,21 @@ export const catalogProducts: CatalogProduct[] = [
         specs: [],
     },
     {
+        slug: 'cama-baja-3-ejes',
+        blueprint: 'platform',
+        photo: { name: 'chief-cama-baja-3-ejes-perspectiva', position: '50% 58%' },
+        line: 'Cama baja',
+        name: '3 ejes',
+        code: 'CB-3EJES',
+        summary: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.',
+        dimensions: { width: '— m', height: '— m', length: '— m' },
+        capacity: '— t',
+        specs: [],
+    },
+    {
         slug: 'dolly-convertidor-tipo-a',
         blueprint: 'dolly',
+        photo: { name: 'chief-plataforma-y-dollies-cenital', position: '50% 100%' },
         line: 'Convertidor',
         name: 'Dolly Tipo A',
         code: 'DC-A',

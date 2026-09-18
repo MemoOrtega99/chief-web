@@ -4,7 +4,11 @@ import Link from 'next/link';
 import { useRef } from 'react';
 import { catalogProducts } from '@/data/catalog';
 import { ArrowIcon } from '@/components/ui/icons';
+import Photo from '@/components/ui/Photo';
 import { useReveal } from '@/components/motion/useReveal';
+
+// Las líneas con foto primero; las que aún no tienen quedan al final.
+const products = [...catalogProducts].sort((a, b) => Number(!a.photo) - Number(!b.photo));
 
 export default function ProductLines() {
     const root = useRef<HTMLElement>(null);
@@ -27,12 +31,16 @@ export default function ProductLines() {
             </div>
 
             <div className="pr-grid">
-                {catalogProducts.map((product, index) => (
+                {products.map((product, index) => (
                     <Link key={product.slug} href={`/catalogo?modelo=${product.slug}`} className="pr-card">
                         <div className="pr-card-media" data-reveal>
                             {product.photo ? (
-                                // eslint-disable-next-line @next/next/no-img-element
-                                <img src={product.photo} alt={`${product.line} ${product.name}`} loading="lazy" />
+                                <Photo
+                                    name={product.photo.name}
+                                    position={product.photo.position}
+                                    alt={`${product.line} ${product.name} de Chief Trailers`}
+                                    sizes="(max-width: 720px) 100vw, (max-width: 1100px) 50vw, 33vw"
+                                />
                             ) : (
                                 <div className="pr-photo-slot" aria-hidden="true">
                                     <span className="mono">Foto de producto</span>

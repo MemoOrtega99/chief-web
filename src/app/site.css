@@ -618,15 +618,9 @@
   width: 100%;
   height: 100%;
   object-fit: cover;
-  object-position: 62% 60%;
+  object-position: 50% 62%;
 }
 
-/* Póster temporal: se amplía para que el camión quede a la derecha, fuera del titular. */
-.hr-media img {
-  width: 104%;
-  max-width: none;
-  object-position: left 62%;
-}
 
 .hr::after {
   content: '';
@@ -690,31 +684,15 @@
 }
 
 .hr-card-media {
-  position: relative;
-  display: grid;
-  place-items: center;
   aspect-ratio: 16 / 10;
   overflow: hidden;
-  background:
-    linear-gradient(var(--line) 1px, transparent 1px) 0 0 / 28px 28px,
-    linear-gradient(90deg, var(--line) 1px, transparent 1px) 0 0 / 28px 28px,
-    var(--white);
+  background: var(--paper-2);
 }
 
 .hr-card-media img {
-  width: 108%;
-  max-width: none;
-  transform: translateY(6%);
-}
-
-.hr-card-code {
-  position: absolute;
-  top: 12px;
-  left: 12px;
-  font-family: var(--f-mono);
-  font-size: 0.64rem;
-  letter-spacing: 0.04em;
-  color: var(--steel-dark);
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
 }
 
 .hr-actions {
@@ -910,18 +888,18 @@
 }
 
 .ci-media {
-  display: grid;
-  place-items: center;
+  position: relative;
   min-height: 420px;
   overflow: hidden;
-  background:
-    linear-gradient(var(--line) 1px, transparent 1px) 0 0 / 56px 56px,
-    linear-gradient(90deg, var(--line) 1px, transparent 1px) 0 0 / 56px 56px,
-    var(--white);
+  background: var(--paper-2);
 }
 
 .ci-media img {
-  width: 88%;
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
   transition: transform 1.2s var(--ease);
 }
 
@@ -1369,6 +1347,31 @@
   height: 16px;
 }
 
+.cg-photo {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  background: var(--paper-2);
+}
+
+.cg-photo img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.cg-photo-note {
+  position: absolute;
+  left: 50%;
+  bottom: 28px;
+  margin: 0;
+  padding: 10px 14px;
+  background: var(--paper);
+  border: 1px solid var(--ink);
+  transform: translateX(-50%);
+  white-space: nowrap;
+}
+
 .cg-placeholder {
   position: absolute;
   inset: 0;
@@ -1799,11 +1802,6 @@
 
   .hr-scroll {
     display: none;
-  }
-
-  .hr-media img {
-    width: 100%;
-    object-position: 55% 60%;
   }
 
   .hr-body {

@@ -3,14 +3,15 @@
 import Link from 'next/link';
 import { useRef } from 'react';
 import { ArrowIcon } from '@/components/ui/icons';
+import Photo from '@/components/ui/Photo';
 import { EASE, gsap, onIntroDone, prefersReducedMotion, SplitText, useGSAP } from '@/components/motion/gsap';
 
 /**
- * Video de fondo del hero. Mientras no exista, se muestra el póster.
+ * Video de fondo del hero. Mientras no exista, se muestra la foto.
  * Para activarlo: colocar el archivo en /public/media y poner aquí su ruta (ej. '/media/hero.mp4').
  */
 const HERO_VIDEO_SRC: string | null = null;
-const HERO_POSTER_SRC = '/media/hero-poster.jpg';
+const HERO_PHOTO = 'chief-plataforma-extendible' as const;
 
 export default function Hero() {
     const root = useRef<HTMLElement>(null);
@@ -50,12 +51,11 @@ export default function Hero() {
         <section ref={root} id="inicio" className="hr">
             <div className="hr-media" aria-hidden="true">
                 {HERO_VIDEO_SRC ? (
-                    <video autoPlay muted loop playsInline preload="metadata" poster={HERO_POSTER_SRC}>
+                    <video autoPlay muted loop playsInline preload="metadata" poster={`/fotos/${HERO_PHOTO}-2400.webp`}>
                         <source src={HERO_VIDEO_SRC} type="video/mp4" />
                     </video>
                 ) : (
-                    // eslint-disable-next-line @next/next/no-img-element
-                    <img src={HERO_POSTER_SRC} alt="" fetchPriority="high" />
+                    <Photo name={HERO_PHOTO} alt="" priority />
                 )}
             </div>
 
@@ -80,9 +80,12 @@ export default function Hero() {
 
                 <aside className="hr-card">
                     <div className="hr-card-media">
-                        <span className="hr-card-code">PHC-40FT-2EJES</span>
-                        {/* eslint-disable-next-line @next/next/no-img-element */}
-                        <img src="/renders/phc-rojo-34.webp" alt="Plataforma High Cube 40 pies en color rojo" />
+                        <Photo
+                            name="chief-cama-baja-trasera-taller"
+                            position="30% 55%"
+                            alt="Cama baja Chief Trailers en la planta"
+                            sizes="420px"
+                        />
                     </div>
                     <div className="hr-actions">
                         <Link href="/#contacto" className="btn btn-ink">

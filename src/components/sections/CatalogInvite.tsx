@@ -3,6 +3,7 @@
 import Link from 'next/link';
 import { useRef } from 'react';
 import { ArrowIcon } from '@/components/ui/icons';
+import Photo from '@/components/ui/Photo';
 import { useReveal } from '@/components/motion/useReveal';
 
 export default function CatalogInvite() {
@@ -30,8 +31,12 @@ export default function CatalogInvite() {
             </div>
 
             <Link href="/catalogo" className="ci-media" aria-label="Ver catálogo" data-reveal>
-                {/* eslint-disable-next-line @next/next/no-img-element */}
-                <img src="/renders/phc-rojo-34.webp" alt="Plataforma High Cube 40 pies" loading="lazy" />
+                <Photo
+                    name="chief-cama-baja-3-ejes-cenital"
+                    position="50% 45%"
+                    alt="Cama baja de tres ejes Chief Trailers vista desde arriba"
+                    sizes="(max-width: 1100px) 100vw, 55vw"
+                />
             </Link>
         </section>
     );

@@ -7,6 +7,7 @@ import { useRef, useState } from 'react';
 import { CatalogProduct, catalogProducts, paintColors } from '@/data/catalog';
 import type { TrailerViewerHandle, ViewName } from '@/components/3d/TrailerViewer';
 import Blueprint from '@/components/ui/Blueprint';
+import Photo from '@/components/ui/Photo';
 import { ArrowIcon, ExpandIcon, RotateIcon } from '@/components/ui/icons';
 import { EASE, gsap, prefersReducedMotion, useGSAP } from '@/components/motion/gsap';
 
@@ -133,6 +134,16 @@ export default function Catalog3D() {
                             </button>
                         </div>
                     </>
+                ) : product.photo ? (
+                    <div className="cg-photo">
+                        <Photo
+                            key={product.slug}
+                            name={product.photo.name}
+                            alt={`${product.line} ${product.name} de Chief Trailers`}
+                            sizes="(max-width: 1100px) 100vw, 68vw"
+                        />
+                        <p className="cg-photo-note mono">Modelo 3D en preparación</p>
+                    </div>
                 ) : (
                     <div className="cg-placeholder">
                         <Blueprint kind={product.blueprint} className="cg-blueprint" />
