@@ -1432,6 +1432,11 @@
   text-transform: uppercase;
 }
 
+.ch-specs-empty {
+  min-height: 180px;
+  border-bottom: 1px solid var(--ch-line-light);
+}
+
 .ch-specs details {
   border-bottom: 1px solid var(--ch-line-light);
 }

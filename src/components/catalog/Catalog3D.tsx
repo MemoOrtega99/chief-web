@@ -238,6 +238,7 @@ export default function Catalog3D() {
 
                 <section className="ch-specs" aria-label="Especificaciones técnicas">
                     <h2>Especificaciones técnicas</h2>
+                    {product.specs.length === 0 && <div className="ch-specs-empty" />}
                     {product.specs.map((group, index) => (
                         <details key={`${product.slug}-${group.title}`} open={index === 0}>
                             <summary>{group.title}</summary>

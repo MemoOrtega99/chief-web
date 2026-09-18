@@ -17,19 +17,9 @@ export type CatalogProduct = {
     model?: ProductModel;
     dimensions?: { width: string; height: string; length: string };
     capacity?: string;
+    /** Pendiente: el cliente aún no confirma las especificaciones técnicas. */
     specs: SpecGroup[];
 };
-
-const sharedRunningGear: SpecGroup[] = [
-    {
-        title: 'Patines',
-        items: ['Holland Mark V, Ampro o Jost', 'Patín de dos velocidades'],
-    },
-    {
-        title: 'Suspensión',
-        items: ['Neumática Sampa, Chief, Hendrickson HT-300 o Gabriel', 'Ejes con capacidad de 30,000 lbs'],
-    },
-];
 
 export const catalogProducts: CatalogProduct[] = [
     {
@@ -45,32 +35,7 @@ export const catalogProducts: CatalogProduct[] = [
         },
         dimensions: { width: '2.60 m', height: '1.35 m', length: '12.19 m' },
         capacity: '30 t',
-        specs: [
-            {
-                title: 'Estructura',
-                items: [
-                    'Vigas principales tipo I en acero G50 o Strenx',
-                    'Doble cuello con vigas A36 o Strenx',
-                    'Corazas de ¼" grado 50',
-                    'Piso de madera de pino traslapada de 1½"',
-                ],
-            },
-            ...sharedRunningGear,
-            {
-                title: 'Sistema de arrastre',
-                items: ['Gancho de arrastre Wallace Force R50-10', 'Perno rey y placa de arrastre para trabajo pesado'],
-            },
-            {
-                title: 'Accesorios y opcionales',
-                items: [
-                    'Sistema ABS Bendix de 2 o 4 sensores',
-                    'Luces y arnés Grote',
-                    'Rines de acero o aluminio de 22.5"',
-                    'Sistema de autoinflado',
-                    'Logotipo de la empresa',
-                ],
-            },
-        ],
+        specs: [],
     },
     {
         slug: 'plataforma-high-cube-40-3-ejes',
@@ -80,7 +45,7 @@ export const catalogProducts: CatalogProduct[] = [
         summary: 'La misma plataforma High Cube con un tercer eje para operaciones de hasta 40 toneladas.',
         dimensions: { width: '2.60 m', height: '1.35 m', length: '12.19 m' },
         capacity: '40 t',
-        specs: sharedRunningGear,
+        specs: [],
     },
     {
         slug: 'portacontenedor-fijo-40',
@@ -89,10 +54,7 @@ export const catalogProducts: CatalogProduct[] = [
         code: 'PC-F40',
         summary: 'Portacontenedor fijo con alma de ¼" G50 y 4 candados.',
         capacity: '30 t',
-        specs: [
-            { title: 'Estructura', items: ['Alma ¼" G50 con patines de solera ½" × 4" A36', '4 candados'] },
-            ...sharedRunningGear,
-        ],
+        specs: [],
     },
     {
         slug: 'portacontenedor-fijo-40-20',
@@ -101,10 +63,7 @@ export const catalogProducts: CatalogProduct[] = [
         code: 'PC-F4020',
         summary: 'Portacontenedor fijo para contenedores de 20 y 40 pies, con 6 candados.',
         capacity: '30 t',
-        specs: [
-            { title: 'Estructura', items: ['Alma ¼" G50 con patines de solera ½" × 4" A36', '6 candados'] },
-            ...sharedRunningGear,
-        ],
+        specs: [],
     },
     {
         slug: 'portacontenedor-extendible-40-20',
@@ -113,10 +72,7 @@ export const catalogProducts: CatalogProduct[] = [
         code: 'PC-E4020',
         summary: 'Diseño adaptable para contenedores de 20 y 40 pies, 6 candados.',
         dimensions: { width: '2.44 m', height: '1.35 m', length: '12.90 m' },
-        specs: [
-            { title: 'Sistema de arrastre', items: ['Gancho Wallace Force 50-10 o Premier 2400 A'] },
-            ...sharedRunningGear,
-        ],
+        specs: [],
     },
     {
         slug: 'dolly-convertidor-tipo-a',
@@ -125,16 +81,7 @@ export const catalogProducts: CatalogProduct[] = [
         code: 'DC-A',
         summary: 'Dolly convertidor con retráctil tipo UBL, quinta rueda Holland y eje Propar.',
         dimensions: { width: '2.60 m', height: '1.45 m', length: '3.66 m' },
-        specs: [
-            {
-                title: 'Componentes',
-                items: ['Retráctil tipo UBL', 'Quinta rueda Holland', 'Eje Propar 30,000 lbs'],
-            },
-            {
-                title: 'Opcionales',
-                items: ['Sistema de autoinflado', 'Llantas y rines unimount 22.5" o 24.5"'],
-            },
-        ],
+        specs: [],
     },
 ];
 
