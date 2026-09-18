@@ -1,140 +1,158 @@
-export type ProductGlyph = 'container' | 'platform' | 'dolly' | 'special';
-
-export type HomeProduct = {
-    slug: string;
-    family: string;
-    name: string;
-    glyph: ProductGlyph;
-    status?: string;
-    available: boolean;
+export type SpecGroup = {
+    title: string;
+    items: string[];
 };
 
-export type ViewerModel = {
-    id: string;
-    name: string;
-    modelPath: string;
-    specs: Record<string, string>;
-    description: string;
-    features: string[];
+export type ProductModel = {
+    path: string;
     defaultColor: string;
 };
 
-export const homeProducts: HomeProduct[] = [
+export type CatalogProduct = {
+    slug: string;
+    line: string;
+    name: string;
+    code: string;
+    summary: string;
+    model?: ProductModel;
+    dimensions?: { width: string; height: string; length: string };
+    capacity?: string;
+    specs: SpecGroup[];
+};
+
+const sharedRunningGear: SpecGroup[] = [
+    {
+        title: 'Patines',
+        items: ['Holland Mark V, Ampro o Jost', 'Patín de dos velocidades'],
+    },
+    {
+        title: 'Suspensión',
+        items: ['Neumática Sampa, Chief, Hendrickson HT-300 o Gabriel', 'Ejes con capacidad de 30,000 lbs'],
+    },
+];
+
+export const catalogProducts: CatalogProduct[] = [
+    {
+        slug: 'plataforma-high-cube-40-2-ejes',
+        line: 'Plataforma',
+        name: "High Cube 40'",
+        code: 'PHC-40FT-2EJES',
+        summary:
+            'Plataforma de 40 pies y 2 ejes para carga general y contenedor. Doble cuello, vigas tipo I y piso de pino traslapado.',
+        model: {
+            path: '/models/plataforma-high-cube-40-2ejes.glb',
+            defaultColor: '#E31E24',
+        },
+        dimensions: { width: '2.60 m', height: '1.35 m', length: '12.19 m' },
+        capacity: '30 t',
+        specs: [
+            {
+                title: 'Estructura',
+                items: [
+                    'Vigas principales tipo I en acero G50 o Strenx',
+                    'Doble cuello con vigas A36 o Strenx',
+                    'Corazas de ¼" grado 50',
+                    'Piso de madera de pino traslapada de 1½"',
+                ],
+            },
+            ...sharedRunningGear,
+            {
+                title: 'Sistema de arrastre',
+                items: ['Gancho de arrastre Wallace Force R50-10', 'Perno rey y placa de arrastre para trabajo pesado'],
+            },
+            {
+                title: 'Accesorios y opcionales',
+                items: [
+                    'Sistema ABS Bendix de 2 o 4 sensores',
+                    'Luces y arnés Grote',
+                    'Rines de acero o aluminio de 22.5"',
+                    'Sistema de autoinflado',
+                    'Logotipo de la empresa',
+                ],
+            },
+        ],
+    },
+    {
+        slug: 'plataforma-high-cube-40-3-ejes',
+        line: 'Plataforma',
+        name: "High Cube 40' · 3 ejes",
+        code: 'PHC-40FT-3EJES',
+        summary: 'La misma plataforma High Cube con un tercer eje para operaciones de hasta 40 toneladas.',
+        dimensions: { width: '2.60 m', height: '1.35 m', length: '12.19 m' },
+        capacity: '40 t',
+        specs: sharedRunningGear,
+    },
     {
         slug: 'portacontenedor-fijo-40',
-        family: 'Portacontenedor',
+        line: 'Portacontenedor',
         name: "Fijo 40'",
-        glyph: 'container',
-        available: false,
+        code: 'PC-F40',
+        summary: 'Portacontenedor fijo con alma de ¼" G50 y 4 candados.',
+        capacity: '30 t',
+        specs: [
+            { title: 'Estructura', items: ['Alma ¼" G50 con patines de solera ½" × 4" A36', '4 candados'] },
+            ...sharedRunningGear,
+        ],
     },
     {
         slug: 'portacontenedor-fijo-40-20',
-        family: 'Portacontenedor',
+        line: 'Portacontenedor',
         name: 'Fijo 40-20 FT',
-        glyph: 'container',
-        available: false,
+        code: 'PC-F4020',
+        summary: 'Portacontenedor fijo para contenedores de 20 y 40 pies, con 6 candados.',
+        capacity: '30 t',
+        specs: [
+            { title: 'Estructura', items: ['Alma ¼" G50 con patines de solera ½" × 4" A36', '6 candados'] },
+            ...sharedRunningGear,
+        ],
     },
     {
         slug: 'portacontenedor-extendible-40-20',
-        family: 'Portacontenedor',
+        line: 'Portacontenedor',
         name: "Extendible 40'-20'",
-        glyph: 'container',
-        available: false,
+        code: 'PC-E4020',
+        summary: 'Diseño adaptable para contenedores de 20 y 40 pies, 6 candados.',
+        dimensions: { width: '2.44 m', height: '1.35 m', length: '12.90 m' },
+        specs: [
+            { title: 'Sistema de arrastre', items: ['Gancho Wallace Force 50-10 o Premier 2400 A'] },
+            ...sharedRunningGear,
+        ],
     },
     {
-        slug: 'plataforma-high-cube-2-ejes',
-        family: 'Plataforma',
-        name: "High Cube 40' · 2 ejes",
-        glyph: 'platform',
-        available: false,
-    },
-    {
-        slug: 'plataforma-high-cube-3-ejes',
-        family: 'Plataforma',
-        name: "High Cube 40' · 3 ejes",
-        glyph: 'platform',
-        available: false,
-    },
-    {
-        slug: 'dolly-convertidor',
-        family: 'Convertidor',
-        name: 'Dolly Convertidor',
-        glyph: 'dolly',
-        available: false,
-    },
-    {
-        slug: 'camas-bajas',
-        family: 'Línea pendiente',
-        name: 'Camas bajas',
-        glyph: 'platform',
-        status: 'Pendiente 3D',
-        available: false,
-    },
-    {
-        slug: 'proyectos-especiales',
-        family: 'A medida',
-        name: 'Proyectos especiales',
-        glyph: 'special',
-        available: false,
+        slug: 'dolly-convertidor-tipo-a',
+        line: 'Convertidor',
+        name: 'Dolly Tipo A',
+        code: 'DC-A',
+        summary: 'Dolly convertidor con retráctil tipo UBL, quinta rueda Holland y eje Propar.',
+        dimensions: { width: '2.60 m', height: '1.45 m', length: '3.66 m' },
+        specs: [
+            {
+                title: 'Componentes',
+                items: ['Retráctil tipo UBL', 'Quinta rueda Holland', 'Eje Propar 30,000 lbs'],
+            },
+            {
+                title: 'Opcionales',
+                items: ['Sistema de autoinflado', 'Llantas y rines unimount 22.5" o 24.5"'],
+            },
+        ],
     },
 ];
 
-export const viewerModels: ViewerModel[] = [
-    {
-        id: 'remolque-1',
-        name: 'Remolque 40-20 Fijo Molino',
-        modelPath: '/models/40-20-fijo-molino-remake.glb',
-        specs: {
-            Largo: '16.15 m',
-            Ancho: '2.60 m',
-            Alto: '2.90 m',
-            Capacidad: '30,000 kg',
-            Volumen: '120 m³',
-        },
-        description: 'Remolque fijo tipo molino 40-20. Construcción robusta para carga pesada.',
-        features: ['Estructura reforzada', 'Piso de acero', 'Alta capacidad de carga', 'Diseño optimizado'],
-        defaultColor: '#E31E24',
-    },
-    {
-        id: 'remolque-2',
-        name: 'Remolque 40-20 Variante 2',
-        modelPath: '/models/40-20-fijo-molino-remake-2.glb',
-        specs: {
-            Largo: '16.10 m',
-            Ancho: '2.55 m',
-            Alto: '2.75 m',
-            Capacidad: '28,000 kg',
-            Tipo: 'Fijo Molino',
-        },
-        description: 'Segunda variante del remolque 40-20, con configuración adaptada para aplicaciones específicas.',
-        features: ['Configuración personalizada', 'Estructura reforzada', 'Versatilidad de uso', 'Diseño industrial'],
-        defaultColor: '#2563EB',
-    },
-    {
-        id: 'remolque-3',
-        name: 'Remolque 40-20 Variante 3',
-        modelPath: '/models/40-20-fijo-molino-remake-3.glb',
-        specs: {
-            Largo: '14.63 m',
-            Ancho: '2.60 m',
-            Alto: '1.52 m',
-            Capacidad: '35,000 kg',
-            Tipo: 'Molino Industrial',
-        },
-        description: 'Tercera variante optimizada para aplicaciones industriales y de alto rendimiento.',
-        features: ['Diseño compacto', 'Alta resistencia', 'Fácil mantenimiento', 'Aplicación industrial'],
-        defaultColor: '#16A34A',
-    },
-];
-
-export const colorOptions = [
+export const paintColors = [
     { name: 'Rojo Chief', value: '#E31E24' },
-    { name: 'Azul', value: '#2563EB' },
-    { name: 'Verde', value: '#16A34A' },
-    { name: 'Amarillo', value: '#EAB308' },
-    { name: 'Blanco', value: '#F5F5F5' },
-    { name: 'Negro', value: '#171717' },
+    { name: 'Negro', value: '#18191B' },
+    { name: 'Azul industrial', value: '#1F4E9C' },
+    { name: 'Gris acero', value: '#6B7078' },
+    { name: 'Blanco', value: '#EDEDEA' },
+    { name: 'Amarillo', value: '#F2B705' },
+    { name: 'Verde', value: '#1E6B3A' },
 ];
+
+export const contact = {
+    phoneDisplay: '81 1636 5258',
+    phoneHref: 'tel:+528116365258',
+    addressLines: ['Carretera Monterrey–Reynosa Km. 40.5', 'Ejido La Fragua, C.P. 67450', 'Cadereyta Jiménez, N.L.'],
+};
 
 export const processSteps = [
     { number: '01', title: 'Corte con plasma mecanizado', tag: 'Fabricación', image: '/hero-background-v2.jpg' },

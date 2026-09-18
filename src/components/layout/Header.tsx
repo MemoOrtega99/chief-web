@@ -1,96 +1,89 @@
 'use client';
 
 import Link from 'next/link';
-import Image from 'next/image';
-import { useState } from 'react';
+import { usePathname } from 'next/navigation';
+import { useEffect, useState } from 'react';
+import { contact } from '@/data/catalog';
+import { ArrowIcon } from '@/components/ui/icons';
 
-export default function Header() {
-    const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+const navLinks = [
+    { href: '/', label: 'Inicio' },
+    { href: '/catalogo', label: 'Catálogo 3D' },
+    { href: '/#contacto', label: 'Contacto' },
+];
 
-    const navLinks = [
-        { href: '/#productos', label: 'Productos' },
-        { href: '/#nosotros', label: 'Nosotros' },
-        { href: '/#proceso', label: 'Proceso' },
-        { href: '/#contacto', label: 'Contacto' },
-    ];
+export default function Header({ solid = false }: { solid?: boolean }) {
+    const pathname = usePathname();
+    const [scrolled, setScrolled] = useState(false);
+    const [menuOpen, setMenuOpen] = useState(false);
+
+    useEffect(() => {
+        if (solid) return;
+        const onScroll = () => setScrolled(window.scrollY > 40);
+        onScroll();
+        window.addEventListener('scroll', onScroll, { passive: true });
+        return () => window.removeEventListener('scroll', onScroll);
+    }, [solid]);
+
+    const isSolid = solid || scrolled || menuOpen;
 
     return (
-        <header className="ct-header">
-            <nav className="ct-nav" aria-label="Navegación principal">
-                <div className="ct-nav-inner">
-                    <Link href="/" className="ct-brand" aria-label="Chief Trailers del Norte, inicio">
-                        <Image
-                            src="/chief-logo-iso.png"
-                            alt="Chief Logo"
-                            width={44}
-                            height={44}
-                            className="ct-brand-mark"
-                            unoptimized
-                            priority
-                        />
-                        <span className="ct-brand-copy">
-                            CHIEF
-                            <small>TRAILERS DEL NORTE</small>
-                        </span>
-                    </Link>
+        <header className={`ch-header ${isSolid ? 'is-solid' : ''}`}>
+            <div className="ch-shell ch-header-inner">
+                <Link href="/" className="ch-brand" aria-label="Chief Trailers del Norte, inicio">
+                    {/* eslint-disable-next-line @next/next/no-img-element */}
+                    <img src="/chief-logo-iso.png" alt="" width={42} height={42} />
+                    <span className="ch-brand-word">
+                        CHIEF
+                        <small>TRAILERS DEL NORTE</small>
+                    </span>
+                </Link>
 
-                    <div className="ct-desktop-nav">
-                        <div className="ct-nav-links">
-                            {navLinks.map((link) => (
-                                <Link
-                                    key={link.href}
-                                    href={link.href}
-                                    className="ct-nav-link"
-                                >
-                                    {link.label}
-                                </Link>
-                            ))}
-                        </div>
-                    </div>
-
-                    <div className="ct-desktop-cta">
+                <nav className="ch-nav" aria-label="Navegación principal">
+                    {navLinks.map((link) => (
                         <Link
-                            href="/#contacto"
-                            className="ct-nav-cta"
+                            key={link.href}
+                            href={link.href}
+                            aria-current={pathname === link.href ? 'page' : undefined}
                         >
-                            Cotizar
+                            {link.label}
                         </Link>
-                    </div>
+                    ))}
+                </nav>
 
-                    <button
-                        onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-                        className="ct-menu-button"
-                        aria-label={isMobileMenuOpen ? 'Cerrar menú' : 'Abrir menú'}
-                        aria-expanded={isMobileMenuOpen}
-                    >
-                        <span />
-                        <span />
-                        <span />
-                    </button>
+                <div className="ch-header-actions">
+                    <a href={contact.phoneHref} className="ch-header-phone">
+                        {contact.phoneDisplay}
+                    </a>
+                    <Link href="/#contacto" className="ch-btn ch-btn-red">
+                        Cotizar <ArrowIcon />
+                    </Link>
                 </div>
 
-                {isMobileMenuOpen && (
-                    <div className="ct-mobile-menu">
-                        {navLinks.map((link) => (
-                            <Link
-                                key={link.href}
-                                href={link.href}
-                                onClick={() => setIsMobileMenuOpen(false)}
-                                className="ct-mobile-link"
-                            >
-                                {link.label}
-                            </Link>
-                        ))}
-                        <Link
-                            href="/#contacto"
-                            onClick={() => setIsMobileMenuOpen(false)}
-                            className="ct-mobile-cta"
-                        >
-                            Cotizar tu remolque
+                <button
+                    type="button"
+                    className="ch-menu-toggle"
+                    onClick={() => setMenuOpen((open) => !open)}
+                    aria-label={menuOpen ? 'Cerrar menú' : 'Abrir menú'}
+                    aria-expanded={menuOpen}
+                    aria-controls="ch-mobile-nav"
+                >
+                    <span />
+                    <span />
+                    <span />
+                </button>
+            </div>
+
+            {menuOpen && (
+                <nav id="ch-mobile-nav" className="ch-mobile-nav" aria-label="Navegación móvil">
+                    {navLinks.map((link) => (
+                        <Link key={link.href} href={link.href} onClick={() => setMenuOpen(false)}>
+                            {link.label}
                         </Link>
-                    </div>
-                )}
-            </nav >
-        </header >
+                    ))}
+                    <a href={contact.phoneHref}>{contact.phoneDisplay}</a>
+                </nav>
+            )}
+        </header>
     );
 }

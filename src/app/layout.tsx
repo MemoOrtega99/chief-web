@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Inter, Montserrat } from "next/font/google";
 import "./globals.css";
+import "./site.css";
 
 const inter = Inter({
     variable: "--font-geist-sans",
@@ -20,8 +21,6 @@ export const metadata: Metadata = {
   keywords: "remolques, plataformas, portacontenedor, dolly, fabricación, Chief Trailers, Cadereyta",
 };
 
-import Script from "next/script";
-
 export default function RootLayout({
   children,
 }: Readonly<{
@@ -29,16 +28,8 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="es">
-      <body className={`${inter.variable} ${montserrat.variable} antialiased`}>
+      <body className={`${inter.variable} ${montserrat.variable} ch-body antialiased`}>
         {children}
-        <Script
-          src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"
-          strategy="beforeInteractive"
-        />
-        <Script
-          src="/scripts/liquidGL.js"
-          strategy="afterInteractive"
-        />
       </body>
     </html>
   );

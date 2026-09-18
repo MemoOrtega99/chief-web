@@ -1,69 +1,67 @@
-'use client';
-
-import dynamic from 'next/dynamic';
 import Link from 'next/link';
-import { motion } from 'framer-motion';
+import { ArrowIcon } from '@/components/ui/icons';
 
-const TrailerViewer = dynamic(() => import('@/components/3d/TrailerViewer'), {
-    ssr: false,
-    loading: () => <div className="ct-viewer-loading">Cargando modelo 3D...</div>,
-});
+/**
+ * Video de fondo del hero. Mientras no exista, se muestra el póster.
+ * Para activarlo: colocar el archivo en /public/media y poner aquí su ruta (ej. '/media/hero.mp4').
+ */
+const HERO_VIDEO_SRC: string | null = null;
+const HERO_POSTER_SRC = '/media/hero-poster.jpg';
 
-const highlights = ['Diseño 3D', 'Acero G50 / G100', 'Pruebas antes de entregar'];
+const facts = [
+    { title: 'Diseño 3D', text: 'Cada unidad se modela y valida en SolidWorks antes de cortar acero.' },
+    { title: 'Acero G50 / G100', text: 'Vigas y corazas de alta resistencia para trabajo pesado.' },
+    { title: 'Pruebas antes de entregar', text: 'Revisamos cada remolque antes de que salga de planta.' },
+];
 
 export default function Hero() {
     return (
-        <section id="inicio" className="ct-hero">
-            <div className="ct-hero-arc ct-hero-arc-one" />
-            <div className="ct-hero-arc ct-hero-arc-two" />
+        <section id="inicio" className="ch-hero">
+            <div className="ch-hero-media" aria-hidden="true">
+                {HERO_VIDEO_SRC ? (
+                    <video autoPlay muted loop playsInline preload="metadata" poster={HERO_POSTER_SRC}>
+                        <source src={HERO_VIDEO_SRC} type="video/mp4" />
+                    </video>
+                ) : (
+                    // eslint-disable-next-line @next/next/no-img-element
+                    <img src={HERO_POSTER_SRC} alt="" fetchPriority="high" />
+                )}
+            </div>
 
-            <div className="ct-shell ct-hero-grid">
-                <motion.div
-                    className="ct-hero-copy"
-                    initial={{ opacity: 0, y: 24 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ duration: 0.7 }}
-                >
-                    <p className="ct-kicker ct-kicker-light">Fabricación de remolques industriales</p>
-                    <h1>
-                        Ingeniería <span>Mexicana</span>
-                        <br />
-                        con Visión Global
+            <div className="ch-hero-inner">
+                <div className="ch-hero-copy">
+                    <p className="ch-label ch-label-light">Fabricantes de remolques · Cadereyta, N.L.</p>
+                    <h1 className="ch-display">
+                        <span>Ingeniería</span>
+                        <span><em>mexicana</em></span>
+                        <span>con visión global</span>
                     </h1>
-                    <p className="ct-hero-subtitle">
+                    <p className="ch-hero-lead">
+                        Remolques y plataformas de alta resistencia, diseñados y fabricados en Nuevo León.
                         En Chief Trailers del Norte, la calidad es primero.
                     </p>
-                    <Link href="/#contacto" className="ct-button ct-button-primary">
-                        Cotiza tu remolque
-                        <span aria-hidden="true">→</span>
-                    </Link>
+                    <div className="ch-hero-actions">
+                        <Link href="/#contacto" className="ch-btn ch-btn-red">
+                            Cotiza tu remolque <ArrowIcon />
+                        </Link>
+                        <Link href="/catalogo" className="ch-btn ch-btn-ghost">
+                            Ver catálogo 3D
+                        </Link>
+                    </div>
+                </div>
 
-                    <div className="ct-checks" aria-label="Atributos de calidad">
-                        {highlights.map((item) => (
-                            <div className="ct-check" key={item}>
-                                <span className="ct-check-icon" aria-hidden="true">✓</span>
-                                <span>{item}</span>
+                <div className="ch-hero-facts">
+                    {facts.map((fact, index) => (
+                        <div className="ch-hero-fact" key={fact.title}>
+                            <b>{String(index + 1).padStart(2, '0')}</b>
+                            <div>
+                                <strong>{fact.title}</strong>
+                                <span>{fact.text}</span>
                             </div>
-                        ))}
-                    </div>
-                </motion.div>
-
-                <motion.div
-                    className="ct-hero-stage"
-                    initial={{ opacity: 0, scale: 0.96 }}
-                    animate={{ opacity: 1, scale: 1 }}
-                    transition={{ duration: 0.9, delay: 0.15 }}
-                >
-                    <div className="ct-red-panel ct-red-panel-one" />
-                    <div className="ct-red-panel ct-red-panel-two" />
-                    <div className="ct-red-panel ct-red-panel-three" />
-                    <div className="ct-hero-model">
-                        <TrailerViewer
-                            modelPath="/models/40-20-fijo-molino-remake.glb"
-                            bodyColor="#E31E24"
-                        />
-                    </div>
-                </motion.div>
+                        </div>
+                    ))}
+                    <a href="#catalogo" className="ch-hero-scroll">Explorar</a>
+                </div>
             </div>
         </section>
     );

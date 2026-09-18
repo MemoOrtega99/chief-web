@@ -8,3 +8,9 @@ README.md
 Dockerfile
 docker-compose.yml
 .env*.local
+.claude
+assets-src
+*.STEP
+*.STL
+*.step
+*.stl
