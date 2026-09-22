@@ -62,8 +62,12 @@
   text-transform: uppercase;
 }
 
-.split-line {
-  padding-bottom: 0.06em;
+/* SplitText envuelve cada línea en una máscara (overflow: clip) del alto de la línea.
+   Con interlineados cerrados eso corta descendentes (g, j, p, y) y acentos; se amplía
+   el área visible con padding y se compensa con margen negativo para no mover el texto. */
+.split-line-mask {
+  padding-block: 0.22em 0.24em;
+  margin-block: -0.22em -0.24em;
 }
 
 .tag {
