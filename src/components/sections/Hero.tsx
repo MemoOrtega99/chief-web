@@ -1,22 +1,54 @@
 'use client';
 
 import Link from 'next/link';
-import { useRef } from 'react';
+import { useEffect, useRef } from 'react';
 import { ArrowIcon } from '@/components/ui/icons';
 import Photo from '@/components/ui/Photo';
 import { EASE, gsap, onIntroDone, prefersReducedMotion, SplitText, useGSAP } from '@/components/motion/gsap';
 
 /**
- * Video de fondo del hero. Mientras no exista, se muestra la foto.
- * Para activarlo: colocar el archivo en /public/media y poner aquí su ruta (ej. '/media/hero.mp4').
+ * Video de fondo del hero (generado con `npm run optimize:video` desde assets-src/video).
+ * Con `null` se muestra HERO_PHOTO en su lugar.
  */
-const HERO_VIDEO_SRC: string | null = null;
+const HERO_VIDEO: { src1080: string; src720: string; poster: string } | null = {
+    src1080: '/media/hero-1080.mp4',
+    src720: '/media/hero-720.mp4',
+    poster: '/media/hero-poster.webp',
+};
 const HERO_PHOTO = 'chief-plataforma-extendible' as const;
 /** Tarjeta de producto junto al titular. Oculta por ahora; se retomará después. */
 const SHOW_HERO_CARD = false;
 
 export default function Hero() {
     const root = useRef<HTMLElement>(null);
+    const video = useRef<HTMLVideoElement>(null);
+
+    // Reproduce solo mientras el hero está en pantalla; con "reducir movimiento" queda el póster.
+    useEffect(() => {
+        const node = video.current;
+        if (!node) return;
+        if (prefersReducedMotion()) {
+            node.removeAttribute('autoplay');
+            node.pause();
+            return;
+        }
+        let inView = true;
+        const sync = () => {
+            if (inView && document.visibilityState === 'visible') node.play().catch(() => {});
+            else node.pause();
+        };
+        const observer = new IntersectionObserver(([entry]) => {
+            inView = entry.isIntersecting;
+            sync();
+        });
+        observer.observe(node);
+        // Al volver a la pestaña el navegador puede dejarlo en pausa: se reanuda si el hero está a la vista.
+        document.addEventListener('visibilitychange', sync);
+        return () => {
+            observer.disconnect();
+            document.removeEventListener('visibilitychange', sync);
+        };
+    }, []);
 
     useGSAP(
         () => {
@@ -54,9 +86,19 @@ export default function Hero() {
     return (
         <section ref={root} id="inicio" className="hr">
             <div className="hr-media" aria-hidden="true">
-                {HERO_VIDEO_SRC ? (
-                    <video autoPlay muted loop playsInline preload="metadata" poster={`/fotos/${HERO_PHOTO}-2400.webp`}>
-                        <source src={HERO_VIDEO_SRC} type="video/mp4" />
+                {HERO_VIDEO ? (
+                    <video
+                        ref={video}
+                        autoPlay
+                        muted
+                        loop
+                        playsInline
+                        disablePictureInPicture
+                        preload="auto"
+                        poster={HERO_VIDEO.poster}
+                    >
+                        <source src={HERO_VIDEO.src720} type="video/mp4" media="(max-width: 900px)" />
+                        <source src={HERO_VIDEO.src1080} type="video/mp4" />
                     </video>
                 ) : (
                     <Photo name={HERO_PHOTO} alt="" priority />

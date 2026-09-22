@@ -18,6 +18,7 @@ Abre [http://localhost:3000](http://localhost:3000).
 ```
 assets-src/            Material fuente, NO se publica en el sitio (Git LFS)
   fotos/               Fotos originales de Chief, en resolución completa y sin modificar
+  video/               Video original del hero, sin modificar
   models/              Modelos 3D originales (.glb exportados de SolidWorks)
     cad/               Archivos CAD (.STEP / .STL)
   marca/               Logotipos originales
@@ -26,6 +27,7 @@ assets-src/            Material fuente, NO se publica en el sitio (Git LFS)
 docs/                  Brief del proyecto y mockups de referencia
 public/                Lo que sí se publica
   fotos/               Versiones web de las fotos (generadas, no editar a mano)
+  media/               Video del hero en 1080p y 720p, y su póster (generados)
   models/              Modelos 3D optimizados para web
 scripts/               Scripts para generar las versiones web
 src/data/              Catálogo de productos y manifiesto de fotos
@@ -47,6 +49,17 @@ src/data/              Catálogo de productos y manifiesto de fotos
    ```
 
    `position` ajusta el encuadre dentro de las tarjetas (como `object-position` en CSS).
+
+### Cambiar el video del hero
+
+Requiere [ffmpeg](https://ffmpeg.org) instalado.
+
+1. Reemplaza `assets-src/video/chief-hero.mp4` con el video original.
+2. Genera las versiones web (sin audio, 1080p para escritorio y 720p para celulares, más el póster):
+
+   ```bash
+   npm run optimize:video
+   ```
 
 ### Agregar un modelo 3D
 
