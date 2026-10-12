@@ -11,6 +11,8 @@ export type ProductModel = {
     defaultColor: string;
 };
 
+export type ProductAvailability = 'Entrega inmediata' | 'Catálogo' | 'Información técnica por confirmar';
+
 export type CatalogProduct = {
     slug: string;
     blueprint: BlueprintKind;
@@ -18,14 +20,183 @@ export type CatalogProduct = {
     photo?: { name: PhotoName; position?: string };
     line: string;
     name: string;
-    code: string;
+    code?: string;
     summary: string;
     model?: ProductModel;
+    modelYear?: string;
+    availability: ProductAvailability;
     dimensions: { width: string; height: string; length: string };
     capacity: string;
-    /** Pendiente: el cliente aún no confirma las especificaciones técnicas. */
+    weight?: string;
     specs: SpecGroup[];
 };
+
+const highCubeSpecs = (axles: string): SpecGroup[] => [
+    {
+        title: 'Dimensiones y configuración',
+        items: [`Configuración: ${axles}.`, 'Ancho: 2.60 m · Alto: 1.35 m · Largo: 12.19 m.'],
+    },
+    {
+        title: 'Estructura',
+        items: [
+            'Viga principal tipo I con alma calibre 1/4" en acero de alta resistencia.',
+            'Patines calibre 1/2" x 6" en acero A-36.',
+            'Doble cuello con almas de 1/4" en acero de alta resistencia y solera de 1/2" x 4" en acero A-36.',
+            'Corazas de 1/4" en acero grado 50.',
+            'Omegas en C-12, placa tirón de 5/8" en A-36 y borda lateral con canal estructural de 6".',
+            'Solera lateral de 3/8", puentes transversales con viga I de 4" x 2" y 80,000 lb de capacidad.',
+            'Planchuela de 3/8" grado 50 y buchacas de 1/4" en acero A-36.',
+            'Diez ganchos loneros por lado y piso de madera de pino traslapada de 1 1/2".',
+        ],
+    },
+    {
+        title: 'Sistema de arrastre',
+        items: [
+            'Suspensión neumática de 30,000 lb, con altura de trabajo de 15" a 17".',
+            'Eje tipo Propar de 30,000 lb con cámaras de aire dobles T30-30 y matracas autoajustables.',
+            'Perno rey de 3/8" por 2".',
+            'Gancho de arrastre Wallace Force R50-10 de 50 toneladas y 10 barrenos.',
+            'Patín Ampro de 2 velocidades y 61,600 lb.',
+            'Defensa PTR perforada conforme a NOM-014-SCT-2-2021.',
+        ],
+    },
+    {
+        title: 'Accesorios y acabados',
+        items: [
+            'Protección lateral reglamentaria NMX-D-318-IMNC-2017.',
+            'Caja de herramientas, luces y arnés Grote.',
+            'Rines de acero o aluminio 11R, 22.5" x 8.25" con 10 birlos.',
+            'Llantas toda posición 11R, 22.5.',
+            'Piso Apitong, piso de madera de pino o piso antiderrapante.',
+            'Pintura a elección del cliente.',
+        ],
+    },
+    {
+        title: 'Configuración',
+        items: ['Suspensiones, ejes y accesorios pueden ajustarse a las necesidades de cada operación y a las mejores marcas disponibles.'],
+    },
+];
+
+const dryBoxSpecs = (length: string): SpecGroup[] => [
+    {
+        title: 'Dimensiones y capacidad',
+        items: [
+            `Largo: ${length}.`,
+            'Ancho exterior: 102.3" (2.60 m).',
+            'Altura interior: 110" (2.79 m).',
+            'Ancho interior: 101" (2.56 m).',
+            'Peso aproximado: 6,500 kg.',
+            'Capacidad de carga: 30 toneladas distribuidas uniformemente.',
+        ],
+    },
+    {
+        title: 'Características técnicas',
+        items: [
+            'Estructura de panel compuesto de aluminio con postes de acero galvanizado.',
+            'Techo de lámina de aluminio sellado de una sola pieza.',
+            'Piso de madera laminada para uso marino con recubrimiento antiderrapante.',
+            'Puertas traseras tipo libro en panel compuesto, con 5 bisagras y 4 barras de cierre.',
+            'Sellado hermético con sellos de hule en puertas y perímetro.',
+            'Arnés eléctrico Grote con sellado hermético y cinta reflejante DOT en laterales y perímetro trasero.',
+            'Suspensión de aire Hendrickson HT300.',
+            'Dos ejes Meritor de 30,000 lb con sistema de ajuste.',
+            'Frenos de aire con cámaras de doble diafragma y sistema ABS Bendix 2S/1M.',
+        ],
+    },
+    {
+        title: 'Accesorios y sistemas',
+        items: [
+            'Loderas marca Chief.',
+            'Protector lateral reglamentario (underride guard).',
+            'Piso reforzado para montacargas.',
+            'Cinta reflejante DOT.',
+            'Soporte de llanta de refacción.',
+            'Toma de aire y conexiones en parte frontal.',
+            'Paro de seguridad (spring brake).',
+        ],
+    },
+    {
+        title: 'Configuración',
+        items: ['La configuración de la suspensión puede variar según las necesidades del cliente. La distancia entre paneles puede ajustarse según los requerimientos de cada operación.'],
+    },
+];
+
+const extendableSpecs: SpecGroup[] = [
+    {
+        title: 'Dimensiones y configuración',
+        items: ['Ancho: 2.44 m · Alto: 1.35 m · Longitud: 12.90 m.', 'Diseñado para operación logística de alta resistencia.'],
+    },
+    {
+        title: 'Estructura',
+        items: [
+            'Vigas principales formadas en acero de alta resistencia.',
+            'Patines calibre 5/8" x 6" en acero A-36.',
+            'Cargadores de 1/4" tipo viga con alma de 1/4" en acero de alta resistencia.',
+            'Corazas de 3/8" en cuello y cajón.',
+            'Placa tirón de 5/8" en A-36 y planchuela de 3/8" grado 50.',
+        ],
+    },
+    {
+        title: 'Sistema de arrastre',
+        items: [
+            'Suspensión neumática de 30,000 lb, con altura de trabajo de 15" a 17".',
+            'Eje tipo Propar de 30,000 lb con cámaras de aire dobles T30-30 y matracas autoajustables.',
+            'Perno rey de 3/8" por 2".',
+            'Gancho de arrastre Wallace Force R50-10 de 50 toneladas y 10 barrenos.',
+            'Patín Ampro de 2 velocidades y 61,600 lb.',
+            'Defensa PTR perforada conforme a NOM-014-SCT-2-2021.',
+        ],
+    },
+    {
+        title: 'Accesorios y opciones',
+        items: [
+            'Luces y arnés Grote.',
+            'Sistema ABS Bendix con 2 o 4 sensores.',
+            'Rines de acero o aluminio 11R, 22.5" x 8.25" con 10 birlos.',
+            'Llantas toda posición 11R, 22.5.',
+            'Pintura a elección del cliente.',
+            'Opcionales: sistema de autoinflado y sistema de levante retráctil.',
+            'Luces y cinta reflejante conforme al reglamento de tránsito en carreteras federales.',
+        ],
+    },
+];
+
+const dollySpecs: SpecGroup[] = [
+    {
+        title: 'Dimensiones y configuración',
+        items: ['Ancho: 2.60 m · Alto: 1.45 m · Longitud: 3.66 m.'],
+    },
+    {
+        title: 'Estructura',
+        items: [
+            'Fabricado con viga formada en acero de alta resistencia.',
+            'Patines calibre 5/8" x 6" en acero A-36.',
+            'Cargadores tipo viga con alma de 1/4" en acero de alta resistencia.',
+            'Resistencia y patines en solera de 1/4" x 4".',
+        ],
+    },
+    {
+        title: 'Sistema de arrastre',
+        items: [
+            'Suspensión neumática de 30,000 lb, con altura de trabajo de 15" a 17".',
+            'Eje tipo Propar de 30,000 lb con cámaras de aire dobles T30-30 y matracas autoajustables.',
+            'Quinta rueda Holland FW35.',
+            'Argolla de arrastre PRE245DB.',
+        ],
+    },
+    {
+        title: 'Accesorios y opciones',
+        items: [
+            'Luces y arnés Grote.',
+            'Sistema ABS Bendix con 2 o 4 sensores.',
+            'Rines de acero o aluminio 11R, 22.5" x 8.25" con 10 birlos.',
+            'Llantas toda posición 11R, 22.5.',
+            'Pintura a elección del cliente.',
+            'Opcionales: sistema de autoinflado y sistema de levante retráctil.',
+            'Luces y cinta reflejante conforme al reglamento de tránsito en carreteras federales.',
+        ],
+    },
+];
 
 export const catalogProducts: CatalogProduct[] = [
     {
@@ -35,14 +206,15 @@ export const catalogProducts: CatalogProduct[] = [
         line: 'Plataforma',
         name: "High Cube 40'",
         code: 'PHC-40FT-2EJES',
-        summary: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.',
+        summary: 'Plataforma High Cube de 40 FT para carga general, con configuración de 2 ejes y pisos adaptables a la operación.',
         model: {
             path: '/models/plataforma-high-cube-40-2ejes.glb',
             defaultColor: '#E31E24',
         },
-        dimensions: { width: '— m', height: '— m', length: '— m' },
-        capacity: '— t',
-        specs: [],
+        availability: 'Entrega inmediata',
+        dimensions: { width: '2.60 m', height: '1.35 m', length: '12.19 m' },
+        capacity: 'Por confirmar',
+        specs: highCubeSpecs('2 ejes'),
     },
     {
         slug: 'plataforma-high-cube-40-3-ejes',
@@ -51,10 +223,11 @@ export const catalogProducts: CatalogProduct[] = [
         line: 'Plataforma',
         name: "High Cube 40' · 3 ejes",
         code: 'PHC-40FT-3EJES',
-        summary: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.',
-        dimensions: { width: '— m', height: '— m', length: '— m' },
-        capacity: '— t',
-        specs: [],
+        summary: 'Plataforma High Cube de 40 FT para carga general, con configuración de 3 ejes y pisos adaptables a la operación.',
+        availability: 'Entrega inmediata',
+        dimensions: { width: '2.60 m', height: '1.35 m', length: '12.19 m' },
+        capacity: 'Por confirmar',
+        specs: highCubeSpecs('3 ejes'),
     },
     {
         slug: 'portacontenedor-fijo-40',
@@ -62,10 +235,11 @@ export const catalogProducts: CatalogProduct[] = [
         line: 'Portacontenedor',
         name: "Fijo 40'",
         code: 'PC-F40',
-        summary: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.',
-        capacity: '— t',
-        dimensions: { width: '— m', height: '— m', length: '— m' },
-        specs: [],
+        summary: 'Portacontenedor fijo de 40 FT para operaciones de carga especializada. La configuración técnica se confirma según la operación.',
+        availability: 'Información técnica por confirmar',
+        capacity: 'Por confirmar',
+        dimensions: { width: 'Por confirmar', height: 'Por confirmar', length: "40'" },
+        specs: [{ title: 'Estado de la ficha', items: ['La presentación técnica recibida no incluye este modelo. Solicita la configuración específica a nuestro equipo comercial.'] }],
     },
     {
         slug: 'portacontenedor-fijo-40-20',
@@ -73,10 +247,11 @@ export const catalogProducts: CatalogProduct[] = [
         line: 'Portacontenedor',
         name: 'Fijo 40-20 FT',
         code: 'PC-F4020',
-        summary: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.',
-        capacity: '— t',
-        dimensions: { width: '— m', height: '— m', length: '— m' },
-        specs: [],
+        summary: 'Portacontenedor fijo para configuraciones de 40 y 20 FT. La ficha técnica se confirma según la operación.',
+        availability: 'Información técnica por confirmar',
+        capacity: 'Por confirmar',
+        dimensions: { width: 'Por confirmar', height: 'Por confirmar', length: '40–20 FT' },
+        specs: [{ title: 'Estado de la ficha', items: ['La presentación técnica recibida no incluye este modelo. Solicita la configuración específica a nuestro equipo comercial.'] }],
     },
     {
         slug: 'portacontenedor-extendible-40-20',
@@ -85,22 +260,68 @@ export const catalogProducts: CatalogProduct[] = [
         line: 'Portacontenedor',
         name: "Extendible 40'-20'",
         code: 'PC-E4020',
-        summary: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.',
-        dimensions: { width: '— m', height: '— m', length: '— m' },
-        capacity: '— t',
-        specs: [],
+        summary: 'Portacontenedor extendible 40-20 FT para operación logística de alta resistencia, con configuración ajustable y opciones de personalización.',
+        availability: 'Entrega inmediata',
+        dimensions: { width: '2.44 m', height: '1.35 m', length: '12.90 m' },
+        capacity: 'Por confirmar',
+        specs: extendableSpecs,
     },
     {
         slug: 'cama-baja-3-ejes',
         blueprint: 'platform',
         photo: { name: 'chief-cama-baja-3-ejes-perspectiva', position: '50% 58%' },
         line: 'Cama baja',
-        name: '3 ejes',
+        name: '53 FT · 3 ejes',
         code: 'CB-3EJES',
-        summary: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.',
-        dimensions: { width: '— m', height: '— m', length: '— m' },
-        capacity: '— t',
-        specs: [],
+        modelYear: '2026',
+        summary: 'Cama baja de 53 FT para carga pesada, con capacidad de 40 toneladas distribuidas uniformemente.',
+        availability: 'Catálogo',
+        dimensions: { width: '102" (2.60 m)', height: '51" (1.295 m) quinta rueda', length: '53 FT (16.18 m)' },
+        capacity: '40 toneladas',
+        weight: '7,000 kg',
+        specs: [
+            {
+                title: 'Especificaciones generales',
+                items: [
+                    'Capacidad de 40 toneladas distribuidas uniformemente.',
+                    'Longitud total de 53 FT (16.18 m) y ancho total de 102" (2.60 m).',
+                    'Peso de unidad: 7,000 kg.',
+                    'Altura de quinta rueda: 51" (1.295 m).',
+                    'Referencia normativa indicada en la ficha: NOM-035-CST.',
+                ],
+            },
+            {
+                title: 'Estructura',
+                items: [
+                    'Vigas principales con almas fabricadas en acero de alta resistencia A-572 grado 50 de 1/4" y patines en acero A-514 grado 100 de 1/2".',
+                    'Placa de enganche de 3/8" en acero grado 50 con perno rey Wallace.',
+                    'Corazas de 5/16" en acero de alta resistencia A-572 grado 50.',
+                    'Cargadores tipo I de 80,000 lb.',
+                    'Puentes tipo C fabricados en acero grado 50.',
+                    'Bastidor con canal de 6", buchacas laterales, solera de 3/8" x 2 1/2" y ganchos loneros.',
+                ],
+            },
+            {
+                title: 'Seguridad y rodaje',
+                items: [
+                    'Defensa amortiguadora de impacto certificada conforme a NOM-035-SCT-2022 y DOT, con capacidad de 80,000 lb y diseño bumper tube de 4" x 4".',
+                    'Protectores laterales normativos en cumplimiento con DOT.',
+                    'Piso de madera de pino nacional de 1 1/2" de espesor.',
+                    'Suspensión HT-300 HJ Rockwell de 30,000 lb y perfil bajo.',
+                    'Tres ejes importados de 30,000 lb, track 77.5, booster doble y matracas autoajustables.',
+                    'Frenos de aire con cámaras de doble diafragma y ABS Bendix con 2 sensores y 1 modulador.',
+                ],
+            },
+            {
+                title: 'Accesorios y sistemas',
+                items: [
+                    'Quince ganchos loneros por lado.',
+                    'Loderas marca Chief y fondo epóxico para uretano.',
+                    'Arnés eléctrico Grote y luces Grote reglamentarias.',
+                    'Cuatro topes de hule y alineación con láser.',
+                ],
+            },
+        ],
     },
     {
         slug: 'dolly-convertidor-tipo-a',
@@ -109,10 +330,37 @@ export const catalogProducts: CatalogProduct[] = [
         line: 'Convertidor',
         name: 'Dolly Tipo A',
         code: 'DC-A',
-        summary: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.',
-        dimensions: { width: '— m', height: '— m', length: '— m' },
-        capacity: '— t',
-        specs: [],
+        summary: 'Convertidor Dolly para acoplar remolques en operaciones de transporte pesado, con configuración ajustable y opciones de personalización.',
+        availability: 'Entrega inmediata',
+        dimensions: { width: '2.60 m', height: '1.45 m', length: '3.66 m' },
+        capacity: 'Por confirmar',
+        specs: dollySpecs,
+    },
+    {
+        slug: 'caja-seca-40',
+        blueprint: 'container',
+        line: 'Caja seca',
+        name: '40 FT · Borda alta',
+        modelYear: '2026',
+        summary: 'Caja seca de 40 FT para carga general, con estructura de panel compuesto de aluminio y capacidad de 30 toneladas.',
+        availability: 'Catálogo',
+        dimensions: { width: '102.3" (2.60 m)', height: '110" (2.79 m) interior', length: "40' (12.19 m)" },
+        capacity: '30 toneladas',
+        weight: '6,500 kg aprox.',
+        specs: dryBoxSpecs("40' (12.19 m)"),
+    },
+    {
+        slug: 'caja-seca-53',
+        blueprint: 'container',
+        line: 'Caja seca',
+        name: '53 FT · Borda alta',
+        modelYear: '2026',
+        summary: 'Caja seca de 53 FT para carga general, con estructura de panel compuesto de aluminio y capacidad de 30 toneladas.',
+        availability: 'Catálogo',
+        dimensions: { width: '102.3" (2.60 m)', height: '110" (2.79 m) interior', length: "53' (16.18 m)" },
+        capacity: '30 toneladas',
+        weight: '6,500 kg aprox.',
+        specs: dryBoxSpecs("53' (16.18 m)"),
     },
 ];
 

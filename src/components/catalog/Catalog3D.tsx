@@ -86,7 +86,7 @@ export default function Catalog3D() {
 
                 <div className="cg-meta mono">
                     <span>
-                        {String(productIndex + 1).padStart(2, '0')} — {product.code}
+                        {String(productIndex + 1).padStart(2, '0')} — {product.code ?? 'FICHA TÉCNICA'}
                     </span>
                     {product.model && <span>{color.toUpperCase()}</span>}
                 </div>
@@ -148,8 +148,8 @@ export default function Catalog3D() {
                     <div className="cg-placeholder">
                         <Blueprint kind={product.blueprint} className="cg-blueprint" />
                         <p>
-                            <strong>Modelo 3D en preparación.</strong>
-                            Estamos integrando esta línea al catálogo interactivo.
+                            <strong>Ficha técnica disponible.</strong>
+                            La visualización 3D de esta línea se integrará próximamente.
                         </p>
                     </div>
                 )}
@@ -172,18 +172,24 @@ export default function Catalog3D() {
                                     <small>{item.line}</small>
                                     {item.name}
                                 </span>
-                                <span className={`chip ${item.model ? 'chip-live' : ''}`}>{item.model ? '3D' : 'Pronto'}</span>
+                                <span className={`chip ${item.model ? 'chip-live' : ''}`}>
+                                    {item.model ? '3D' : item.availability === 'Información técnica por confirmar' ? 'Consultar' : 'Ficha'}
+                                </span>
                             </button>
                         ))}
                     </div>
                 </div>
 
                 <div className="cg-block cg-head">
-                    <p className="mono cg-kicker">
-                        {product.line} · {product.code}
-                    </p>
+                    <p className="mono cg-kicker">{product.line}{product.code ? ` · ${product.code}` : ''}</p>
                     <h1 className="display">{product.name}</h1>
                     <p className="cg-summary">{product.summary}</p>
+                    <div className="cg-product-meta">
+                        <span className={`cg-availability ${product.availability === 'Entrega inmediata' ? 'is-ready' : ''}`}>
+                            {product.availability}
+                        </span>
+                        {product.modelYear && <span className="mono">Modelo {product.modelYear}</span>}
+                    </div>
                 </div>
 
                 <dl className="cg-dims">
@@ -203,6 +209,12 @@ export default function Catalog3D() {
                         <dt className="mono">Capacidad</dt>
                         <dd>{product.capacity}</dd>
                     </div>
+                    {product.weight && (
+                        <div>
+                            <dt className="mono">Peso</dt>
+                            <dd>{product.weight}</dd>
+                        </div>
+                    )}
                 </dl>
 
                 {product.model && (
