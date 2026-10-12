@@ -156,30 +156,6 @@ export default function Catalog3D() {
             </div>
 
             <aside className="cg-panel">
-                <div className="cg-block">
-                    <p className="tag">Líneas de producto</p>
-                    <div className="cg-lines">
-                        {catalogProducts.map((item, index) => (
-                            <button
-                                key={item.slug}
-                                type="button"
-                                className="cg-line"
-                                aria-pressed={item.slug === product.slug}
-                                onClick={() => selectProduct(item)}
-                            >
-                                <span className="mono">{String(index + 1).padStart(2, '0')}</span>
-                                <span className="cg-line-name">
-                                    <small>{item.line}</small>
-                                    {item.name}
-                                </span>
-                                <span className={`chip ${item.model ? 'chip-live' : ''}`}>
-                                    {item.model ? '3D' : item.availability === 'Información técnica por confirmar' ? 'Consultar' : 'Ficha'}
-                                </span>
-                            </button>
-                        ))}
-                    </div>
-                </div>
-
                 <div className="cg-block cg-head">
                     <p className="mono cg-kicker">{product.line}{product.code ? ` · ${product.code}` : ''}</p>
                     <h1 className="display">{product.name}</h1>
@@ -274,6 +250,30 @@ export default function Catalog3D() {
                         </details>
                     ))}
                 </section>
+
+                <div className="cg-block">
+                    <p className="tag">Líneas de producto</p>
+                    <div className="cg-lines">
+                        {catalogProducts.map((item, index) => (
+                            <button
+                                key={item.slug}
+                                type="button"
+                                className="cg-line"
+                                aria-pressed={item.slug === product.slug}
+                                onClick={() => selectProduct(item)}
+                            >
+                                <span className="mono">{String(index + 1).padStart(2, '0')}</span>
+                                <span className="cg-line-name">
+                                    <small>{item.line}</small>
+                                    {item.name}
+                                </span>
+                                <span className={`chip ${item.model ? 'chip-live' : ''}`}>
+                                    {item.model ? '3D' : item.availability === 'Información técnica por confirmar' ? 'Consultar' : 'Ficha'}
+                                </span>
+                            </button>
+                        ))}
+                    </div>
+                </div>
             </aside>
         </div>
     );
