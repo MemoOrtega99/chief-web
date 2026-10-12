@@ -28,6 +28,9 @@ export const metadata: Metadata = {
   title: "Chief Trailers del Norte | Ingeniería mexicana",
   description: "Fabricación de remolques y plataformas de alta resistencia, con diseño e ingeniería 100% mexicana.",
   keywords: "remolques, plataformas, portacontenedor, dolly, fabricación, Chief Trailers, Cadereyta",
+  icons: {
+    icon: "/chief-logo-iso.png",
+  },
 };
 
 export default function RootLayout({
