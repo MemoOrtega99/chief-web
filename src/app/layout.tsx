@@ -1,27 +1,39 @@
 import type { Metadata } from "next";
-import { Inter, JetBrains_Mono, Montserrat } from "next/font/google";
+import localFont from "next/font/local";
 import "lenis/dist/lenis.css";
 import "./globals.css";
 import "./site.css";
 import SmoothScroll from "@/components/motion/SmoothScroll";
 import Preloader from "@/components/motion/Preloader";
 
-const inter = Inter({
+const inter = localFont({
+    src: [
+        { path: "../../public/fonts/inter-400.ttf", weight: "400", style: "normal" },
+        { path: "../../public/fonts/inter-500.ttf", weight: "500", style: "normal" },
+        { path: "../../public/fonts/inter-600.ttf", weight: "600", style: "normal" },
+    ],
     variable: "--font-geist-sans",
-    subsets: ["latin"],
-    weight: ["400", "500", "600"],
+    display: "swap",
 });
 
-const montserrat = Montserrat({
+const montserrat = localFont({
+    src: [
+        { path: "../../public/fonts/montserrat-500.ttf", weight: "500", style: "normal" },
+        { path: "../../public/fonts/montserrat-600.ttf", weight: "600", style: "normal" },
+        { path: "../../public/fonts/montserrat-700.ttf", weight: "700", style: "normal" },
+        { path: "../../public/fonts/montserrat-800.ttf", weight: "800", style: "normal" },
+    ],
     variable: "--font-display",
-    subsets: ["latin"],
-    weight: ["500", "600", "700", "800"],
+    display: "swap",
 });
 
-const mono = JetBrains_Mono({
+const mono = localFont({
+    src: [
+        { path: "../../public/fonts/jetbrains-mono-400.ttf", weight: "400", style: "normal" },
+        { path: "../../public/fonts/jetbrains-mono-500.ttf", weight: "500", style: "normal" },
+    ],
     variable: "--font-mono",
-    subsets: ["latin"],
-    weight: ["400", "500"],
+    display: "swap",
 });
 
 export const metadata: Metadata = {
