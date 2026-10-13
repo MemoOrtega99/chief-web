@@ -1058,6 +1058,9 @@
 /* ---------- Trayectoria y cifras ---------- */
 
 .stats-band {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
   display: block;
   margin-top: 0;
   border-top: 1px solid var(--line-dark);
@@ -1066,7 +1069,42 @@
   color: var(--white);
 }
 
+.stats-band::before,
+.stats-band::after {
+  content: '';
+  position: absolute;
+  pointer-events: none;
+  z-index: 0;
+}
+
+.stats-band::before {
+  inset: 0;
+  background-image:
+    linear-gradient(rgba(255, 255, 255, 0.035) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 255, 255, 0.035) 1px, transparent 1px);
+  background-size: 72px 72px;
+  opacity: 0.45;
+}
+
+.stats-band::after {
+  width: min(68vw, 860px);
+  height: min(68vw, 860px);
+  top: -52%;
+  right: -14%;
+  border-radius: 50%;
+  background: radial-gradient(
+    circle,
+    rgba(227, 30, 36, 0.16),
+    rgba(255, 154, 61, 0.07) 28%,
+    transparent 68%
+  );
+  filter: blur(46px);
+  opacity: 0.6;
+}
+
 .stats-intro {
+  position: relative;
+  z-index: 1;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -1092,11 +1130,15 @@
 }
 
 .stats-grid {
+  position: relative;
+  z-index: 1;
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
 }
 
 .stats-cell {
+  position: relative;
+  overflow: hidden;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -1105,6 +1147,42 @@
   gap: 28px;
   padding: clamp(28px, 4vw, 56px) var(--gut);
   text-align: center;
+  transition: background-color 0.45s var(--ease);
+}
+
+.stats-cell::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(circle at 50% 38%, rgba(227, 30, 36, 0.08), transparent 50%);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.45s var(--ease);
+}
+
+.stats-cell::after {
+  content: '';
+  position: absolute;
+  right: var(--gut);
+  bottom: 0;
+  left: var(--gut);
+  height: 2px;
+  background: var(--red);
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 0.45s var(--ease);
+}
+
+.stats-cell:hover {
+  background: var(--ink-2);
+}
+
+.stats-cell:hover::before {
+  opacity: 1;
+}
+
+.stats-cell:hover::after {
+  transform: scaleX(1);
 }
 
 .stats-cell + .stats-cell {
@@ -1112,6 +1190,8 @@
 }
 
 .stats-number {
+  position: relative;
+  z-index: 1;
   display: block;
   color: var(--red);
   font-family: var(--f-display);
@@ -1120,9 +1200,17 @@
   letter-spacing: -0.06em;
   line-height: 0.9;
   font-variant-numeric: tabular-nums;
+  transition: transform 0.45s var(--ease), text-shadow 0.45s var(--ease);
+}
+
+.stats-cell:hover .stats-number {
+  transform: translateY(-4px);
+  text-shadow: 0 0 24px rgba(227, 30, 36, 0.22);
 }
 
 .stats-label {
+  position: relative;
+  z-index: 1;
   max-width: 10ch;
   color: var(--white);
   font-family: var(--f-mono);
