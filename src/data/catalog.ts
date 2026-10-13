@@ -33,8 +33,8 @@ export type CatalogProduct = {
 
 const highCubeSpecs = (axles: string): SpecGroup[] => [
     {
-        title: 'Dimensiones y configuración',
-        items: [`Configuración: ${axles}.`, 'Ancho: 2.60 m · Alto: 1.35 m · Largo: 12.19 m.'],
+        title: 'Configuración de ejes',
+        items: [`${axles}.`],
     },
     {
         title: 'Estructura',
@@ -77,17 +77,10 @@ const highCubeSpecs = (axles: string): SpecGroup[] => [
     },
 ];
 
-const dryBoxSpecs = (length: string): SpecGroup[] => [
+const dryBoxSpecs = (): SpecGroup[] => [
     {
-        title: 'Dimensiones y capacidad',
-        items: [
-            `Largo: ${length}.`,
-            'Ancho exterior: 102.3" (2.60 m).',
-            'Altura interior: 110" (2.79 m).',
-            'Ancho interior: 101" (2.56 m).',
-            'Peso aproximado: 6,500 kg.',
-            'Capacidad de carga: 30 toneladas distribuidas uniformemente.',
-        ],
+        title: 'Configuración interior',
+        items: ['Ancho interior: 101" (2.56 m).'],
     },
     {
         title: 'Características técnicas',
@@ -123,8 +116,8 @@ const dryBoxSpecs = (length: string): SpecGroup[] => [
 
 const extendableSpecs: SpecGroup[] = [
     {
-        title: 'Dimensiones y configuración',
-        items: ['Ancho: 2.44 m · Alto: 1.35 m · Longitud: 12.90 m.', 'Diseñado para operación logística de alta resistencia.'],
+        title: 'Configuración',
+        items: ['Diseñado para operación logística de alta resistencia.'],
     },
     {
         title: 'Estructura',
@@ -162,10 +155,6 @@ const extendableSpecs: SpecGroup[] = [
 ];
 
 const dollySpecs: SpecGroup[] = [
-    {
-        title: 'Dimensiones y configuración',
-        items: ['Ancho: 2.60 m · Alto: 1.45 m · Longitud: 3.66 m.'],
-    },
     {
         title: 'Estructura',
         items: [
@@ -281,12 +270,8 @@ export const catalogProducts: CatalogProduct[] = [
         weight: '7,000 kg',
         specs: [
             {
-                title: 'Especificaciones generales',
+                title: 'Referencia técnica',
                 items: [
-                    'Capacidad de 40 toneladas distribuidas uniformemente.',
-                    'Longitud total de 53 FT (16.18 m) y ancho total de 102" (2.60 m).',
-                    'Peso de unidad: 7,000 kg.',
-                    'Altura de quinta rueda: 51" (1.295 m).',
                     'Referencia normativa indicada en la ficha: NOM-035-CST.',
                 ],
             },
@@ -347,7 +332,7 @@ export const catalogProducts: CatalogProduct[] = [
         dimensions: { width: '102.3" (2.60 m)', height: '110" (2.79 m) interior', length: "40' (12.19 m)" },
         capacity: '30 toneladas',
         weight: '6,500 kg aprox.',
-        specs: dryBoxSpecs("40' (12.19 m)"),
+        specs: dryBoxSpecs(),
     },
     {
         slug: 'caja-seca-53',
@@ -360,7 +345,7 @@ export const catalogProducts: CatalogProduct[] = [
         dimensions: { width: '102.3" (2.60 m)', height: '110" (2.79 m) interior', length: "53' (16.18 m)" },
         capacity: '30 toneladas',
         weight: '6,500 kg aprox.',
-        specs: dryBoxSpecs("53' (16.18 m)"),
+        specs: dryBoxSpecs(),
     },
 ];
 
