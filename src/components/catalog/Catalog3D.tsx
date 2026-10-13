@@ -168,30 +168,36 @@ export default function Catalog3D() {
                     </div>
                 </div>
 
-                <dl className="cg-dims">
-                    <div>
-                        <dt className="mono">Largo</dt>
-                        <dd>{product.dimensions.length}</dd>
+                <section className="cg-measures" aria-label="Medidas principales">
+                    <div className="cg-measures-head">
+                        <p className="tag">Medidas principales</p>
+                        <span className="mono">Ficha rápida</span>
                     </div>
-                    <div>
-                        <dt className="mono">Ancho</dt>
-                        <dd>{product.dimensions.width}</dd>
-                    </div>
-                    <div>
-                        <dt className="mono">Alto</dt>
-                        <dd>{product.dimensions.height}</dd>
-                    </div>
-                    <div>
-                        <dt className="mono">Capacidad</dt>
-                        <dd>{product.capacity}</dd>
-                    </div>
-                    {product.weight && (
+                    <dl className="cg-dims">
                         <div>
-                            <dt className="mono">Peso</dt>
-                            <dd>{product.weight}</dd>
+                            <dt className="mono">Largo</dt>
+                            <dd>{product.dimensions.length}</dd>
                         </div>
-                    )}
-                </dl>
+                        <div>
+                            <dt className="mono">Ancho</dt>
+                            <dd>{product.dimensions.width}</dd>
+                        </div>
+                        <div>
+                            <dt className="mono">Alto</dt>
+                            <dd>{product.dimensions.height}</dd>
+                        </div>
+                        <div>
+                            <dt className="mono">Capacidad</dt>
+                            <dd>{product.capacity}</dd>
+                        </div>
+                        {product.weight && (
+                            <div>
+                                <dt className="mono">Peso</dt>
+                                <dd>{product.weight}</dd>
+                            </div>
+                        )}
+                    </dl>
+                </section>
 
                 {product.model && (
                     <div className="cg-block">
@@ -237,11 +243,17 @@ export default function Catalog3D() {
                 </div>
 
                 <section className="cg-block cg-specs" aria-label="Especificaciones técnicas">
-                    <p className="tag">Especificaciones técnicas</p>
+                    <div className="cg-specs-head">
+                        <p className="tag">Especificaciones técnicas</p>
+                        <span className="mono">{product.specs.length} secciones</span>
+                    </div>
                     {product.specs.length === 0 && <div className="cg-specs-empty" />}
                     {product.specs.map((group, index) => (
                         <details key={`${product.slug}-${group.title}`} open={index === 0}>
-                            <summary>{group.title}</summary>
+                            <summary>
+                                <span className="cg-spec-index mono">{String(index + 1).padStart(2, '0')}</span>
+                                <span>{group.title}</span>
+                            </summary>
                             <ul>
                                 {group.items.map((item) => (
                                     <li key={item}>{item}</li>
