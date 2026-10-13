@@ -366,13 +366,13 @@ export const contact = {
 };
 
 export const processSteps = [
-    { number: '01', title: 'Corte con plasma mecanizado', tag: 'Fabricación', image: '/hero-background-v2.jpg' },
-    { number: '02', title: 'Oxicorte y doblez', tag: 'Fabricación', image: '/hero-background-v3.jpg' },
-    { number: '03', title: 'Soldadura', tag: 'Fabricación', image: '/trailer-day.png' },
-    { number: '04', title: 'Sandblast', tag: 'Acabado', image: '/hero-background.jpg' },
-    { number: '05', title: 'Pintura', tag: 'Acabado', image: '/hero-background-user.png' },
-    { number: '06', title: 'Personalización', tag: 'Entrega', image: '/trailer-day.png' },
-    { number: '07', title: 'Logística de entrega', tag: 'Entrega', image: '/hero-background-v2.jpg' },
+    { number: '01', title: 'Corte con plasma mecanizado', tag: 'Fabricación', image: '/fotos/chief-cama-baja-3-ejes-cenital-1200.webp' },
+    { number: '02', title: 'Oxicorte y doblez', tag: 'Fabricación', image: '/fotos/chief-cama-baja-trasera-taller-1200.webp' },
+    { number: '03', title: 'Soldadura', tag: 'Fabricación', image: '/fotos/chief-plataformas-y-dollies-patio-1200.webp' },
+    { number: '04', title: 'Sandblast', tag: 'Acabado', image: '/fotos/chief-plataforma-y-dollies-cenital-1200.webp' },
+    { number: '05', title: 'Pintura', tag: 'Acabado', image: '/hero-background-v2.jpg' },
+    { number: '06', title: 'Personalización', tag: 'Entrega', image: '/fotos/chief-plataforma-extendible-1200.webp' },
+    { number: '07', title: 'Logística de entrega', tag: 'Entrega', image: '/hero-background-user.png' },
 ];
 
 export const clientNames = [

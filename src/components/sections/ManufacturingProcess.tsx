@@ -1,12 +1,5 @@
-const processSteps = [
-    'Corte con plasma mecanizado',
-    'Oxicorte y doblez',
-    'Soldadura',
-    'Sandblast',
-    'Pintura',
-    'Personalización',
-    'Logística de entrega',
-];
+import Image from 'next/image';
+import { processSteps } from '@/data/catalog';
 
 export default function ManufacturingProcess() {
     return (
@@ -26,13 +19,21 @@ export default function ManufacturingProcess() {
                 </div>
 
                 <div className="pf-steps">
-                    {processSteps.map((step, index) => (
-                        <article className="pf-step" key={step}>
+                    {processSteps.map((step) => (
+                        <article className="pf-step" key={step.number}>
+                            <div className="pf-step-media">
+                                <Image
+                                    src={step.image}
+                                    alt=""
+                                    fill
+                                    sizes="(max-width: 720px) 50vw, (max-width: 1100px) 25vw, 14vw"
+                                />
+                                <span className="pf-step-number">{step.number}</span>
+                            </div>
                             <div className="pf-step-top">
-                                <span className="pf-step-number">{String(index + 1).padStart(2, '0')}</span>
                                 <span className="pf-step-line" aria-hidden="true" />
                             </div>
-                            <h3>{step}</h3>
+                            <h3>{step.title}</h3>
                         </article>
                     ))}
                 </div>
