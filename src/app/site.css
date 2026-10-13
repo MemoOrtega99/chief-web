@@ -744,6 +744,87 @@
   100% { transform: scaleY(0); transform-origin: bottom; }
 }
 
+/* ---------- Trayectoria y cifras ---------- */
+
+.stats-band {
+  display: grid;
+  grid-template-columns: minmax(0, 1.05fr) minmax(0, 1.45fr);
+  margin-top: clamp(72px, 12vh, 144px);
+  border-top: 1px solid var(--line-dark);
+  border-bottom: 1px solid var(--line-dark);
+  background: var(--ink);
+  color: var(--white);
+}
+
+.stats-intro {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: center;
+  min-height: 360px;
+  padding: clamp(48px, 7vw, 96px) var(--gut);
+  border-right: 1px solid var(--line-dark);
+}
+
+.stats-intro h2 {
+  margin: 24px 0 20px;
+  font-family: var(--f-display);
+  font-size: clamp(2.3rem, 4.4vw, 5rem);
+  font-weight: 600;
+  line-height: 0.98;
+  letter-spacing: -0.05em;
+}
+
+.stats-intro h2 em {
+  color: var(--red);
+  font-style: normal;
+}
+
+.stats-intro > p:last-child {
+  max-width: 410px;
+  margin: 0;
+  color: rgba(255, 255, 255, 0.68);
+  line-height: 1.6;
+}
+
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.stats-cell {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  min-height: 360px;
+  padding: clamp(28px, 4vw, 56px) var(--gut);
+}
+
+.stats-cell + .stats-cell {
+  border-left: 1px solid var(--line-dark);
+}
+
+.stats-number {
+  display: block;
+  color: var(--white);
+  font-family: var(--f-display);
+  font-size: clamp(2.8rem, 5.5vw, 6.4rem);
+  font-weight: 600;
+  letter-spacing: -0.06em;
+  line-height: 0.9;
+  font-variant-numeric: tabular-nums;
+}
+
+.stats-label {
+  max-width: 10ch;
+  color: var(--red);
+  font-family: var(--f-mono);
+  font-size: 0.72rem;
+  letter-spacing: 0.05em;
+  line-height: 1.35;
+  text-transform: uppercase;
+}
+
 /* ---------- Productos ---------- */
 
 .pr {
@@ -1901,6 +1982,20 @@
     grid-template-columns: 1fr;
   }
 
+  .stats-band {
+    grid-template-columns: 1fr;
+  }
+
+  .stats-intro {
+    min-height: 0;
+    border-right: 0;
+    border-bottom: 1px solid var(--line-dark);
+  }
+
+  .stats-cell {
+    min-height: 260px;
+  }
+
   .cg-stage {
     position: relative;
     top: 0;
@@ -2008,6 +2103,19 @@
 
   .cg-stage {
     height: 58svh;
+  }
+
+  .stats-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .stats-cell {
+    min-height: 180px;
+  }
+
+  .stats-cell + .stats-cell {
+    border-top: 1px solid var(--line-dark);
+    border-left: 0;
   }
 
   .cg-meta {

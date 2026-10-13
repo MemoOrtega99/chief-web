@@ -42,6 +42,7 @@ export default function Footer() {
                     <p className="mono ft-label">Sitio</p>
                     <ul>
                         <li><Link href="/">Inicio</Link></li>
+                        <li><Link href="/#nosotros">Nosotros</Link></li>
                         <li><Link href="/catalogo">Catálogo</Link></li>
                         <li><Link href="/#contacto">Cotizar</Link></li>
                     </ul>
