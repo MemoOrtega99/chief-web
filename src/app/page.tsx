@@ -4,6 +4,7 @@ import Footer from '@/components/layout/Footer';
 import About from '@/components/sections/About';
 import Hero from '@/components/sections/Hero';
 import ExperienceStats from '@/components/sections/ExperienceStats';
+import ManufacturingProcess from '@/components/sections/ManufacturingProcess';
 import ProductLines from '@/components/sections/ProductLines';
 import CatalogInvite from '@/components/sections/CatalogInvite';
 import Contact from '@/components/sections/Contact';
@@ -15,6 +16,7 @@ export default function Home() {
       <main>
         <Hero />
         <About />
+        <ManufacturingProcess />
         <ExperienceStats />
         <ProductLines />
         <CatalogInvite />

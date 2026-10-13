@@ -744,11 +744,250 @@
   100% { transform: scaleY(0); transform-origin: bottom; }
 }
 
+/* ---------- Nosotros ---------- */
+
+.ab-section {
+  padding: clamp(88px, 12vw, 164px) var(--gut) 0;
+  background: var(--paper);
+  color: var(--ink);
+}
+
+.ab-shell,
+.pf-shell {
+  width: min(100%, 1600px);
+  margin: 0 auto;
+}
+
+.ab-section-head {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin-bottom: clamp(34px, 5vw, 68px);
+}
+
+.ab-section-head .mono {
+  color: var(--red);
+  white-space: nowrap;
+}
+
+.ab-section-rule {
+  flex: 1;
+  height: 1px;
+  background: var(--line);
+}
+
+.ab-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1.08fr) minmax(0, 0.92fr);
+  gap: clamp(40px, 6vw, 112px);
+  align-items: center;
+}
+
+.ab-media {
+  display: grid;
+  grid-template-columns: minmax(0, 1.08fr) minmax(0, 0.92fr);
+  grid-template-rows: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+  min-height: clamp(420px, 44vw, 640px);
+}
+
+.ab-tile {
+  position: relative;
+  min-height: 0;
+  overflow: hidden;
+  border: 1px solid var(--line);
+  background: var(--paper-2);
+}
+
+.ab-tile-main {
+  grid-row: 1 / span 2;
+}
+
+.ab-tile::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, rgba(18, 19, 20, 0.02) 40%, rgba(18, 19, 20, 0.72) 100%);
+  pointer-events: none;
+}
+
+.ab-image {
+  object-fit: cover;
+  transition: transform 0.8s var(--ease);
+}
+
+.ab-tile:hover .ab-image {
+  transform: scale(1.04);
+}
+
+.ab-tile-label {
+  position: absolute;
+  right: 16px;
+  bottom: 14px;
+  z-index: 1;
+  color: var(--white);
+  font-family: var(--f-mono);
+  font-size: 0.66rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.ab-tile-label i {
+  margin-right: 9px;
+  color: var(--red);
+  font-style: normal;
+}
+
+.ab-copy {
+  padding-block: 24px;
+}
+
+.ab-kicker {
+  margin: 0 0 22px;
+  color: var(--red);
+}
+
+.ab-title {
+  max-width: 720px;
+  font-size: clamp(2.8rem, 5.2vw, 6rem);
+}
+
+.ab-title em {
+  font-style: normal;
+  color: var(--red);
+}
+
+.ab-lead {
+  max-width: 560px;
+  margin: 32px 0 0;
+  color: var(--steel-dark);
+  font-size: 1rem;
+  line-height: 1.65;
+}
+
+.ab-attributes {
+  margin-top: 40px;
+  border-top: 1px solid var(--line);
+}
+
+.ab-attribute {
+  display: grid;
+  grid-template-columns: 40px minmax(0, 1fr);
+  gap: 12px;
+  align-items: center;
+  padding: 16px 0;
+  border-bottom: 1px solid var(--line);
+  font-family: var(--f-mono);
+  font-size: 0.72rem;
+  letter-spacing: 0.04em;
+  line-height: 1.35;
+  text-transform: uppercase;
+}
+
+.ab-attribute-index {
+  color: var(--red);
+}
+
+/* ---------- Proceso de fabricación ---------- */
+
+.pf-section {
+  margin-top: clamp(88px, 12vw, 164px);
+  padding: clamp(64px, 8vw, 112px) var(--gut);
+  border-top: 1px solid var(--line-dark);
+  border-bottom: 1px solid var(--line-dark);
+  background: var(--ink);
+  color: var(--white);
+}
+
+.pf-heading {
+  display: grid;
+  grid-template-columns: minmax(0, 1.1fr) minmax(280px, 0.9fr);
+  gap: 48px;
+  align-items: end;
+}
+
+.pf-kicker {
+  margin: 0 0 22px;
+  color: var(--red);
+}
+
+.pf-title {
+  color: var(--white);
+  font-size: clamp(3rem, 6vw, 7rem);
+}
+
+.pf-title em {
+  color: var(--red);
+  font-style: normal;
+}
+
+.pf-lead {
+  max-width: 440px;
+  margin: 0 0 4px auto;
+  color: rgba(255, 255, 255, 0.66);
+  line-height: 1.6;
+}
+
+.pf-steps {
+  display: grid;
+  grid-template-columns: repeat(7, minmax(0, 1fr));
+  margin-top: clamp(52px, 7vw, 88px);
+  border-top: 1px solid var(--line-dark);
+  border-bottom: 1px solid var(--line-dark);
+}
+
+.pf-step {
+  display: flex;
+  flex-direction: column;
+  min-height: 250px;
+  padding: 22px 18px 28px;
+  border-left: 1px solid var(--line-dark);
+}
+
+.pf-step:first-child {
+  border-left: 0;
+}
+
+.pf-step-top {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.pf-step-number {
+  display: grid;
+  flex: 0 0 38px;
+  place-items: center;
+  width: 38px;
+  height: 38px;
+  background: var(--red);
+  color: var(--white);
+  font-family: var(--f-mono);
+  font-size: 0.74rem;
+}
+
+.pf-step-line {
+  flex: 1;
+  height: 1px;
+  background: var(--line-dark);
+}
+
+.pf-step h3 {
+  max-width: 150px;
+  margin: auto 0 0;
+  color: var(--white);
+  font-family: var(--f-display);
+  font-size: clamp(0.95rem, 1.35vw, 1.28rem);
+  font-weight: 600;
+  line-height: 1.08;
+  letter-spacing: -0.025em;
+}
+
 /* ---------- Trayectoria y cifras ---------- */
 
 .stats-band {
   display: block;
-  margin-top: clamp(72px, 12vh, 144px);
+  margin-top: 0;
   border-top: 1px solid var(--line-dark);
   border-bottom: 1px solid var(--line-dark);
   background: var(--ink);
@@ -1978,6 +2217,40 @@
     grid-template-columns: 1fr;
   }
 
+  .ab-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .ab-media {
+    max-width: 900px;
+    min-height: min(72vw, 640px);
+  }
+
+  .ab-copy {
+    max-width: 780px;
+  }
+
+  .pf-heading {
+    grid-template-columns: 1fr;
+    gap: 24px;
+  }
+
+  .pf-lead {
+    margin: 0;
+  }
+
+  .pf-steps {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+
+  .pf-step:nth-child(5) {
+    border-left: 0;
+  }
+
+  .pf-step:nth-child(n + 5) {
+    border-top: 1px solid var(--line-dark);
+  }
+
   .stats-band {
     display: block;
   }
@@ -2093,6 +2366,65 @@
 
   .cg-stage {
     height: 58svh;
+  }
+
+  .ab-section {
+    padding-top: 80px;
+  }
+
+  .ab-section-head {
+    margin-bottom: 32px;
+  }
+
+  .ab-media {
+    min-height: 420px;
+    gap: 8px;
+  }
+
+  .ab-tile-label {
+    right: 10px;
+    bottom: 10px;
+    font-size: 0.6rem;
+  }
+
+  .ab-lead {
+    margin-top: 24px;
+  }
+
+  .ab-attributes {
+    margin-top: 28px;
+  }
+
+  .pf-section {
+    margin-top: 80px;
+    padding-block: 64px;
+  }
+
+  .pf-title {
+    font-size: clamp(2.8rem, 12vw, 5rem);
+  }
+
+  .pf-steps {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .pf-step {
+    min-height: 190px;
+    padding: 18px 14px 22px;
+    border-top: 1px solid var(--line-dark);
+    border-left: 0;
+  }
+
+  .pf-step:nth-child(-n + 2) {
+    border-top: 0;
+  }
+
+  .pf-step:nth-child(n + 3) {
+    border-top: 1px solid var(--line-dark);
+  }
+
+  .pf-step:nth-child(odd) {
+    border-right: 1px solid var(--line-dark);
   }
 
   .stats-grid {

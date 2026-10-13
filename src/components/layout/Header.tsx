@@ -11,6 +11,7 @@ import { getLenis } from '@/components/motion/SmoothScroll';
 const navLinks = [
     { href: '/', label: 'Inicio' },
     { href: '/#nosotros', label: 'Nosotros' },
+    { href: '/#proceso', label: 'Proceso' },
     { href: '/catalogo', label: 'Catálogo' },
     { href: '/#contacto', label: 'Contacto' },
 ];
