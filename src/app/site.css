@@ -890,12 +890,57 @@
 /* ---------- Proceso de fabricación ---------- */
 
 .pf-section {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
   margin-top: clamp(88px, 12vw, 164px);
   padding: clamp(64px, 8vw, 112px) var(--gut);
   border-top: 1px solid var(--line-dark);
   border-bottom: 1px solid var(--line-dark);
   background: var(--ink);
   color: var(--white);
+}
+
+.pf-section::before,
+.pf-section::after {
+  content: '';
+  position: absolute;
+  pointer-events: none;
+  z-index: 0;
+}
+
+.pf-section::before {
+  inset: -12%;
+  background:
+    radial-gradient(circle at 10% 36%, rgba(255, 195, 112, 0.52) 0 1px, transparent 2px),
+    radial-gradient(circle at 14% 43%, rgba(255, 116, 42, 0.38) 0 1px, transparent 2px),
+    radial-gradient(circle at 17% 31%, rgba(255, 224, 157, 0.34) 0 1px, transparent 2px),
+    radial-gradient(circle at 21% 48%, rgba(255, 126, 54, 0.42) 0 1px, transparent 2px),
+    radial-gradient(circle at 25% 39%, rgba(255, 208, 122, 0.3) 0 1px, transparent 2px),
+    radial-gradient(circle at 30% 54%, rgba(255, 94, 39, 0.26) 0 1px, transparent 2px),
+    radial-gradient(ellipse at 16% 45%, rgba(255, 108, 38, 0.18), transparent 30%),
+    radial-gradient(ellipse at 27% 74%, rgba(227, 30, 36, 0.1), transparent 34%);
+  filter: blur(1.8px);
+  opacity: 0.68;
+}
+
+.pf-section::after {
+  width: min(74vw, 900px);
+  height: min(74vw, 900px);
+  left: -17vw;
+  bottom: -31vw;
+  border-radius: 50%;
+  background:
+    radial-gradient(ellipse at 50% 43%, rgba(255, 176, 78, 0.18), rgba(255, 82, 31, 0.08) 22%, transparent 58%),
+    conic-gradient(from 168deg at 50% 50%, transparent 0deg 30deg, rgba(255, 137, 59, 0.16) 38deg 51deg, transparent 61deg 360deg);
+  filter: blur(48px);
+  opacity: 0.48;
+  transform: rotate(-18deg);
+}
+
+.pf-shell {
+  position: relative;
+  z-index: 1;
 }
 
 .pf-heading {
