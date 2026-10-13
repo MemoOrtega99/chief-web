@@ -1,7 +1,7 @@
 'use client';
 
 import { Canvas, useFrame, useThree } from '@react-three/fiber';
-import { ContactShadows, Environment, Lightformer, OrbitControls, useGLTF, useProgress } from '@react-three/drei';
+import { ContactShadows, Environment, Lightformer, OrbitControls, useAnimations, useGLTF, useProgress } from '@react-three/drei';
 import {
     Component,
     ReactNode,
@@ -19,6 +19,7 @@ import * as THREE from 'three';
 import type { OrbitControls as OrbitControlsImpl } from 'three-stdlib';
 
 export type ViewName = 'perspectiva' | 'lateral' | 'frontal' | 'superior';
+export type AnimationTarget = 'closed' | 'open';
 
 /** Direcciones de cámara por vista. El remolque queda con su largo sobre el eje X. */
 const VIEW_DIRECTIONS: Record<ViewName, THREE.Vector3> = {
@@ -70,10 +71,42 @@ type ModelProps = {
     path: string;
     color: string;
     onBounds: (box: THREE.Box3) => void;
+    animationTarget?: AnimationTarget;
 };
 
-function TrailerModel({ path, color, onBounds }: ModelProps) {
-    const { scene } = useGLTF(path);
+function TrailerModel({ path, color, onBounds, animationTarget }: ModelProps) {
+    const { scene, animations } = useGLTF(path);
+    const { actions, mixer } = useAnimations(animations, scene);
+    const previousAnimationTarget = useRef<AnimationTarget | null>(null);
+
+    // El GLB animado del PE53 parte cerrado. Los botones cambian el sentido de
+    // la misma secuencia: cerrado -> abierto o abierto -> cerrado.
+    useEffect(() => {
+        const action = actions['PE53 Extension'];
+        if (!action || !animationTarget) return;
+
+        if (previousAnimationTarget.current === null) {
+            previousAnimationTarget.current = animationTarget;
+            return;
+        }
+        if (previousAnimationTarget.current === animationTarget) return;
+
+        const opening = animationTarget === 'open';
+        action.stop();
+        action.reset();
+        // AnimationAction expone este estado mutable como parte de su API de reproducción.
+        // eslint-disable-next-line react-hooks/immutability
+        action.clampWhenFinished = true;
+        action.setLoop(THREE.LoopOnce, 1);
+        action.timeScale = opening ? 1 : -1;
+        action.time = opening ? 0 : action.getClip().duration;
+        action.play();
+        previousAnimationTarget.current = animationTarget;
+
+        return () => {
+            action.stop();
+        };
+    }, [actions, animationTarget]);
 
     // Centra el modelo sobre el origen y lo apoya en el piso (y = 0).
     const offset = useMemo(() => {
@@ -81,6 +114,38 @@ function TrailerModel({ path, color, onBounds }: ModelProps) {
         const center = box.getCenter(new THREE.Vector3());
         return new THREE.Vector3(-center.x, -box.min.y, -center.z);
     }, [scene]);
+
+    // Mide el envolvente de ambos extremos antes de reproducir la animación.
+    // Así la extensión no sale del encuadre cuando cambia de cerrado a abierto.
+    useLayoutEffect(() => {
+        const baseBox = computeBounds(scene).translate(offset);
+        const action = actions['PE53 Extension'];
+        if (!action) {
+            onBounds(baseBox);
+            return;
+        }
+
+        /* eslint-disable react-hooks/immutability -- Three.js AnimationAction is intentionally mutable. */
+        const sampleAt = (time: number) => {
+            action.stop();
+            action.reset();
+            action.setLoop(THREE.LoopOnce, 1);
+            action.timeScale = 1;
+            // AnimationAction se muestrea de forma imperativa para calcular el encuadre.
+            action.time = time;
+            action.play();
+            mixer.update(0);
+            const box = computeBounds(scene).translate(offset);
+            action.stop();
+            return box;
+        };
+        /* eslint-enable react-hooks/immutability */
+
+        const closedBox = sampleAt(0);
+        const openBox = sampleAt(action.getClip().duration);
+        sampleAt(0);
+        onBounds(closedBox.union(openBox));
+    }, [actions, mixer, offset, onBounds, scene]);
 
     useLayoutEffect(() => {
         scene.traverse((child) => {
@@ -140,11 +205,6 @@ function TrailerModel({ path, color, onBounds }: ModelProps) {
         firstPaint.current = false;
         paints.forEach((material) => material.color.lerp(targetColor, t));
     });
-
-    useEffect(() => {
-        const box = computeBounds(scene).translate(offset);
-        onBounds(box);
-    }, [scene, offset, onBounds]);
 
     return (
         <group position={offset}>
@@ -319,6 +379,7 @@ class ViewerErrorBoundary extends Component<{ children: ReactNode }, BoundarySta
 type TrailerViewerProps = {
     modelPath: string;
     color: string;
+    animationTarget?: AnimationTarget;
     initialView?: ViewName;
     autoRotate?: boolean;
     autoRotateSpeed?: number;
@@ -334,6 +395,7 @@ const TrailerViewer = forwardRef<TrailerViewerHandle, TrailerViewerProps>(functi
     {
         modelPath,
         color,
+        animationTarget,
         initialView = 'perspectiva',
         autoRotate = false,
         autoRotateSpeed = 0.6,
@@ -368,7 +430,7 @@ const TrailerViewer = forwardRef<TrailerViewerHandle, TrailerViewerProps>(functi
                     <directionalLight position={[8, 4, -6]} intensity={0.45} />
                     <Suspense fallback={null}>
                         <Studio />
-                        <TrailerModel path={modelPath} color={color} onBounds={setBox} />
+                        <TrailerModel path={modelPath} color={color} onBounds={setBox} animationTarget={animationTarget} />
                         {box && (
                             <ContactShadows
                                 position={[0, 0.001, 0]}

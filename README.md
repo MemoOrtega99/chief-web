@@ -91,3 +91,15 @@ CHIEF_WEB_PORT=3002 docker compose up --build -d
 ```
 
 Para detenerlo: `docker compose down`.
+
+### Actualizar el VPS
+
+Git LFS debe estar instalado en el host del VPS, no dentro del contenedor. Después de la primera instalación, cada actualización del sitio sigue este orden desde la carpeta del proyecto:
+
+```bash
+git pull --ff-only origin main
+git lfs pull
+docker compose up -d --build
+```
+
+Los `.glb` de `public/models/` ya están cubiertos por `.gitattributes`, por lo que `git lfs pull` descarga los binarios antes de que Docker construya la imagen.

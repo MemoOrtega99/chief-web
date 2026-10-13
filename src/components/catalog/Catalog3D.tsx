@@ -5,7 +5,7 @@ import Link from 'next/link';
 import { useSearchParams } from 'next/navigation';
 import { useRef, useState } from 'react';
 import { CatalogProduct, catalogProducts, paintColors } from '@/data/catalog';
-import type { TrailerViewerHandle, ViewName } from '@/components/3d/TrailerViewer';
+import type { AnimationTarget, TrailerViewerHandle, ViewName } from '@/components/3d/TrailerViewer';
 import Blueprint from '@/components/ui/Blueprint';
 import Photo from '@/components/ui/Photo';
 import { ArrowIcon, ExpandIcon, RotateIcon } from '@/components/ui/icons';
@@ -31,6 +31,9 @@ export default function Catalog3D() {
     const [color, setColor] = useState(product.model?.defaultColor ?? paintColors[0].value);
     const [view, setView] = useState<ViewName>('perspectiva');
     const [autoRotate, setAutoRotate] = useState(false);
+    const [animationTarget, setAnimationTarget] = useState<AnimationTarget>(
+        () => product.model?.animation?.initial ?? 'closed',
+    );
 
     const preset = paintColors.find((option) => option.value.toLowerCase() === color.toLowerCase());
     const productIndex = catalogProducts.indexOf(product);
@@ -58,6 +61,7 @@ export default function Catalog3D() {
     const selectProduct = (next: CatalogProduct) => {
         setProduct(next);
         if (next.model) setColor(next.model.defaultColor);
+        setAnimationTarget(next.model?.animation?.initial ?? 'closed');
         const url = new URL(window.location.href);
         url.searchParams.set('modelo', next.slug);
         window.history.replaceState(null, '', url);
@@ -98,8 +102,30 @@ export default function Catalog3D() {
                             key={product.model.path}
                             modelPath={product.model.path}
                             color={color}
+                            animationTarget={product.model.animation ? animationTarget : undefined}
                             autoRotate={autoRotate}
                         />
+                        {product.model.animation && (
+                            <div className="cg-model-state" role="group" aria-label="Estado del modelo">
+                                <span className="mono">Extensión</span>
+                                <button
+                                    type="button"
+                                    className={animationTarget === 'closed' ? 'is-active' : ''}
+                                    aria-pressed={animationTarget === 'closed'}
+                                    onClick={() => setAnimationTarget('closed')}
+                                >
+                                    Cerrado
+                                </button>
+                                <button
+                                    type="button"
+                                    className={animationTarget === 'open' ? 'is-active' : ''}
+                                    aria-pressed={animationTarget === 'open'}
+                                    onClick={() => setAnimationTarget('open')}
+                                >
+                                    Abierto
+                                </button>
+                            </div>
+                        )}
                         <p className="cg-hint mono">Arrastra para girar · Rueda o pellizco para acercar</p>
                         <div className="cg-toolbar" role="toolbar" aria-label="Controles del visor">
                             {views.map((option) => (

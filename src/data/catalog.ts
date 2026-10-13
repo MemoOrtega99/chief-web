@@ -9,6 +9,9 @@ export type SpecGroup = {
 export type ProductModel = {
     path: string;
     defaultColor: string;
+    animation?: {
+        initial: 'closed' | 'open';
+    };
 };
 
 export type ProductAvailability = 'Entrega inmediata' | 'Catálogo' | 'Información técnica por confirmar';
@@ -213,6 +216,10 @@ export const catalogProducts: CatalogProduct[] = [
         name: "High Cube 40' · 3 ejes",
         code: 'PHC-40FT-3EJES',
         summary: 'Plataforma High Cube de 40 FT para carga general, con configuración de 3 ejes y pisos adaptables a la operación.',
+        model: {
+            path: '/models/plataforma-high-cube-40-3-ejes.glb',
+            defaultColor: '#E31E24',
+        },
         availability: 'Entrega inmediata',
         dimensions: { width: '2.60 m', height: '1.35 m', length: '12.19 m' },
         capacity: 'Por confirmar',
@@ -250,6 +257,10 @@ export const catalogProducts: CatalogProduct[] = [
         name: "Extendible 40'-20'",
         code: 'PC-E4020',
         summary: 'Portacontenedor extendible 40-20 FT para operación logística de alta resistencia, con configuración ajustable y opciones de personalización.',
+        model: {
+            path: '/models/portacontenedor-extendible-40-20.glb',
+            defaultColor: '#E31E24',
+        },
         availability: 'Entrega inmediata',
         dimensions: { width: '2.44 m', height: '1.35 m', length: '12.90 m' },
         capacity: 'Por confirmar',
@@ -264,6 +275,11 @@ export const catalogProducts: CatalogProduct[] = [
         code: 'CB-3EJES',
         modelYear: '2026',
         summary: 'Cama baja de 53 FT para carga pesada, con capacidad de 40 toneladas distribuidas uniformemente.',
+        model: {
+            path: '/models/cama-baja-53-3-ejes.glb',
+            defaultColor: '#E31E24',
+            animation: { initial: 'closed' },
+        },
         availability: 'Catálogo',
         dimensions: { width: '102" (2.60 m)', height: '51" (1.295 m) quinta rueda', length: '53 FT (16.18 m)' },
         capacity: '40 toneladas',
@@ -316,6 +332,10 @@ export const catalogProducts: CatalogProduct[] = [
         name: 'Dolly Tipo A',
         code: 'DC-A',
         summary: 'Convertidor Dolly para acoplar remolques en operaciones de transporte pesado, con configuración ajustable y opciones de personalización.',
+        model: {
+            path: '/models/dolly-convertidor-tipo-a.glb',
+            defaultColor: '#E31E24',
+        },
         availability: 'Entrega inmediata',
         dimensions: { width: '2.60 m', height: '1.45 m', length: '3.66 m' },
         capacity: 'Por confirmar',
