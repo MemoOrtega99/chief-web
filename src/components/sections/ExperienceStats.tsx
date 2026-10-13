@@ -74,16 +74,9 @@ export default function ExperienceStats() {
     return (
         <section className="stats-band" aria-labelledby="stats-title">
             <div className="stats-intro">
-                <p className="tag tag-light">Nuestra trayectoria</p>
                 <h2 id="stats-title">
-                    Más de una década
-                    <br />
-                    moviendo <em>grandes cargas.</em>
+                    Más de una década moviendo <em>grandes cargas.</em>
                 </h2>
-                <p>
-                    Experiencia, capacidad y relaciones de largo plazo para responder a las operaciones que no se
-                    pueden detener.
-                </p>
             </div>
 
             <div className="stats-grid">

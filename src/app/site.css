@@ -747,8 +747,7 @@
 /* ---------- Trayectoria y cifras ---------- */
 
 .stats-band {
-  display: grid;
-  grid-template-columns: minmax(0, 1.05fr) minmax(0, 1.45fr);
+  display: block;
   margin-top: clamp(72px, 12vh, 144px);
   border-top: 1px solid var(--line-dark);
   border-bottom: 1px solid var(--line-dark);
@@ -758,33 +757,27 @@
 
 .stats-intro {
   display: flex;
-  flex-direction: column;
-  align-items: flex-start;
+  align-items: center;
   justify-content: center;
-  min-height: 360px;
-  padding: clamp(48px, 7vw, 96px) var(--gut);
-  border-right: 1px solid var(--line-dark);
+  min-height: 190px;
+  padding: clamp(40px, 5vw, 68px) var(--gut);
+  border-bottom: 1px solid var(--line-dark);
 }
 
 .stats-intro h2 {
-  margin: 24px 0 20px;
+  margin: 0;
   font-family: var(--f-display);
-  font-size: clamp(2.3rem, 4.4vw, 5rem);
+  font-size: clamp(2.1rem, 3.5vw, 4.5rem);
   font-weight: 600;
-  line-height: 0.98;
+  line-height: 1;
   letter-spacing: -0.05em;
+  text-align: center;
+  white-space: nowrap;
 }
 
 .stats-intro h2 em {
   color: var(--red);
   font-style: normal;
-}
-
-.stats-intro > p:last-child {
-  max-width: 410px;
-  margin: 0;
-  color: rgba(255, 255, 255, 0.68);
-  line-height: 1.6;
 }
 
 .stats-grid {
@@ -795,9 +788,12 @@
 .stats-cell {
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
-  min-height: 360px;
+  align-items: center;
+  justify-content: center;
+  min-height: 300px;
+  gap: 28px;
   padding: clamp(28px, 4vw, 56px) var(--gut);
+  text-align: center;
 }
 
 .stats-cell + .stats-cell {
@@ -806,7 +802,7 @@
 
 .stats-number {
   display: block;
-  color: var(--white);
+  color: var(--red);
   font-family: var(--f-display);
   font-size: clamp(2.8rem, 5.5vw, 6.4rem);
   font-weight: 600;
@@ -817,7 +813,7 @@
 
 .stats-label {
   max-width: 10ch;
-  color: var(--red);
+  color: var(--white);
   font-family: var(--f-mono);
   font-size: 0.72rem;
   letter-spacing: 0.05em;
@@ -1983,13 +1979,7 @@
   }
 
   .stats-band {
-    grid-template-columns: 1fr;
-  }
-
-  .stats-intro {
-    min-height: 0;
-    border-right: 0;
-    border-bottom: 1px solid var(--line-dark);
+    display: block;
   }
 
   .stats-cell {
@@ -2107,6 +2097,10 @@
 
   .stats-grid {
     grid-template-columns: 1fr;
+  }
+
+  .stats-intro h2 {
+    white-space: normal;
   }
 
   .stats-cell {
