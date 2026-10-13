@@ -14,7 +14,7 @@ export default function ManufacturingProcess() {
             <div className="pf-shell">
                 <div className="pf-heading">
                     <div>
-                        <p className="mono pf-kicker">02 / Fabricación</p>
+                        <p className="tag tag-light pf-kicker">02 / Fabricación</p>
                         <h2 id="process-title" className="display pf-title">
                             Proceso de <em>fabricación</em>
                         </h2>

@@ -14,7 +14,7 @@ export default function About() {
         <section id="nosotros" className="ab-section">
             <div className="ab-shell">
                 <div className="ab-section-head">
-                    <span className="mono">01 / Nosotros</span>
+                    <span className="tag">01 / Nosotros</span>
                     <span className="ab-section-rule" aria-hidden="true" />
                 </div>
 
