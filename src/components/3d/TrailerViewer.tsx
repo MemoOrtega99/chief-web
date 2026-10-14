@@ -30,6 +30,20 @@ const VIEW_DIRECTIONS: Record<ViewName, THREE.Vector3> = {
 };
 
 const PAINT_MATERIALS = new Set(['paint_body', 'paint_accent']);
+const ORIGINAL_COLOR_COMPONENTS = /\b(?:rines?|rin|llantas?|neum[aá]ticos?|tires?|wheels?|polveras?|loderas?|guardafangos?|guardabarros?|mudguards?|fenders?|focos?|luces?|lights?|lamps?|reflectores?|faroles?|micas?|stops?)\b/i;
+
+function isOriginalColorComponent(object: THREE.Object3D) {
+    let current: THREE.Object3D | null = object;
+    while (current) {
+        if (ORIGINAL_COLOR_COMPONENTS.test(current.name)) return true;
+        current = current.parent;
+    }
+    return false;
+}
+
+function isProtectedPaintMaterial(material: THREE.Material) {
+    return material.name.startsWith('protected_');
+}
 
 export type TrailerViewerHandle = {
     setView: (view: ViewName) => void;
@@ -152,8 +166,29 @@ function TrailerModel({ path, color, onBounds, animationTarget }: ModelProps) {
             if (!(child instanceof THREE.Mesh)) return;
             child.castShadow = true;
             const materials = Array.isArray(child.material) ? child.material : [child.material];
-            materials.forEach((material) => {
+            const protectedComponent = isOriginalColorComponent(child);
+            const nextMaterials = materials.map((material) => {
+                if (
+                    !protectedComponent ||
+                    !(material instanceof THREE.MeshStandardMaterial) ||
+                    !PAINT_MATERIALS.has(material.name) ||
+                    isProtectedPaintMaterial(material)
+                ) {
+                    return material;
+                }
+
+                // Un componente protegido puede compartir el material de pintura del chasis.
+                // Separamos su instancia para que conserve su color y acabado originales.
+                const original = material.clone();
+                original.name = `protected_${material.name}`;
+                return original;
+            });
+            if (Array.isArray(child.material)) child.material = nextMaterials;
+            else child.material = nextMaterials[0];
+
+            nextMaterials.forEach((material) => {
                 if (!(material instanceof THREE.MeshStandardMaterial)) return;
+                if (isProtectedPaintMaterial(material)) return;
                 if (material instanceof THREE.MeshPhysicalMaterial && material.transmission > 0) {
                     // La transmisión obliga a un render extra por cuadro; para micas basta la transparencia.
                     material.transmission = 0;
@@ -186,11 +221,18 @@ function TrailerModel({ path, color, onBounds, animationTarget }: ModelProps) {
     // Materiales de pintura; el color cambia con una transición suave en lugar de un salto.
     const paints = useMemo(() => {
         const list: THREE.MeshStandardMaterial[] = [];
+        const seen = new Set<THREE.MeshStandardMaterial>();
         scene.traverse((child) => {
             if (!(child instanceof THREE.Mesh)) return;
             const materials = Array.isArray(child.material) ? child.material : [child.material];
             materials.forEach((material) => {
-                if (material instanceof THREE.MeshStandardMaterial && PAINT_MATERIALS.has(material.name)) {
+                if (
+                    material instanceof THREE.MeshStandardMaterial &&
+                    PAINT_MATERIALS.has(material.name) &&
+                    !isProtectedPaintMaterial(material) &&
+                    !seen.has(material)
+                ) {
+                    seen.add(material);
                     list.push(material);
                 }
             });
