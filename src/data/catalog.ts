@@ -195,7 +195,7 @@ const allCatalogProducts: CatalogProduct[] = [
     {
         slug: 'plataforma-high-cube-40-2-ejes',
         blueprint: 'platform',
-        photo: { name: 'chief-plataforma-y-dollies-cenital', position: '50% 22%' },
+        photo: { name: 'chief-producto-high-cube-40', position: '50% 56%' },
         line: 'Plataforma',
         name: "High Cube 40'",
         code: 'PHC-40FT-2EJES',
@@ -212,7 +212,7 @@ const allCatalogProducts: CatalogProduct[] = [
     {
         slug: 'plataforma-high-cube-40-3-ejes',
         blueprint: 'platform',
-        photo: { name: 'chief-plataformas-y-dollies-cenital', position: '50% 24%' },
+        photo: { name: 'chief-producto-high-cube-40-3-ejes', position: '50% 56%' },
         line: 'Plataforma',
         name: "High Cube 40' · 3 ejes",
         code: 'PHC-40FT-3EJES',
@@ -229,6 +229,7 @@ const allCatalogProducts: CatalogProduct[] = [
     {
         slug: 'portacontenedor-fijo-40',
         blueprint: 'container',
+        photo: { name: 'chief-producto-fijo-40', position: '50% 56%' },
         line: 'Portacontenedor',
         name: "Fijo 40'",
         code: 'PC-F40',
@@ -241,6 +242,7 @@ const allCatalogProducts: CatalogProduct[] = [
     {
         slug: 'portacontenedor-fijo-40-20',
         blueprint: 'container',
+        photo: { name: 'chief-producto-fijo-40-20', position: '50% 56%' },
         line: 'Portacontenedor',
         name: 'Fijo 40-20 FT',
         code: 'PC-F4020',
@@ -253,7 +255,7 @@ const allCatalogProducts: CatalogProduct[] = [
     {
         slug: 'portacontenedor-extendible-40-20',
         blueprint: 'extendable',
-        photo: { name: 'chief-plataforma-extendible', position: '55% 50%' },
+        photo: { name: 'chief-producto-extendible-40-20', position: '50% 56%' },
         line: 'Portacontenedor',
         name: "Extendible 40'-20'",
         code: 'PC-E4020',
@@ -270,7 +272,7 @@ const allCatalogProducts: CatalogProduct[] = [
     {
         slug: 'cama-baja-3-ejes',
         blueprint: 'platform',
-        photo: { name: 'chief-cama-baja-3-ejes-perspectiva', position: '50% 58%' },
+        photo: { name: 'chief-producto-cama-baja-53-3-ejes', position: '50% 56%' },
         line: 'Cama baja',
         name: '53 FT · 3 ejes',
         code: 'CB-3EJES',
@@ -328,7 +330,7 @@ const allCatalogProducts: CatalogProduct[] = [
     {
         slug: 'dolly-convertidor-tipo-a',
         blueprint: 'dolly',
-        photo: { name: 'chief-plataforma-y-dollies-cenital', position: '50% 100%' },
+        photo: { name: 'chief-producto-dolly', position: '50% 56%' },
         line: 'Convertidor',
         name: 'Dolly Tipo A',
         code: 'DC-A',

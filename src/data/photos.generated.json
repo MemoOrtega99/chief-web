@@ -102,5 +102,61 @@
       1200,
       1600
     ]
+  },
+  "chief-producto-cama-baja-53-3-ejes": {
+    "width": 1600,
+    "height": 1200,
+    "widths": [
+      1200,
+      1600
+    ]
+  },
+  "chief-producto-dolly": {
+    "width": 1600,
+    "height": 1200,
+    "widths": [
+      1200,
+      1600
+    ]
+  },
+  "chief-producto-extendible-40-20": {
+    "width": 1600,
+    "height": 1200,
+    "widths": [
+      1200,
+      1600
+    ]
+  },
+  "chief-producto-fijo-40-20": {
+    "width": 1600,
+    "height": 1200,
+    "widths": [
+      1200,
+      1600
+    ]
+  },
+  "chief-producto-fijo-40": {
+    "width": 1600,
+    "height": 1200,
+    "widths": [
+      1200,
+      1600
+    ]
+  },
+  "chief-producto-high-cube-40-3-ejes": {
+    "width": 1600,
+    "height": 1200,
+    "widths": [
+      1200,
+      1600
+    ]
+  },
+  "chief-producto-high-cube-40": {
+    "width": 1600,
+    "height": 1200,
+    "widths": [
+      1200,
+      1600
+    ]
   }
 }
