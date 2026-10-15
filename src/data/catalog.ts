@@ -18,6 +18,7 @@ export type ProductAvailability = 'Entrega inmediata' | 'Catálogo' | 'Informaci
 
 export type CatalogProduct = {
     slug: string;
+    hiddenFromCatalog?: boolean;
     blueprint: BlueprintKind;
     /** Foto real (ver assets-src/fotos) y su encuadre en las tarjetas. */
     photo?: { name: PhotoName; position?: string };
@@ -190,7 +191,7 @@ const dollySpecs: SpecGroup[] = [
     },
 ];
 
-export const catalogProducts: CatalogProduct[] = [
+const allCatalogProducts: CatalogProduct[] = [
     {
         slug: 'plataforma-high-cube-40-2-ejes',
         blueprint: 'platform',
@@ -343,6 +344,7 @@ export const catalogProducts: CatalogProduct[] = [
     },
     {
         slug: 'caja-seca-40',
+        hiddenFromCatalog: true,
         blueprint: 'container',
         line: 'Caja seca',
         name: '40 FT · Borda alta',
@@ -356,6 +358,7 @@ export const catalogProducts: CatalogProduct[] = [
     },
     {
         slug: 'caja-seca-53',
+        hiddenFromCatalog: true,
         blueprint: 'container',
         line: 'Caja seca',
         name: '53 FT · Borda alta',
@@ -368,6 +371,8 @@ export const catalogProducts: CatalogProduct[] = [
         specs: dryBoxSpecs(),
     },
 ];
+
+export const catalogProducts = allCatalogProducts.filter((product) => !product.hiddenFromCatalog);
 
 export const paintColors = [
     { name: 'Rojo Chief', value: '#E31E24' },
