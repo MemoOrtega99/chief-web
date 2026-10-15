@@ -391,13 +391,12 @@ export const contact = {
 };
 
 export const processSteps = [
-    { number: '01', title: 'Corte con plasma mecanizado', tag: 'Fabricación', image: '/fotos/chief-cama-baja-3-ejes-cenital-1200.webp' },
-    { number: '02', title: 'Oxicorte y doblez', tag: 'Fabricación', image: '/fotos/chief-cama-baja-trasera-taller-1200.webp' },
-    { number: '03', title: 'Soldadura', tag: 'Fabricación', image: '/fotos/chief-plataformas-y-dollies-patio-1200.webp' },
-    { number: '04', title: 'Sandblast', tag: 'Acabado', image: '/fotos/chief-plataforma-y-dollies-cenital-1200.webp' },
-    { number: '05', title: 'Pintura', tag: 'Acabado', image: '/hero-background-v2.jpg' },
-    { number: '06', title: 'Personalización', tag: 'Entrega', image: '/fotos/chief-plataforma-extendible-1200.webp' },
-    { number: '07', title: 'Logística de entrega', tag: 'Entrega', image: '/hero-background-user.png' },
+    { number: '01', title: 'Corte con plasma mecanizado', tag: 'Fabricación', image: '/fotos/chief-proceso-corte-plasma-1200.webp' },
+    { number: '02', title: 'Soldadura', tag: 'Fabricación', image: '/fotos/chief-proceso-soldadura-1200.webp' },
+    { number: '03', title: 'Sandblast', tag: 'Acabado', image: '/fotos/chief-proceso-sandblast-1200.webp' },
+    { number: '04', title: 'Pintura', tag: 'Acabado', image: '/fotos/chief-proceso-pintura-1200.webp' },
+    { number: '05', title: 'Personalización', tag: 'Entrega', image: '/fotos/chief-proceso-personalizacion-1200.webp' },
+    { number: '06', title: 'Logística de entrega', tag: 'Entrega', image: '/fotos/chief-proceso-entrega-1200.webp' },
 ];
 
 export const clientNames = [

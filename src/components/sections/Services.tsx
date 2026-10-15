@@ -15,7 +15,7 @@ export default function Services() {
                             Nuestro <span>proceso</span>
                         </h2>
                     </div>
-                    <p>Desliza para conocer las siete etapas que convierten el acero en una unidad lista para trabajar.</p>
+                    <p>Desliza para conocer las seis etapas que convierten el acero en una unidad lista para trabajar.</p>
                 </div>
 
                 <div className="ct-process-track" aria-label="Etapas del proceso de fabricación">
