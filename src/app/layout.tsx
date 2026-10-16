@@ -5,6 +5,7 @@ import "./globals.css";
 import "./site.css";
 import SmoothScroll from "@/components/motion/SmoothScroll";
 import Preloader from "@/components/motion/Preloader";
+import WhatsAppButton from "@/components/ui/WhatsAppButton";
 
 const inter = localFont({
     src: [
@@ -55,6 +56,7 @@ export default function RootLayout({
       <body className={`${inter.variable} ${montserrat.variable} ${mono.variable} ch-body antialiased`}>
         <Preloader />
         <SmoothScroll>{children}</SmoothScroll>
+        <WhatsAppButton />
       </body>
     </html>
   );
