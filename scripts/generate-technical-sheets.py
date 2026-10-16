@@ -27,6 +27,7 @@ from reportlab.platypus import (
 
 
 ROOT = Path(__file__).resolve().parents[1]
+LOGO_PATH = ROOT / 'public/chief-logo-iso.png'
 PAPER = colors.HexColor('#F3F2EE')
 INK = colors.HexColor('#121314')
 MUTED = colors.HexColor('#666A72')
@@ -169,7 +170,7 @@ PRODUCTS = [
         'line': 'Portacontenedor',
         'name': 'Fijo 40-20 FT',
         'summary': 'Portacontenedor fijo para configuraciones de 40 y 20 FT. La ficha técnica se confirma según la operación.',
-        'dimensions': [('Largo', '40–20 FT'), ('Ancho', 'Por confirmar'), ('Alto', 'Por confirmar'), ('Capacidad', 'Por confirmar')],
+        'dimensions': [('Largo', '40-20 FT'), ('Ancho', 'Por confirmar'), ('Alto', 'Por confirmar'), ('Capacidad', 'Por confirmar')],
         'specs': groups(
             ('Estado de la ficha', ['La presentación técnica recibida no incluye este modelo. Solicita la configuración específica a nuestro equipo comercial.']),
         ),
@@ -322,7 +323,8 @@ def make_styles():
         'title': ParagraphStyle('Title', parent=base['Normal'], fontName='Montserrat-Bold', fontSize=27, leading=29, textColor=INK, spaceAfter=8),
         'summary': ParagraphStyle('Summary', parent=base['Normal'], fontName='Inter', fontSize=10.2, leading=15, textColor=MUTED, spaceAfter=18),
         'section': ParagraphStyle('Section', parent=base['Normal'], fontName='Montserrat-Bold', fontSize=13, leading=16, textColor=INK, spaceBefore=15, spaceAfter=8),
-        'group': ParagraphStyle('Group', parent=base['Normal'], fontName='Montserrat-Bold', fontSize=10.5, leading=13, textColor=INK),
+        'group': ParagraphStyle('Group', parent=base['Normal'], fontName='Montserrat-Bold', fontSize=10.5, leading=13, textColor=WHITE),
+        'section_label': ParagraphStyle('SectionLabel', parent=base['Normal'], fontName='Mono', fontSize=7.2, leading=9, textColor=WHITE, tracking=0.8),
         'item': ParagraphStyle('Item', parent=base['Normal'], fontName='Inter', fontSize=8.8, leading=12.5, textColor=MUTED, leftIndent=0, spaceAfter=5),
         'label': ParagraphStyle('Label', parent=base['Normal'], fontName='Mono', fontSize=6.8, leading=8.5, textColor=MUTED),
         'value': ParagraphStyle('Value', parent=base['Normal'], fontName='Montserrat-Bold', fontSize=10.5, leading=13, textColor=INK),
@@ -335,17 +337,16 @@ def page_decor(canvas, doc) -> None:
     canvas.saveState()
     canvas.setFillColor(INK)
     canvas.rect(0, height - 24 * mm, width, 24 * mm, stroke=0, fill=1)
-    canvas.setFillColor(RED)
-    canvas.rect(14 * mm, height - 15.2 * mm, 4 * mm, 4 * mm, stroke=0, fill=1)
+    canvas.drawImage(str(LOGO_PATH), 14 * mm, height - 20.2 * mm, width=11 * mm, height=11 * mm, preserveAspectRatio=True, mask='auto')
     canvas.setFillColor(WHITE)
     canvas.setFont('Montserrat-Bold', 10)
-    canvas.drawString(21 * mm, height - 15.4 * mm, 'CHIEF')
+    canvas.drawString(29 * mm, height - 15.4 * mm, 'CHIEF')
     canvas.setFont('Inter', 7)
     canvas.setFillColor(colors.HexColor('#D7D7D2'))
-    canvas.drawString(21 * mm, height - 19.2 * mm, 'TRAILERS DEL NORTE')
+    canvas.drawString(29 * mm, height - 19.2 * mm, 'TRAILERS DEL NORTE')
     canvas.setFont('Mono', 6.5)
     canvas.setFillColor(colors.HexColor('#D7D7D2'))
-    canvas.drawRightString(width - 14 * mm, height - 15.4 * mm, 'FICHA TÉCNICA')
+    canvas.drawRightString(width - 14 * mm, height - 15.4 * mm, 'PRODUCT DATA / FICHA TÉCNICA')
     canvas.setStrokeColor(LINE)
     canvas.setLineWidth(0.6)
     canvas.line(14 * mm, 15 * mm, width - 14 * mm, 15 * mm)
@@ -388,8 +389,8 @@ def group_block(number: int, group: dict[str, object], styles: dict, width: floa
         Paragraph(escape(title), styles['group']),
     ]], colWidths=[12 * mm, width - 12 * mm])
     header.setStyle(TableStyle([
-        ('BACKGROUND', (0, 0), (-1, -1), WHITE),
-        ('BOX', (0, 0), (-1, -1), 0.6, LINE),
+        ('BACKGROUND', (0, 0), (-1, -1), INK),
+        ('BOX', (0, 0), (-1, -1), 0.6, INK),
         ('VALIGN', (0, 0), (-1, -1), 'MIDDLE'),
         ('LEFTPADDING', (0, 0), (0, 0), 10),
         ('LEFTPADDING', (1, 0), (1, 0), 0),
@@ -401,6 +402,23 @@ def group_block(number: int, group: dict[str, object], styles: dict, width: floa
     for item in items:
         body.append(Paragraph(f'<font color="#E31E24">■</font>&nbsp;&nbsp;{escape(str(item))}', styles['item']))
     return [KeepTogether([header, Spacer(1, 6)]), *body]
+
+
+def specification_label(styles: dict, width: float) -> Table:
+    label = Table([[
+        Paragraph('<font color="#E31E24">■</font>', styles['section_label']),
+        Paragraph('ESPECIFICACIONES TÉCNICAS / EQUIPAMIENTO', styles['section_label']),
+    ]], colWidths=[9 * mm, width - 9 * mm])
+    label.setStyle(TableStyle([
+        ('BACKGROUND', (0, 0), (-1, -1), INK),
+        ('VALIGN', (0, 0), (-1, -1), 'MIDDLE'),
+        ('LEFTPADDING', (0, 0), (0, 0), 10),
+        ('LEFTPADDING', (1, 0), (1, 0), 0),
+        ('RIGHTPADDING', (0, 0), (-1, -1), 10),
+        ('TOPPADDING', (0, 0), (-1, -1), 9),
+        ('BOTTOMPADDING', (0, 0), (-1, -1), 9),
+    ]))
+    return label
 
 
 def build_pdf(product: dict, output_path: Path) -> None:
@@ -426,7 +444,8 @@ def build_pdf(product: dict, output_path: Path) -> None:
         dimension_table(product, styles, content_width),
         Spacer(1, 10),
         HRFlowable(width='100%', thickness=0.6, color=LINE, spaceBefore=0, spaceAfter=7),
-        Paragraph('Especificaciones técnicas', styles['section']),
+        specification_label(styles, content_width),
+        Spacer(1, 11),
     ]
 
     for index, group in enumerate(product['specs'], start=1):
