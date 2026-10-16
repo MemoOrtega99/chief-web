@@ -57,6 +57,16 @@ function isPaintableMaterial(material: THREE.Material) {
     return STRUCTURAL_MATERIALS.test(material.name);
 }
 
+function isBlueStructuralMaterial(material: THREE.Material) {
+    if (!(material instanceof THREE.MeshStandardMaterial)) return false;
+
+    // Algunos GLB de entrada exportan soportes estructurales como material
+    // genérico "color" azul. El tono original permite distinguirlos de los
+    // accesorios que deben conservar su acabado, aunque estén junto a una rueda.
+    const { r, g, b } = material.color;
+    return b > 0.3 && b > r * 1.35 && b > g * 1.05;
+}
+
 function getProtectedComponents(scene: THREE.Object3D) {
     const tireBoxes: THREE.Box3[] = [];
     const protectedComponents = new Set<THREE.Object3D>();
@@ -91,6 +101,7 @@ function getProtectedComponents(scene: THREE.Object3D) {
 
         const componentBox = new THREE.Box3().setFromObject(child);
         const materials = Array.isArray(child.material) ? child.material : [child.material];
+        if (materials.some(isBlueStructuralMaterial)) return;
         if (materials.some((material) => STRUCTURAL_RAIL_MATERIALS.test(material.name))) return;
         const componentMaxDimension = Math.max(...componentBox.getSize(new THREE.Vector3()).toArray());
         if (tireData.some(({ box, maxDimension }) => {
