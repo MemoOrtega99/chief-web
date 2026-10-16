@@ -7,6 +7,7 @@ import { CatalogProduct, catalogProducts, paintColors } from '@/data/catalog';
 import type { AnimationTarget, TrailerViewerHandle, ViewName } from '@/components/3d/TrailerViewer';
 import Blueprint from '@/components/ui/Blueprint';
 import Photo from '@/components/ui/Photo';
+import TechnicalSheetModal from '@/components/catalog/TechnicalSheetModal';
 import { ArrowIcon, ExpandIcon, RotateIcon } from '@/components/ui/icons';
 import { EASE, gsap, prefersReducedMotion, useGSAP } from '@/components/motion/gsap';
 
@@ -34,6 +35,7 @@ export default function Catalog3D() {
         () => product.model?.animation?.initial ?? 'closed',
     );
     const [openSpecIndex, setOpenSpecIndex] = useState<number | null>(() => (product.specs.length > 0 ? 0 : null));
+    const [isSheetModalOpen, setIsSheetModalOpen] = useState(false);
 
     const preset = paintColors.find((option) => option.value.toLowerCase() === color.toLowerCase());
     const productIndex = catalogProducts.indexOf(product);
@@ -63,6 +65,7 @@ export default function Catalog3D() {
         if (next.model) setColor(next.model.defaultColor);
         setAnimationTarget(next.model?.animation?.initial ?? 'closed');
         setOpenSpecIndex(next.specs.length > 0 ? 0 : null);
+        setIsSheetModalOpen(false);
         const url = new URL(window.location.href);
         url.searchParams.set('modelo', next.slug);
         window.history.replaceState(null, '', url);
@@ -264,9 +267,9 @@ export default function Catalog3D() {
                     <a href={quoteHref} className="btn btn-red btn-lg">
                         Cotizar esta configuración <ArrowIcon />
                     </a>
-                    <a href={quoteHref} className="btn btn-line btn-lg">
-                        Solicitar ficha técnica
-                    </a>
+                    <button type="button" className="btn btn-line btn-lg" onClick={() => setIsSheetModalOpen(true)}>
+                        Generar ficha técnica
+                    </button>
                 </div>
 
                 <section className="cg-block cg-specs" aria-label="Especificaciones técnicas">
@@ -324,6 +327,13 @@ export default function Catalog3D() {
                     </div>
                 </div>
             </aside>
+
+            <TechnicalSheetModal
+                key={`${product.slug}-${isSheetModalOpen ? 'open' : 'closed'}`}
+                product={product}
+                open={isSheetModalOpen}
+                onClose={() => setIsSheetModalOpen(false)}
+            />
         </div>
     );
 }
