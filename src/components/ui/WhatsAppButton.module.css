@@ -1,0 +1,137 @@
+.launcher {
+  position: fixed;
+  right: max(20px, env(safe-area-inset-right));
+  bottom: max(20px, env(safe-area-inset-bottom));
+  z-index: 80;
+  pointer-events: none;
+  visibility: hidden;
+}
+
+.isVisible {
+  visibility: visible;
+}
+
+.desktopOnly,
+.mobileOnly {
+  pointer-events: none;
+}
+
+.desktopOnly {
+  display: block;
+}
+
+.mobileOnly {
+  display: none;
+}
+
+.whatsappLink,
+.quoteLink {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  min-height: 58px;
+  padding: 0 20px;
+  border: 1px solid var(--ink);
+  border-radius: 4px;
+  font-family: var(--f-body);
+  font-size: 0.9rem;
+  font-weight: 600;
+  text-decoration: none;
+  transition: background-color 0.25s var(--ease), color 0.25s var(--ease), border-color 0.25s var(--ease), transform 0.25s var(--ease), opacity 0.35s var(--ease);
+}
+
+.whatsappLink {
+  background: var(--white);
+  color: var(--ink);
+  opacity: 0;
+  transform: translateY(12px);
+}
+
+.isVisible .whatsappLink,
+.isVisible .quoteLink {
+  opacity: 1;
+  transform: translateY(0);
+  pointer-events: auto;
+}
+
+.whatsappLink:hover,
+.whatsappLink:focus-visible {
+  background: var(--ink);
+  color: var(--white);
+}
+
+.quoteLink {
+  border-color: var(--red);
+  background: var(--red);
+  color: var(--white);
+  opacity: 0;
+  transform: translateY(12px);
+}
+
+.quoteLink:hover,
+.quoteLink:focus-visible {
+  border-color: var(--red-dark);
+  background: var(--red-dark);
+}
+
+.whatsappLink:active,
+.quoteLink:active {
+  transform: translateY(1px);
+}
+
+.icon,
+.quoteIcon {
+  width: 20px;
+  height: 20px;
+  flex: 0 0 auto;
+}
+
+.quoteIcon {
+  transition: transform 0.25s var(--ease);
+}
+
+.quoteLink:hover .quoteIcon,
+.quoteLink:focus-visible .quoteIcon {
+  transform: translateX(4px);
+}
+
+@media (max-width: 720px) {
+  .launcher {
+    right: 0;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+  }
+
+  .desktopOnly {
+    display: none;
+  }
+
+  .mobileOnly {
+    display: block;
+  }
+
+  .mobileBar {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 12px;
+    padding: 10px max(12px, env(safe-area-inset-right)) calc(10px + env(safe-area-inset-bottom)) max(12px, env(safe-area-inset-left));
+    border-top: 1px solid var(--line);
+    background: var(--paper);
+    box-shadow: 0 -10px 26px rgba(18, 19, 20, 0.12);
+    pointer-events: auto;
+  }
+
+  .mobileBar .whatsappLink,
+  .mobileBar .quoteLink {
+    min-height: 58px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .whatsappLink,
+  .quoteLink {
+    transition: none;
+  }
+}

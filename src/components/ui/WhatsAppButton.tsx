@@ -1,10 +1,9 @@
 'use client';
 
 import Link from 'next/link';
-import { type AnimationEvent, useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { ArrowIcon } from './icons';
-
-type LaunchPhase = 'waiting' | 'entering' | 'settled';
+import styles from './WhatsAppButton.module.css';
 
 const WHATSAPP_HREF = `https://wa.me/528116365258?text=${encodeURIComponent(
     'Hola, me gustaría recibir información sobre sus remolques.',
@@ -19,68 +18,54 @@ function WhatsAppIcon({ className }: { className?: string }) {
     );
 }
 
-function MobileContactBar() {
+function ContactLinks() {
     return (
-        <div className="mobile-contact-bar" aria-label="Opciones de contacto">
+        <div className={styles.mobileBar} aria-label="Opciones de contacto">
             <a
-                className="mobile-contact-bar__link mobile-contact-bar__whatsapp"
+                className={styles.whatsappLink}
                 href={WHATSAPP_HREF}
                 target="_blank"
                 rel="noreferrer"
                 aria-label="Contactar a Chief Trailers del Norte por WhatsApp"
             >
-                <WhatsAppIcon className="mobile-contact-bar__icon" />
+                <WhatsAppIcon className={styles.icon} />
                 <span>WhatsApp</span>
             </a>
-            <Link className="mobile-contact-bar__link mobile-contact-bar__quote" href="/#contacto">
+            <Link className={styles.quoteLink} href="/#contacto">
                 <span>Cotizar</span>
-                <ArrowIcon />
+                <ArrowIcon className={styles.quoteIcon} />
             </Link>
         </div>
     );
 }
 
 export default function WhatsAppButton() {
-    const [phase, setPhase] = useState<LaunchPhase>('waiting');
+    const [isVisible, setIsVisible] = useState(false);
 
     useEffect(() => {
-        const timer = window.setTimeout(() => setPhase('entering'), 3000);
+        const timer = window.setTimeout(() => setIsVisible(true), 3000);
         return () => window.clearTimeout(timer);
     }, []);
 
-    const handleAnimationEnd = (event: AnimationEvent<HTMLDivElement>) => {
-        if (event.animationName === 'wa-wheel-translation') setPhase('settled');
-    };
-
     return (
-        <div className={`whatsapp-launcher whatsapp-launcher--${phase}`}>
-            <MobileContactBar />
-
-            <div className="wa-arrival" onAnimationEnd={handleAnimationEnd}>
-                <div className="wa-wheel-spin">
-                    <div className="wa-entrance-sparks" aria-hidden="true">
-                        {Array.from({ length: 7 }, (_, index) => (
-                            <span className="wa-spark" key={index} />
-                        ))}
-                    </div>
-                    <a
-                        className="wa-action"
-                        href={WHATSAPP_HREF}
-                        target="_blank"
-                        rel="noreferrer"
-                        aria-label="Contactar a Chief Trailers del Norte por WhatsApp"
-                    >
-                        <WhatsAppIcon className="wa-icon" />
-                        <span className="wa-tooltip" aria-hidden="true">
-                            Cotiza por WhatsApp
-                        </span>
-                    </a>
-                </div>
-                <div className="wa-smoke" aria-hidden="true">
-                    <span className="wa-smoke-puff" />
-                    <span className="wa-smoke-puff" />
-                    <span className="wa-smoke-puff" />
-                </div>
+        <div
+            className={`${styles.launcher} ${isVisible ? styles.isVisible : ''}`}
+            aria-hidden={!isVisible}
+        >
+            <div className={styles.desktopOnly}>
+                <a
+                    className={styles.whatsappLink}
+                    href={WHATSAPP_HREF}
+                    target="_blank"
+                    rel="noreferrer"
+                    aria-label="Contactar a Chief Trailers del Norte por WhatsApp"
+                >
+                    <WhatsAppIcon className={styles.icon} />
+                    <span>WhatsApp</span>
+                </a>
+            </div>
+            <div className={styles.mobileOnly}>
+                <ContactLinks />
             </div>
         </div>
     );

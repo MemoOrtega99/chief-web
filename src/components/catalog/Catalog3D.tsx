@@ -34,6 +34,7 @@ export default function Catalog3D() {
     const [animationTarget, setAnimationTarget] = useState<AnimationTarget>(
         () => product.model?.animation?.initial ?? 'closed',
     );
+    const [openSpecIndex, setOpenSpecIndex] = useState<number | null>(() => (product.specs.length > 0 ? 0 : null));
 
     const preset = paintColors.find((option) => option.value.toLowerCase() === color.toLowerCase());
     const productIndex = catalogProducts.indexOf(product);
@@ -62,6 +63,7 @@ export default function Catalog3D() {
         setProduct(next);
         if (next.model) setColor(next.model.defaultColor);
         setAnimationTarget(next.model?.animation?.initial ?? 'closed');
+        setOpenSpecIndex(next.specs.length > 0 ? 0 : null);
         const url = new URL(window.location.href);
         url.searchParams.set('modelo', next.slug);
         window.history.replaceState(null, '', url);
@@ -275,7 +277,17 @@ export default function Catalog3D() {
                     </div>
                     {product.specs.length === 0 && <div className="cg-specs-empty" />}
                     {product.specs.map((group, index) => (
-                        <details key={`${product.slug}-${group.title}`} open={index === 0}>
+                        <details
+                            key={`${product.slug}-${group.title}`}
+                            open={openSpecIndex === index}
+                            onClick={(event) => {
+                                const target = event.target as HTMLElement;
+                                if (target.closest('summary')) {
+                                    event.preventDefault();
+                                    setOpenSpecIndex((current) => (current === index ? null : index));
+                                }
+                            }}
+                        >
                             <summary>
                                 <span className="cg-spec-index mono">{String(index + 1).padStart(2, '0')}</span>
                                 <span>{group.title}</span>
