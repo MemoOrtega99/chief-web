@@ -1,7 +1,6 @@
 'use client';
 
 import dynamic from 'next/dynamic';
-import Link from 'next/link';
 import { useSearchParams } from 'next/navigation';
 import { useRef, useState } from 'react';
 import { CatalogProduct, catalogProducts, paintColors } from '@/data/catalog';
@@ -262,12 +261,12 @@ export default function Catalog3D() {
                 )}
 
                 <div className="cg-ctas">
-                    <Link href={quoteHref} className="btn btn-red btn-lg">
+                    <a href={quoteHref} className="btn btn-red btn-lg">
                         Cotizar esta configuración <ArrowIcon />
-                    </Link>
-                    <Link href={quoteHref} className="btn btn-line btn-lg">
+                    </a>
+                    <a href={quoteHref} className="btn btn-line btn-lg">
                         Solicitar ficha técnica
-                    </Link>
+                    </a>
                 </div>
 
                 <section className="cg-block cg-specs" aria-label="Especificaciones técnicas">
