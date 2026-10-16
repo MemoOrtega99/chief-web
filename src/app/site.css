@@ -210,10 +210,22 @@
   width: 76px;
   height: 76px;
   pointer-events: auto;
+  will-change: transform;
 }
 
 .whatsapp-launcher--entering .wa-arrival {
-  animation: wa-wheel-arrival 1.65s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+  animation: wa-wheel-translation 1.8s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+}
+
+.wa-wheel-spin {
+  position: relative;
+  width: 76px;
+  height: 76px;
+  will-change: transform;
+}
+
+.whatsapp-launcher--entering .wa-wheel-spin {
+  animation: wa-wheel-spin 1.8s linear forwards;
 }
 
 .wa-action {
@@ -233,7 +245,7 @@
 }
 
 .whatsapp-launcher--entering .wa-action {
-  animation: wa-button-stamp 1.65s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+  animation: wa-button-stamp 1.8s cubic-bezier(0.22, 1, 0.36, 1) forwards;
 }
 
 .whatsapp-launcher--settled .wa-action {
@@ -248,37 +260,7 @@
   transform: translateY(-3px);
 }
 
-.wa-tire-ring {
-  position: absolute;
-  inset: 8px;
-  border: 1px dashed rgba(255, 255, 255, 0.54);
-  border-radius: 50%;
-  pointer-events: none;
-}
-
-.wa-tire-ring::before,
-.wa-tire-ring::after {
-  content: '';
-  position: absolute;
-  width: 5px;
-  height: 5px;
-  border-radius: 50%;
-  background: rgba(255, 255, 255, 0.68);
-}
-
-.wa-tire-ring::before {
-  top: 5px;
-  left: 50%;
-  transform: translateX(-50%);
-}
-
-.wa-tire-ring::after {
-  right: 5px;
-  bottom: 12px;
-}
-
 .wa-icon {
-  position: relative;
   z-index: 1;
   width: 32px;
   height: 32px;
@@ -308,6 +290,50 @@
 .wa-action:focus-visible .wa-tooltip {
   opacity: 1;
   transform: translate(0, -50%);
+}
+
+.wa-smoke {
+  position: absolute;
+  right: 7px;
+  bottom: -13px;
+  z-index: 0;
+  width: 62px;
+  height: 34px;
+  opacity: 0;
+  filter: blur(2px);
+  pointer-events: none;
+}
+
+.whatsapp-launcher--entering .wa-smoke {
+  animation: wa-smoke-burst 0.46s ease-out 1.34s forwards;
+}
+
+.wa-smoke-puff {
+  position: absolute;
+  bottom: 0;
+  display: block;
+  width: 22px;
+  height: 15px;
+  border-radius: 50%;
+  background: rgba(176, 179, 181, 0.44);
+}
+
+.wa-smoke-puff:nth-child(1) {
+  left: 6px;
+}
+
+.wa-smoke-puff:nth-child(2) {
+  left: 21px;
+  bottom: 3px;
+  width: 26px;
+  height: 18px;
+}
+
+.wa-smoke-puff:nth-child(3) {
+  right: 2px;
+  bottom: -1px;
+  width: 18px;
+  height: 13px;
 }
 
 .wa-entrance-sparks {
@@ -414,10 +440,10 @@
   --spark-delay: 0.66s;
 }
 
-@keyframes wa-wheel-arrival {
+@keyframes wa-wheel-translation {
   0% {
     opacity: 0;
-    transform: translate3d(calc(-100vw + 108px), 78px, 0) rotate(-720deg) scale(0.76);
+    transform: translate3d(calc(-100vw + 108px), 78px, 0) scale(0.76);
   }
 
   8% {
@@ -425,20 +451,30 @@
   }
 
   72% {
-    transform: translate3d(-76px, 0, 0) rotate(520deg) scale(1.02);
+    transform: translate3d(-76px, 0, 0) scale(1.02);
   }
 
   84% {
-    transform: translate3d(10px, -5px, 0) rotate(650deg) scale(1.08);
+    transform: translate3d(10px, -5px, 0) scale(1.08);
   }
 
   92% {
-    transform: translate3d(-5px, 2px, 0) rotate(700deg) scale(0.96);
+    transform: translate3d(-5px, 2px, 0) scale(0.96);
   }
 
   100% {
     opacity: 1;
-    transform: translate3d(0, 0, 0) rotate(720deg) scale(1);
+    transform: translate3d(0, 0, 0) scale(1);
+  }
+}
+
+@keyframes wa-wheel-spin {
+  0% {
+    transform: rotate(0deg);
+  }
+
+  100% {
+    transform: rotate(1080deg);
   }
 }
 
@@ -494,10 +530,28 @@
   }
 }
 
+@keyframes wa-smoke-burst {
+  0% {
+    opacity: 0;
+    transform: translate3d(0, 5px, 0) scale(0.65);
+  }
+
+  25% {
+    opacity: 0.56;
+  }
+
+  100% {
+    opacity: 0;
+    transform: translate3d(-8px, -15px, 0) scale(1.35);
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
   .whatsapp-launcher--entering .wa-arrival,
+  .whatsapp-launcher--entering .wa-wheel-spin,
   .whatsapp-launcher--entering .wa-action,
   .whatsapp-launcher--entering .wa-entrance-sparks,
+  .whatsapp-launcher--entering .wa-smoke,
   .whatsapp-launcher--entering .wa-spark {
     animation: none;
   }
@@ -509,6 +563,10 @@
   }
 
   .wa-entrance-sparks {
+    display: none;
+  }
+
+  .wa-smoke {
     display: none;
   }
 }
