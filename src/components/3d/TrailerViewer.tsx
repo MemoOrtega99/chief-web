@@ -30,16 +30,19 @@ const VIEW_DIRECTIONS: Record<ViewName, THREE.Vector3> = {
 };
 
 const PAINT_MATERIALS = new Set(['paint_body', 'paint_accent']);
-const STRUCTURAL_MATERIALS = /^(?:color|matte steel|polished steel|carbon steel|matte zinc|shiny galvanized|satin finish stainless steel|white-pw(?:-mt\d+)?|white-pw-mt11050)$/i;
-const STRUCTURAL_RAIL_MATERIALS = /^(?:shiny galvanized|satin finish stainless steel)$/i;
-const ORIGINAL_FINISHES = /\b(?:rubber|tire|tread|pine|wood|glass|chrome|mirror)\b/i;
+const STRUCTURAL_MATERIALS = /^(?:color|white-pw(?:-mt\d+)?|white-pw-mt11050)$/i;
+const ORIGINAL_FINISHES = /\b(?:rubber|tire|tread|pine|wood|glass|chrome|mirror|steel|galvanized|stainless|zinc|alumin(?:um|io))\b/i;
 const TIRE_MATERIALS = /\b(?:rubber|tire|tread|llanta|neum[aá]tico)\b/i;
 const ORIGINAL_COLOR_COMPONENTS = /\b(?:rines?|rin|llantas?|neum[aá]ticos?|tires?|wheels?|polveras?|loderas?|guardafangos?|guardabarros?|mudguards?|fenders?|focos?|luces?|lights?|lamps?|reflectores?|reflector|reflective|faroles?|micas?|stops?|markers?|direccionales?|beacons?|leds?)\b/i;
+
+function normalizeComponentName(name: string) {
+    return name.replace(/[_-]+/g, ' ');
+}
 
 function isOriginalColorComponent(object: THREE.Object3D) {
     let current: THREE.Object3D | null = object;
     while (current) {
-        if (ORIGINAL_COLOR_COMPONENTS.test(current.name)) return true;
+        if (ORIGINAL_COLOR_COMPONENTS.test(normalizeComponentName(current.name))) return true;
         current = current.parent;
     }
     return false;
@@ -57,34 +60,58 @@ function isPaintableMaterial(material: THREE.Material) {
     return STRUCTURAL_MATERIALS.test(material.name);
 }
 
-function isBlueStructuralMaterial(material: THREE.Material) {
-    if (!(material instanceof THREE.MeshStandardMaterial)) return false;
-
-    // Algunos GLB de entrada exportan soportes estructurales como material
-    // genérico "color" azul. El tono original permite distinguirlos de los
-    // accesorios que deben conservar su acabado, aunque estén junto a una rueda.
-    const { r, g, b } = material.color;
-    return b > 0.3 && b > r * 1.35 && b > g * 1.05;
+function isNamedTireMesh(object: THREE.Object3D) {
+    return /\b(?:llantas?|neum[aá]ticos?|tires?|wheels?)\b/i.test(normalizeComponentName(object.name));
 }
 
-function getProtectedComponents(scene: THREE.Object3D) {
+function isSpecialWheelAssembly(object: THREE.Object3D) {
+    let current: THREE.Object3D | null = object;
+    while (current) {
+        // El conjunto del eje del modelo 53 FT se exporta con materiales "color"
+        // genéricos, sin nombres semánticos de rueda. Se protege como una unidad
+        // para conservar rines, llantas y sus dispositivos de seguridad.
+        if (/\bej00108\b/i.test(normalizeComponentName(current.name))) return true;
+        current = current.parent;
+    }
+    return false;
+}
+
+function isNeutralGenericMaterial(material: THREE.Material) {
+    if (!(material instanceof THREE.MeshStandardMaterial) || material.name.toLowerCase() !== 'color') return false;
+
+    const { r, g, b } = material.color;
+    const maximum = Math.max(r, g, b);
+    const minimum = Math.min(r, g, b);
+    // Los accesorios genéricos suelen exportarse en negro, gris o blanco.
+    // Los colores saturados se dejan disponibles para recolorear la estructura.
+    return maximum < 0.18 || maximum - minimum < 0.16;
+}
+
+function getProtectedMaterials(scene: THREE.Object3D) {
     const tireBoxes: THREE.Box3[] = [];
-    const protectedComponents = new Set<THREE.Object3D>();
+    const protectedMaterials = new Map<THREE.Mesh, Set<THREE.Material>>();
+
+    const protectMaterials = (mesh: THREE.Mesh, predicate: (material: THREE.Material) => boolean = () => true) => {
+        const materials = Array.isArray(mesh.material) ? mesh.material : [mesh.material];
+        const paintable = materials.filter((material) => isPaintableMaterial(material) && predicate(material));
+        if (!paintable.length) return;
+        protectedMaterials.set(mesh, new Set(paintable));
+    };
 
     scene.updateWorldMatrix(true, true);
     scene.traverse((child) => {
         if (!(child instanceof THREE.Mesh)) return;
         const materials = Array.isArray(child.material) ? child.material : [child.material];
-        if (!materials.some((material) => TIRE_MATERIALS.test(material.name))) return;
-        tireBoxes.push(new THREE.Box3().setFromObject(child));
-        protectedComponents.add(child);
+        if (materials.some((material) => TIRE_MATERIALS.test(material.name)) || isNamedTireMesh(child)) {
+            tireBoxes.push(new THREE.Box3().setFromObject(child));
+        }
     });
 
     if (!tireBoxes.length) {
         scene.traverse((child) => {
-            if (isOriginalColorComponent(child)) protectedComponents.add(child);
+            if (child instanceof THREE.Mesh && isOriginalColorComponent(child)) protectMaterials(child);
         });
-        return protectedComponents;
+        return protectedMaterials;
     }
 
     const tireData = tireBoxes.map((box) => ({
@@ -95,14 +122,15 @@ function getProtectedComponents(scene: THREE.Object3D) {
     scene.traverse((child) => {
         if (!(child instanceof THREE.Mesh)) return;
         if (isOriginalColorComponent(child)) {
-            protectedComponents.add(child);
+            protectMaterials(child);
             return;
         }
 
         const componentBox = new THREE.Box3().setFromObject(child);
         const materials = Array.isArray(child.material) ? child.material : [child.material];
-        if (materials.some(isBlueStructuralMaterial)) return;
-        if (materials.some((material) => STRUCTURAL_RAIL_MATERIALS.test(material.name))) return;
+        // La estructura principal también puede pasar junto a una rueda. Sus
+        // materiales explícitos deben seguir el color elegido por el usuario.
+        if (materials.some((material) => PAINT_MATERIALS.has(material.name))) return;
         const componentMaxDimension = Math.max(...componentBox.getSize(new THREE.Vector3()).toArray());
         if (tireData.some(({ box, maxDimension }) => {
             // Las defensas, largueros y travesaños pueden pasar junto a una rueda,
@@ -111,11 +139,18 @@ function getProtectedComponents(scene: THREE.Object3D) {
             const expandedTireBox = box.clone().expandByScalar(maxDimension * 0.35);
             return expandedTireBox.intersectsBox(componentBox);
         })) {
-            protectedComponents.add(child);
+            if (isSpecialWheelAssembly(child)) {
+                protectMaterials(child);
+            } else {
+                // En meshes genéricos de exportación, sólo conservamos los
+                // acabados neutros de ruedas y accesorios. Amarillos, azules o
+                // rojos saturados suelen ser estructura que sí debe recolorearse.
+                protectMaterials(child, isNeutralGenericMaterial);
+            }
         }
     });
 
-    return protectedComponents;
+    return protectedMaterials;
 }
 
 export type TrailerViewerHandle = {
@@ -165,7 +200,7 @@ function TrailerModel({ path, color, onBounds, animationTarget }: ModelProps) {
     const { scene, animations } = useGLTF(path);
     const { actions, mixer } = useAnimations(animations, scene);
     const previousAnimationTarget = useRef<AnimationTarget | null>(null);
-    const protectedComponents = useMemo(() => getProtectedComponents(scene), [scene]);
+    const protectedMaterials = useMemo(() => getProtectedMaterials(scene), [scene]);
 
     // El GLB animado del PE53 parte cerrado. Los botones cambian el sentido de
     // la misma secuencia: cerrado -> abierto o abierto -> cerrado.
@@ -240,10 +275,10 @@ function TrailerModel({ path, color, onBounds, animationTarget }: ModelProps) {
             if (!(child instanceof THREE.Mesh)) return;
             child.castShadow = true;
             const materials = Array.isArray(child.material) ? child.material : [child.material];
-            const protectedComponent = protectedComponents.has(child);
+            const protectedMeshMaterials = protectedMaterials.get(child);
             const nextMaterials = materials.map((material) => {
                 if (
-                    !protectedComponent ||
+                    !protectedMeshMaterials?.has(material) ||
                     !(material instanceof THREE.MeshStandardMaterial) ||
                     !isPaintableMaterial(material) ||
                     isProtectedPaintMaterial(material)
@@ -290,7 +325,7 @@ function TrailerModel({ path, color, onBounds, animationTarget }: ModelProps) {
                 material.envMapIntensity = 0.85;
             });
         });
-    }, [protectedComponents, scene]);
+    }, [protectedMaterials, scene]);
 
     // Materiales de pintura; el color cambia con una transición suave en lugar de un salto.
     const paints = useMemo(() => {
