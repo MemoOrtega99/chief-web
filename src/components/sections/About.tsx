@@ -26,35 +26,44 @@ export default function About() {
                         viewport={{ once: true, margin: '-80px' }}
                         transition={{ duration: 0.7 }}
                     >
-                        <div className="ab-tile ab-tile-main">
+                        <div className="ab-tile">
                             <Image
-                                src="/trailer-day.png"
-                                alt="Unidad de carga en carretera"
+                                src="/fotos/chief-proceso-corte-plasma-1200.webp"
+                                alt="Proceso de corte y fabricación de remolques"
                                 fill
-                                sizes="(max-width: 900px) 100vw, 34vw"
+                                sizes="(max-width: 900px) 50vw, 22vw"
                                 className="ab-image"
                             />
-                            <span className="ab-tile-label"><i>01</i> Operación</span>
                         </div>
                         <div className="ab-tile">
                             <Image
-                                src="/hero-background-v2.jpg"
-                                alt="Detalle industrial de transporte"
+                                src="/fotos/chief-producto-high-cube-40-3-ejes-1200.webp"
+                                alt="Plataforma High Cube de 3 ejes"
                                 fill
-                                sizes="(max-width: 900px) 50vw, 18vw"
+                                sizes="(max-width: 900px) 50vw, 22vw"
                                 className="ab-image"
                             />
-                            <span className="ab-tile-label"><i>02</i> Resistencia</span>
                         </div>
                         <div className="ab-tile">
                             <Image
-                                src="/hero-background-user.png"
-                                alt="Diseño de transporte para largas rutas"
+                                src="/fotos/chief-producto-cama-baja-53-3-ejes-1200.webp"
+                                alt="Cama baja Chief de 53 FT y 3 ejes"
                                 fill
-                                sizes="(max-width: 900px) 50vw, 18vw"
+                                sizes="(max-width: 900px) 50vw, 22vw"
                                 className="ab-image"
                             />
-                            <span className="ab-tile-label"><i>03</i> Diseño 3D</span>
+                        </div>
+                        <div className="ab-tile">
+                            <Image
+                                src="/fotos/chief-proceso-personalizacion-1200.webp"
+                                alt="Unidades Chief listas para personalización"
+                                fill
+                                sizes="(max-width: 900px) 50vw, 22vw"
+                                className="ab-image"
+                            />
+                        </div>
+                        <div className="ab-brand-mark" aria-hidden="true">
+                            <Image src="/chief-logo-iso.png" alt="" width={240} height={240} className="ab-brand-logo" />
                         </div>
                     </motion.div>
 
