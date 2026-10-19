@@ -13,7 +13,7 @@ import { EASE, gsap, onIntroDone, prefersReducedMotion, SplitText, useGSAP } fro
 const HERO_VIDEO: { src1080: string; src720: string; poster: string } | null = {
     src1080: '/media/hero-1080.mp4',
     src720: '/media/hero-720.mp4',
-    poster: '/media/hero-poster.webp',
+    poster: '/media/hero-poster.jpg',
 };
 const HERO_PHOTO = 'chief-plataforma-extendible' as const;
 /** Tarjeta de producto junto al titular. Oculta por ahora; se retomará después. */
@@ -89,12 +89,11 @@ export default function Hero() {
                 {HERO_VIDEO ? (
                     <video
                         ref={video}
-                        autoPlay
                         muted
                         loop
                         playsInline
                         disablePictureInPicture
-                        preload="auto"
+                        preload="metadata"
                         poster={HERO_VIDEO.poster}
                     >
                         <source src={HERO_VIDEO.src720} type="video/mp4" media="(max-width: 900px)" />
