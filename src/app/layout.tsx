@@ -7,7 +7,8 @@ import SmoothScroll from "@/components/motion/SmoothScroll";
 import Preloader from "@/components/motion/Preloader";
 import WhatsAppButton from "@/components/ui/WhatsAppButton";
 
-const chiefFavicon = "/chief-logo-iso.png?v=chief-favicon-20261016";
+const chiefFavicon = "/favicon.ico?v=chief-favicon-20261018";
+const chiefLogo = "/chief-logo-iso.png?v=chief-logo-20261018";
 
 const inter = localFont({
     src: [
@@ -44,9 +45,9 @@ export const metadata: Metadata = {
   description: "Fabricación de remolques y plataformas de alta resistencia, con diseño e ingeniería 100% mexicana.",
   keywords: "remolques, plataformas, portacontenedor, dolly, fabricación, Chief Trailers, Cadereyta",
   icons: {
-    icon: [{ url: chiefFavicon, type: "image/png", sizes: "795x795" }],
-    shortcut: [chiefFavicon],
-    apple: [{ url: chiefFavicon, type: "image/png", sizes: "795x795" }],
+    icon: [{ url: chiefFavicon, type: "image/x-icon", sizes: "64x64" }],
+    shortcut: [{ url: chiefFavicon, type: "image/x-icon" }],
+    apple: [{ url: chiefLogo, type: "image/png", sizes: "795x795" }],
   },
 };
 
