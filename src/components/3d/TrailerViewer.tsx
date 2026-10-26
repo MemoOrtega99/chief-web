@@ -252,13 +252,14 @@ function TrailerModel({ path, color, onBounds, animationTarget }: ModelProps) {
                     // metal/plástico. El caucho debe ser negro, mate y apenas
                     // responder a la luz ambiente para conservar el relieve.
                     material.metalness = 0;
-                    material.roughness = 0.86;
-                    material.color.set('#151515');
-                    material.envMapIntensity = 0.12;
+                    material.roughness = 1;
+                    material.color.set('#0b0b0b');
+                    material.envMapIntensity = 0;
                     if (material instanceof THREE.MeshPhysicalMaterial) {
                         material.clearcoat = 0;
                         material.clearcoatRoughness = 1;
                     }
+                    material.needsUpdate = true;
                     return;
                 }
                 if (isOriginalFinishMaterial(material)) return;
