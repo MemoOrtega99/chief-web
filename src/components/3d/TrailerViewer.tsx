@@ -30,6 +30,7 @@ const VIEW_DIRECTIONS: Record<ViewName, THREE.Vector3> = {
 };
 
 const PAINT_MATERIALS = new Set(['paint_body', 'paint_accent']);
+const TIRE_FINISHES = /\b(?:rubber|tire|tread|llanta|neum[aá]tico)\b/i;
 const ORIGINAL_FINISHES = /\b(?:rubber|tire|tread|pine|wood|glass|chrome|mirror|steel|galvanized|stainless|zinc|alumin(?:um|io))\b/i;
 const ORIGINAL_COLOR_COMPONENTS =
     /\b(?:rines?|rin|llantas?|neum[aá]ticos?|tires?|wheels?|polveras?|loderas?|guardafangos?|guardabarros?|mudguards?|fenders?|salpicaderas?|focos?|luces?|lights?|lamps?|reflectores?|reflector|reflective|faroles?|micas?|stops?|markers?|direccionales?|beacons?|leds?|banderas?|flags?|tri[aá]ngulos?|warning|precauci[oó]n)\b/i;
@@ -53,6 +54,10 @@ function isProtectedPaintMaterial(material: THREE.Material) {
 
 function isOriginalFinishMaterial(material: THREE.Material) {
     return ORIGINAL_FINISHES.test(material.name);
+}
+
+function isTireMaterial(material: THREE.Material) {
+    return TIRE_FINISHES.test(material.name);
 }
 
 function isPaintableMaterial(material: THREE.Material) {
@@ -239,6 +244,21 @@ function TrailerModel({ path, color, onBounds, animationTarget }: ModelProps) {
                     material.roughness = 0.8;
                     material.metalness = 0;
                     material.color.set('#c9a477');
+                    return;
+                }
+                if (isTireMaterial(material)) {
+                    // El exportador llama "glossy rubber" al neumático y lo
+                    // entrega con roughness 0.15, lo que produce reflejos de
+                    // metal/plástico. El caucho debe ser negro, mate y apenas
+                    // responder a la luz ambiente para conservar el relieve.
+                    material.metalness = 0;
+                    material.roughness = 0.86;
+                    material.color.set('#151515');
+                    material.envMapIntensity = 0.12;
+                    if (material instanceof THREE.MeshPhysicalMaterial) {
+                        material.clearcoat = 0;
+                        material.clearcoatRoughness = 1;
+                    }
                     return;
                 }
                 if (isOriginalFinishMaterial(material)) return;
