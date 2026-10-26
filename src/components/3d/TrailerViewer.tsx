@@ -30,7 +30,11 @@ const VIEW_DIRECTIONS: Record<ViewName, THREE.Vector3> = {
 };
 
 const PAINT_MATERIALS = new Set(['paint_body', 'paint_accent']);
-const CAMA_BAJA_STRUCTURAL_COLORS = new Set(['f80022', '003df0', '0dcf00']);
+const MODEL_STRUCTURAL_COLORS = [
+    { file: 'cama-baja-53-3-ejes.glb', colors: new Set(['f80022', '003df0', '0dcf00']) },
+    { file: 'dolly-convertidor-tipo-a.glb', colors: new Set(['00bcff', '0000ff']) },
+    { file: 'plataforma-high-cube-40-2ejes.glb', colors: new Set(['4b00ff', '008bff']) },
+];
 const TIRE_FINISHES = /\b(?:rubber|tire|tread|llanta|neum[aá]tico)\b/i;
 const ORIGINAL_FINISHES = /\b(?:rubber|tire|tread|pine|wood|glass|chrome|mirror|steel|galvanized|stainless|zinc|alumin(?:um|io))\b/i;
 const ORIGINAL_COLOR_COMPONENTS =
@@ -65,20 +69,21 @@ function isHighCubeThreeAxleWheelPart(path: string, object: THREE.Object3D) {
     return path.endsWith('plataforma-high-cube-40-3-ejes.glb') && /^mesh_18(?:_\d+)?$/.test(object.name);
 }
 
-function isCamaBajaStructuralMaterial(path: string | undefined, object: THREE.Object3D | undefined, material: THREE.Material) {
-    if (!path?.endsWith('cama-baja-53-3-ejes.glb') || !object || material.name !== 'color') return false;
+function isModelStructuralMaterial(path: string | undefined, object: THREE.Object3D | undefined, material: THREE.Material) {
+    if (!path || !object || material.name !== 'color') return false;
     if (!(material instanceof THREE.MeshStandardMaterial)) return false;
     if (isOriginalColorComponent(object)) return false;
-    return CAMA_BAJA_STRUCTURAL_COLORS.has(material.color.getHexString().toLowerCase());
+    const model = MODEL_STRUCTURAL_COLORS.find(({ file }) => path.endsWith(file));
+    return model?.colors.has(material.color.getHexString().toLowerCase()) ?? false;
 }
 
 function isPaintableMaterial(material: THREE.Material, path?: string, object?: THREE.Object3D) {
     if (!(material instanceof THREE.MeshStandardMaterial)) return false;
     if (isProtectedPaintMaterial(material)) return false;
     // La mayoría de los archivos optimizados marca explícitamente el chasis;
-    // la cama baja además conserva parte de su estructura como materiales
+    // algunos modelos además conservan partes de su estructura como materiales
     // genéricos "color" con los tonos originales del bastidor.
-    return PAINT_MATERIALS.has(material.name) || isCamaBajaStructuralMaterial(path, object, material);
+    return PAINT_MATERIALS.has(material.name) || isModelStructuralMaterial(path, object, material);
 }
 
 function getProtectedMaterials(scene: THREE.Object3D, path: string) {
