@@ -249,11 +249,11 @@ function TrailerModel({ path, color, onBounds, animationTarget }: ModelProps) {
                 if (isTireMaterial(material)) {
                     // El exportador llama "glossy rubber" al neumático y lo
                     // entrega con roughness 0.15, lo que produce reflejos de
-                    // metal/plástico. El caucho debe ser negro, mate y apenas
+                    // metal/plástico. El caucho debe ser oscuro, mate y apenas
                     // responder a la luz ambiente para conservar el relieve.
                     material.metalness = 0;
-                    material.roughness = 1;
-                    material.color.set('#0b0b0b');
+                    material.roughness = 0.92;
+                    material.color.set('#343434');
                     material.envMapIntensity = 0;
                     if (material instanceof THREE.MeshPhysicalMaterial) {
                         material.clearcoat = 0;
