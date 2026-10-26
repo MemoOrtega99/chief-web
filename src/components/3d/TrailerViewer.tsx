@@ -30,6 +30,7 @@ const VIEW_DIRECTIONS: Record<ViewName, THREE.Vector3> = {
 };
 
 const PAINT_MATERIALS = new Set(['paint_body', 'paint_accent']);
+const CAMA_BAJA_STRUCTURAL_COLORS = new Set(['f80022', '003df0', '0dcf00']);
 const TIRE_FINISHES = /\b(?:rubber|tire|tread|llanta|neum[aá]tico)\b/i;
 const ORIGINAL_FINISHES = /\b(?:rubber|tire|tread|pine|wood|glass|chrome|mirror|steel|galvanized|stainless|zinc|alumin(?:um|io))\b/i;
 const ORIGINAL_COLOR_COMPONENTS =
@@ -64,21 +65,28 @@ function isHighCubeThreeAxleWheelPart(path: string, object: THREE.Object3D) {
     return path.endsWith('plataforma-high-cube-40-3-ejes.glb') && /^mesh_18(?:_\d+)?$/.test(object.name);
 }
 
-function isPaintableMaterial(material: THREE.Material) {
+function isCamaBajaStructuralMaterial(path: string | undefined, object: THREE.Object3D | undefined, material: THREE.Material) {
+    if (!path?.endsWith('cama-baja-53-3-ejes.glb') || !object || material.name !== 'color') return false;
     if (!(material instanceof THREE.MeshStandardMaterial)) return false;
-    if (isProtectedPaintMaterial(material)) return false;
-    // El archivo optimizado marca de forma explícita qué material pertenece al
-    // chasis. Los materiales genéricos "color" también se usan en loderas,
-    // reflejantes, banderas y accesorios, por lo que no deben recolorearse.
-    return PAINT_MATERIALS.has(material.name);
+    if (isOriginalColorComponent(object)) return false;
+    return CAMA_BAJA_STRUCTURAL_COLORS.has(material.color.getHexString().toLowerCase());
 }
 
-function getProtectedMaterials(scene: THREE.Object3D) {
+function isPaintableMaterial(material: THREE.Material, path?: string, object?: THREE.Object3D) {
+    if (!(material instanceof THREE.MeshStandardMaterial)) return false;
+    if (isProtectedPaintMaterial(material)) return false;
+    // La mayoría de los archivos optimizados marca explícitamente el chasis;
+    // la cama baja además conserva parte de su estructura como materiales
+    // genéricos "color" con los tonos originales del bastidor.
+    return PAINT_MATERIALS.has(material.name) || isCamaBajaStructuralMaterial(path, object, material);
+}
+
+function getProtectedMaterials(scene: THREE.Object3D, path: string) {
     const protectedMaterials = new Map<THREE.Mesh, Set<THREE.Material>>();
 
     const protectMaterials = (mesh: THREE.Mesh, predicate: (material: THREE.Material) => boolean = () => true) => {
         const materials = Array.isArray(mesh.material) ? mesh.material : [mesh.material];
-        const paintable = materials.filter((material) => isPaintableMaterial(material) && predicate(material));
+        const paintable = materials.filter((material) => isPaintableMaterial(material, path, mesh) && predicate(material));
         if (!paintable.length) return;
         protectedMaterials.set(mesh, new Set(paintable));
     };
@@ -141,7 +149,7 @@ function TrailerModel({ path, color, onBounds, animationTarget }: ModelProps) {
     const { scene, animations } = useGLTF(path);
     const { actions, mixer } = useAnimations(animations, scene);
     const previousAnimationTarget = useRef<AnimationTarget | null>(null);
-    const protectedMaterials = useMemo(() => getProtectedMaterials(scene), [scene]);
+    const protectedMaterials = useMemo(() => getProtectedMaterials(scene, path), [path, scene]);
 
     // El GLB animado del PE53 parte cerrado. Los botones cambian el sentido de
     // la misma secuencia: cerrado -> abierto o abierto -> cerrado.
@@ -221,7 +229,7 @@ function TrailerModel({ path, color, onBounds, animationTarget }: ModelProps) {
                 if (
                     !protectedMeshMaterials?.has(material) ||
                     !(material instanceof THREE.MeshStandardMaterial) ||
-                    !isPaintableMaterial(material) ||
+                    !isPaintableMaterial(material, path, child) ||
                     isProtectedPaintMaterial(material)
                 ) {
                     return material;
@@ -329,7 +337,7 @@ function TrailerModel({ path, color, onBounds, animationTarget }: ModelProps) {
                     material.transparent = true;
                     material.opacity = 0.55;
                 }
-                if (isPaintableMaterial(material)) {
+                if (isPaintableMaterial(material, path, child)) {
                     // Esmalte automotriz: brillo medio, reflejo suave.
                     material.metalness = 0.25;
                     material.roughness = 0.38;
@@ -338,7 +346,7 @@ function TrailerModel({ path, color, onBounds, animationTarget }: ModelProps) {
                         material.clearcoatRoughness = 0.25;
                     }
                 }
-                if (isPaintableMaterial(material)) material.envMapIntensity = 0.85;
+                if (isPaintableMaterial(material, path, child)) material.envMapIntensity = 0.85;
             });
         });
     }, [path, protectedMaterials, scene]);
@@ -353,7 +361,7 @@ function TrailerModel({ path, color, onBounds, animationTarget }: ModelProps) {
             materials.forEach((material) => {
                 if (
                     material instanceof THREE.MeshStandardMaterial &&
-                    isPaintableMaterial(material) &&
+                    isPaintableMaterial(material, path, child) &&
                     !seen.has(material)
                 ) {
                     seen.add(material);
@@ -362,7 +370,7 @@ function TrailerModel({ path, color, onBounds, animationTarget }: ModelProps) {
             });
         });
         return list;
-    }, [scene]);
+    }, [path, scene]);
     const targetColor = useMemo(() => new THREE.Color(color), [color]);
     const firstPaint = useRef(true);
 
