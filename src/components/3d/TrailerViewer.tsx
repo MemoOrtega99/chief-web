@@ -60,6 +60,10 @@ function isTireMaterial(material: THREE.Material) {
     return TIRE_FINISHES.test(material.name);
 }
 
+function isHighCubeThreeAxleWheelPart(path: string, object: THREE.Object3D) {
+    return path.endsWith('plataforma-high-cube-40-3-ejes.glb') && /^mesh_18(?:_\d+)?$/.test(object.name);
+}
+
 function isPaintableMaterial(material: THREE.Material) {
     if (!(material instanceof THREE.MeshStandardMaterial)) return false;
     if (isProtectedPaintMaterial(material)) return false;
@@ -235,6 +239,28 @@ function TrailerModel({ path, color, onBounds, animationTarget }: ModelProps) {
             nextMaterials.forEach((material) => {
                 if (!(material instanceof THREE.MeshStandardMaterial)) return;
                 if (isProtectedPaintMaterial(material)) return;
+                if (
+                    isHighCubeThreeAxleWheelPart(path, child) &&
+                    material.name === 'color' &&
+                    material.color.r < 0.08 &&
+                    material.color.g < 0.08 &&
+                    material.color.b < 0.08
+                ) {
+                    // En este GLB la banda principal de las ruedas quedó como
+                    // un material genérico negro, no como "glossy rubber".
+                    // La normalizamos como caucho mate para que coincida con
+                    // High Cube de 2 ejes y Extendible 40'-20'.
+                    material.color.set('#5f5f5f');
+                    material.metalness = 0;
+                    material.roughness = 0.92;
+                    material.envMapIntensity = 0;
+                    if (material instanceof THREE.MeshPhysicalMaterial) {
+                        material.clearcoat = 0;
+                        material.clearcoatRoughness = 1;
+                    }
+                    material.needsUpdate = true;
+                    return;
+                }
                 // Los materiales originales del modelo —neumáticos, rines,
                 // vidrio y metales— deben conservar su PBR. En especial, no
                 // deben pasar por la normalización que los hacía parecer metal.
@@ -262,6 +288,40 @@ function TrailerModel({ path, color, onBounds, animationTarget }: ModelProps) {
                     material.needsUpdate = true;
                     return;
                 }
+                if (
+                    path.endsWith('plataforma-high-cube-40-3-ejes.glb') &&
+                    child.name === 'mesh_19' &&
+                    material.name === 'polished steel'
+                ) {
+                    // En el 3 ejes el exportador aplicó "polished steel" a
+                    // la banda principal de la rueda. En el High Cube de 2
+                    // ejes esa misma zona es caucho gris mate.
+                    material.color.set('#767676');
+                    material.metalness = 0;
+                    material.roughness = 0.78;
+                    material.envMapIntensity = 0;
+                    if (material instanceof THREE.MeshPhysicalMaterial) {
+                        material.clearcoat = 0;
+                        material.clearcoatRoughness = 1;
+                    }
+                    material.needsUpdate = true;
+                    return;
+                }
+                if (material.name === 'polished steel' || material.name === 'shiny galvanized') {
+                    // El High Cube de 3 ejes usa estos acabados en piezas del
+                    // conjunto de ruedas. Conservamos el metal plateado,
+                    // pero reducimos el reflejo duro que hacía parecer
+                    // brillantes los neumáticos en esta configuración.
+                    material.metalness = 1;
+                    material.roughness = material.name === 'polished steel' ? 0.34 : 0.45;
+                    material.envMapIntensity = 0.5;
+                    if (material instanceof THREE.MeshPhysicalMaterial) {
+                        material.clearcoat = 0;
+                        material.clearcoatRoughness = 1;
+                    }
+                    material.needsUpdate = true;
+                    return;
+                }
                 if (isOriginalFinishMaterial(material)) return;
                 if (material instanceof THREE.MeshPhysicalMaterial && material.transmission > 0) {
                     // La transmisión obliga a un render extra por cuadro; para micas basta la transparencia.
@@ -281,7 +341,7 @@ function TrailerModel({ path, color, onBounds, animationTarget }: ModelProps) {
                 if (isPaintableMaterial(material)) material.envMapIntensity = 0.85;
             });
         });
-    }, [protectedMaterials, scene]);
+    }, [path, protectedMaterials, scene]);
 
     // Materiales de pintura; el color cambia con una transición suave en lugar de un salto.
     const paints = useMemo(() => {
